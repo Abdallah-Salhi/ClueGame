@@ -1,0 +1,16 @@
+# Eclipse project files
+.classpath
+.project
+.settings/
+
+# macOS system files
+.DS_Store
+
+# Eclipse compiled files
+bin/
+*.class
+
+# Misc files you may not want to track
+*.png
+*.txt
+
