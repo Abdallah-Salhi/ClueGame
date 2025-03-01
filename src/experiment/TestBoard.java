@@ -20,17 +20,17 @@ public class TestBoard {
 		
 	}
 	
-	//returns the cell from the board at row, col
+	//returns the cell from the board at row, column
 	public TestBoardCell getCell(int row, int column) {
 		
-		TestBoardCell emptyCell = new TestBoardCell();
+		TestBoardCell emptyCell = new TestBoardCell(0,0);
 		
 		return emptyCell;
 		
 	}
 	
 	//gets the targets last created by calcTargets()
-	Set<TestBoardCell> getTargets(){
+	public Set<TestBoardCell> getTargets(){
 		
 		Set<TestBoardCell> emptySet = new HashSet<>();
 		
