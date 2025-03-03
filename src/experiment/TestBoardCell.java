@@ -48,7 +48,7 @@ public class TestBoardCell {
     }
 
     // Getter for checking if the given space is currently occupied by another player
-    public boolean getOccupied() {
+    public boolean isOccupied() {
         return isOccupied;
     }
 }

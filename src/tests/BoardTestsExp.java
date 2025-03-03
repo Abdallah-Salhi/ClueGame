@@ -34,30 +34,48 @@ public class BoardTestsExp {
 	
 	@Test
 	public void testAdjacency() {
-		TestBoardCell cell = board.getCell(0, 0);
-		Set<TestBoardCell> testList = cell.getAdjList();
-		Assert.assertTrue(testList.contains(board.getCell(0, 0))); //top left corner
-		Assert.assertTrue(testList.contains(board.getCell(3, 3))); //bottom right corner
-		Assert.assertTrue(testList.contains(board.getCell(1, 3))); //right edge
-		Assert.assertTrue(testList.contains(board.getCell(3, 0))); //left edge
-		Assert.assertTrue(testList.contains(board.getCell(2, 2))); //center
-		
+	    //Top left corner (0,0)
+	    TestBoardCell cell = board.getCell(0, 0);
+	    Set<TestBoardCell> testList = cell.getAdjList();
+	    Assert.assertTrue(testList.contains(board.getCell(0, 1))); 
+	    Assert.assertTrue(testList.contains(board.getCell(1, 0))); 
+	    Assert.assertFalse(testList.contains(board.getCell(0, 0))); 
+	    Assert.assertFalse(testList.contains(board.getCell(3, 3))); 
+
+	    //Bottom right corner (3,3)
+	    cell = board.getCell(3, 3);
+	    testList = cell.getAdjList();
+	    Assert.assertTrue(testList.contains(board.getCell(3, 2))); 
+	    Assert.assertTrue(testList.contains(board.getCell(2, 3))); 
+	    Assert.assertFalse(testList.contains(board.getCell(3, 3))); 
+
+	    //Right edge (1,3)
+	    cell = board.getCell(1, 3);
+	    testList = cell.getAdjList();
+	    Assert.assertTrue(testList.contains(board.getCell(0, 3)));
+	    Assert.assertTrue(testList.contains(board.getCell(2, 3))); 
+	    Assert.assertTrue(testList.contains(board.getCell(1, 2))); 
+	    Assert.assertFalse(testList.contains(board.getCell(1, 3)));
+
+	    // Left edge (3,0)
+	    cell = board.getCell(3, 0);
+	    testList = cell.getAdjList();
+	    Assert.assertTrue(testList.contains(board.getCell(2, 0))); 
+	    Assert.assertTrue(testList.contains(board.getCell(3, 1)));
+	    Assert.assertFalse(testList.contains(board.getCell(3, 0))); 
 	}
 	
 
 	/*
 	 * Test target creation for maximum die roll test case on 4x4 board
 	 */
-	@Test
-	void testTargetMax() {
-		//Test case 1
-		TestBoardCell cell = board.getCell(0, 0);
-		board.calcTargets(cell, 6);
-		Set<TestBoardCell> targets = board.getTargets();
-		Assert.assertEquals(48, targets.size());
-		
-		
-	}
+    @Test
+    public void testTargetMax() {
+        TestBoardCell cell = board.getCell(0, 0);
+        board.calcTargets(cell, 6);
+        Set<TestBoardCell> targets = board.getTargets();
+        Assert.assertTrue(targets.contains(board.getCell(3, 3))); // Reachable within 6 moves
+    }
 	
 	/*
 	 * Test target creation on empty 4x4 board
@@ -100,11 +118,6 @@ public class BoardTestsExp {
 		Assert.assertTrue(targets.contains(board.getCell(1,1)));
 		Assert.assertTrue(targets.contains(board.getCell(0,2)));
 		Assert.assertTrue(targets.contains(board.getCell(2,0)));
-
-		
-
-
-
 	}
 
 }
