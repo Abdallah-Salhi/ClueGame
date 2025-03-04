@@ -1,12 +1,21 @@
 package tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.*;
+/*
+ * This program tests that config files are loaded properly.
+ */
 
-import org.junit.jupiter.api.BeforeEach;
+// Doing a static import allows me to write assertEquals rather than
+// Assert.assertEquals
+import static org.junit.Assert.*;
+
+import org.junit.Assert;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import clueGame.Board;
+import clueGame.BoardCell;
+import clueGame.DoorDirection;
+import clueGame.Room;
 
 public class FileInitTests {
 	// Constants that we will use to test whether the file was loaded correctly
@@ -14,8 +23,8 @@ public class FileInitTests {
 	public static final int NUM_COLUMNS = 29;
 	private static Board board;
 
-	@BeforeEach
-	public static void setup{
+	@BeforeAll
+	public static void setup() {
 		// Board is singleton, get the only instance
 		board = Board.getInstance();
 		// set the file names to use my config files
@@ -25,34 +34,35 @@ public class FileInitTests {
 	}
 
 	@Test
-	public void testSetup{
+	public void testSetup() {
 		// To ensure data is correctly loaded, test retrieving a few rooms
 		// from the hash, including the first and last in the file and a few others
-		assertEquals("Great Hall", board.getRoom('C').getName() );
-		assertEquals("Gryffindor Dormitory", board.getRoom('B').getName() );
-		assertEquals("", board.getRoom('R').getName() );
-		assertEquals("", board.getRoom('D').getName() );
-		assertEquals("", board.getRoom('W').getName() );
+		assertEquals("Great Hall", board.getRoom('A').getName());
+		assertEquals("Gryffindor Dormitory", board.getRoom('G').getName());
+		assertEquals("Chamber of Secrets", board.getRoom('C').getName());
+		assertEquals("Headmaster's Office", board.getRoom('O').getName());
+		assertEquals("Room of Requirement", board.getRoom('Q').getName());
 	}
 
 	@Test
-	public void testFourDirections{
+	public void testFourDirections() {
 		//Each Direction
 
 		//Cells that don't have doorway return false for isDoorway()
 	}
+	
 	@Test
-	public void testNumOfDoors{
+	public void testNumOfDoors() {
 
 	}
 
 	@Test
-	public void testInitial{
+	public void testInitial() {
 
 	}
 
 	@Test
-	public void testRoomLabels{
+	public void testRoomLabels() {
 		//Check if room have proper center cell
 
 		//Check if room have propoer label cell

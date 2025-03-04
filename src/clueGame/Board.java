@@ -47,7 +47,7 @@ public class Board {
 		}
 
 		// Calculate adjacency lists for each cell
-		calcAdjacencies();
+		// calcAdjacencies();
 	}
 
 	public void setConfigFiles(String string, String string2) {
@@ -71,6 +71,7 @@ public class Board {
 	}
 	
 	// Calculates adjacency lists for all cells on the board
+	/*
     private void calcAdjacencies() {
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -84,7 +85,9 @@ public class Board {
             }
         }
     }
-	public Object getRoom(char c) {
+    */
+	
+	public Room getRoom(char c) {
 		// TODO Auto-generated method stub
 		return null;
 	}
