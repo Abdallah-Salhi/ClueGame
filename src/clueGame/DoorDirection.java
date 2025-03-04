@@ -2,7 +2,7 @@ package clueGame;
 
 
 public enum DoorDirection {
-	DOWN,UP,LEFT,RIGHT
+	DOWN,UP,LEFT,RIGHT,NONE
 	
 }
 

@@ -1,22 +1,28 @@
 package clueGame;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
 
 public class Board {
-	private BoardCell[][] grid;
-	private Set<BoardCell> targets;
-	private Set<BoardCell> visited;
-
+	
 	public static final int COLS = 4;
 	public static final int ROWS = 4;
+	
+	private int numRows,numColumns;
+	private String layoutConfigFile, setupConfigFile;
+	private Map<Character,Room> roomMap;
 
 	/*
 	 * variable and methods used for singleton pattern
 	 */
 	private static Board theInstance = new Board();
+	private BoardCell[][] grid;
+	private Set<BoardCell> targets;
+	private Set<BoardCell> visited;
+
 	// constructor is private to ensure only one can be created
 	private Board() {
 		super() ;
