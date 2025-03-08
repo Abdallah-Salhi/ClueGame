@@ -99,22 +99,17 @@ public class BoardCell {
 	}
 
 	public boolean isRoomCenter() {
-		// TODO Auto-generated method stub
 		return isCenter;
 	}
 	public boolean setRoomCenter() {
-		// TODO Auto-generated method stub
 		return isCenter = true;
 	}
 
 	public void setSecretPassage(char value) {
-		// TODO Auto-generated method stub
 		this.secretPassage = value;
-		
 	}
 
 	public char getSecretPassage() {
-		// TODO Auto-generated method stub
 		return secretPassage;
 	}
 
