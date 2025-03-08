@@ -1,0 +1,99 @@
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C14A-2, dated 03/02/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C14A-2, dated 03/03/2025.
+
+
+
+commit 4a78a5d14fc970afcf69a49897151f2527abf32a
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Sun Mar 2 18:22:33 2025 -0700
+
+    Finished changes for CluePaths2
+
+commit 10583288a513296bcb4c0d76e7c0bfacc5f6cddc
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 22:55:08 2025 -0700
+
+    Implemented class methods and JUnit Tests
+
+commit 9215504a8cf263c1c2efc94b48988c1e0b76c3da
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 16:58:33 2025 -0700
+
+    Added classes: TestBoard, TestBoardCell, BoardTestsExp
+
+commit 2c28d4a1b21fae71f6f020fb1c589f2f5f3626ea
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 16:51:37 2025 -0700
+
+    Initializing repo, Added .gitignore and Junit library
+commit 80bc57711de54a96247821a6ffd7057af11289eb
+Merge: a0527ca dcbec41
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Mon Mar 3 21:41:25 2025 -0700
+
+    Merge pull request #3 from Abdallah-Salhi/GitInit1Monnty
+    
+    More changes to JUnit tests
+
+commit dcbec414da929b948c3ec15a2fc659cfd81d05c4
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 3 21:40:44 2025 -0700
+
+    More changes to JUnit tests
+
+commit a0527ca1dd4b52f5cf2f2fa08bc97f6c19864bde
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 3 20:58:49 2025 -0700
+
+    Modified a few of the JUnit tests
+
+commit 7ead9b35df0482057dcbcb49c927a4c1529edd95
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Mar 3 17:51:02 2025 -0700
+
+    Progress in ClueInit1
+
+commit 1554d87abd0b724be284cf63d2654a59ec598db8
+Merge: 6f058a3 9bb8e3f
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Mon Mar 3 17:28:03 2025 -0700
+
+    Merge pull request #2 from Abdallah-Salhi/GitInit1Monty
+    
+    Added Room.java and BadConfigFormatException.java
+
+commit 9bb8e3fae0531efca9c31db4ab933dd1d799f767
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 3 17:26:24 2025 -0700
+
+    Added Room.java and BadConfigFormatException.java
+
+commit 6f058a3bd03138bcd195f5ca2ddceea0efc56385
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Mar 3 16:01:55 2025 -0700
+
+    Clue Init 1 changes
+
+commit 4a78a5d14fc970afcf69a49897151f2527abf32a
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Sun Mar 2 18:22:33 2025 -0700
+
+    Finished changes for CluePaths2
+
+commit 10583288a513296bcb4c0d76e7c0bfacc5f6cddc
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 22:55:08 2025 -0700
+
+    Implemented class methods and JUnit Tests
+
+commit 9215504a8cf263c1c2efc94b48988c1e0b76c3da
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 16:58:33 2025 -0700
+
+    Added classes: TestBoard, TestBoardCell, BoardTestsExp
+
+commit 2c28d4a1b21fae71f6f020fb1c589f2f5f3626ea
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Feb 28 16:51:37 2025 -0700
+
+    Initializing repo, Added .gitignore and Junit library

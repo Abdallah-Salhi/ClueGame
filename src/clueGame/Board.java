@@ -163,6 +163,7 @@ public class Board {
 					grid[row][col].setInitial(firstChar); //set the initial of the cell
 					grid[row][col].setRoom(roomMap.get(firstChar)); 
 					grid[row][col].isRoom();
+					
 					if(tempList.get(row)[col].length() > 1) { //check if cell has other characters
 						char scndChar = tempList.get(row)[col].charAt(1); //get the second Character( * or # or letters)
 						
@@ -170,6 +171,7 @@ public class Board {
 							grid[row][col].setRoomCenter();
 							Room room = roomMap.get(firstChar);
 							room.setCenterCell(grid[row][col]);
+							
 						}else if(scndChar == '#') {
 							grid[row][col].setLabel();
 							Room room = roomMap.get(firstChar);
@@ -177,8 +179,10 @@ public class Board {
 							
 						}else if(scndChar == '<' ||scndChar == '>' || scndChar == 'v'|| scndChar == '^') {
 							grid[row][col].setDoorDirection(scndChar);
+							
 						}else if(roomMap.containsKey(scndChar)) {
 							grid[row][col].setSecretPassage(scndChar);
+							
 						}else {
 							throw new BadConfigFormatException("Error: Second character in cell unknown");
 						}

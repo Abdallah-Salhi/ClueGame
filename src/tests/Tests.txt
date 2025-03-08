@@ -1,0 +1,18 @@
+//Test room labels
+Great Hall has an initial of 'A'
+Chamber of Secrets has an initial of 'C'
+..etc
+
+//testBoardDimensions
+Our board has 42 rows and 29 columns so we used assertEquals and getNumRow/Rol to check if that was accurate
+
+//testFourDirections
+RavenClaw dormitory cell(10,5) has door that opens left
+
+//testNumberOfDoors
+We have 20 doors in our layout so we compared the count of doors to 20
+
+//testRooms
+Cell (23,23) is in great hall which is a room so we checked if room was not null
+Cell (2,19) is a label cell so we used the isLabel() function to return true
+Cell (3,0) is a secret passage so we checked if the isSecretPassage() function returns 0 (will change later to different return value)

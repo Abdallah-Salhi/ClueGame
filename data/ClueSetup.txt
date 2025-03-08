@@ -1,0 +1,13 @@
+//Rooms and room cards
+Room, Great Hall, A
+Room, Gryffindor Dormitory, G
+Room, Slytherin Dormitory, S
+Room, Hufflepuff Dormitory, H
+Room, Ravenclaw Dormitory, R
+Room, Chamber of Secrets, C
+Room, Transfiguration Classroom, T
+Room, Headmaster's Office, O
+Room, Room of Requirement, Q
+// other spaces on board
+Space, Unused, X
+Space, Walkway, W
