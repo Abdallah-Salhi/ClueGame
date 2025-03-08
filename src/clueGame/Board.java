@@ -50,6 +50,11 @@ public class Board {
 	 * initialize the board (since we are using singleton pattern)
 	 */
 	public void initialize(){
+		//reset memory
+		
+		ROWS = 0;
+		COLS = 0;
+		
 		//Insert try catch to handle setup and badConfig exceptions
 		try {
 			//setConfigFiles("ClueLayout.csv","ClueSetup.txt"); may not need this
@@ -141,6 +146,7 @@ public class Board {
 
 			ROWS++;
 		}
+		
 		//initialize grid 
 		grid = new BoardCell[ROWS][COLS];
 
