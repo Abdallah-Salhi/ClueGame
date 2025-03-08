@@ -3,78 +3,133 @@ package clueGame;
 import java.util.HashSet;
 import java.util.Set;
 
+/*
+ * BoardCell 
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 
 
 public class BoardCell {
 	private int row;
-    private int col;
-    private char initial;
-    private char secretPassage;
-    private boolean roomLabel;
-    private boolean roomCenter;
-    private DoorDirection doorDirection;
-    private boolean isRoom;
-    private boolean isOccupied;
-    private Set<BoardCell> adjacencyList;
-    
-    // Constructor
-    public BoardCell(int row, int col) {
-        this.row = row;
-        this.col = col;
-        this.adjacencyList = new HashSet<>();
-    }
+	private int col;
+	private char initial;
+	private char secretPassage;
+	private boolean isLabel = false;
+	private boolean isCenter = false;
+	private boolean isDoorway = false;
+	private DoorDirection doorDirection;
+	private boolean isRoom = false;
+	private boolean isOccupied = false;
+	private Set<BoardCell> adjacencyList;
+	private Room room;
 
-    public void addAdjacency(BoardCell cell) {
-        adjacencyList.add(cell);
-    }
+	// Constructor
+	public BoardCell(int row, int col) {
+		this.row = row;
+		this.col = col;
+		this.adjacencyList = new HashSet<>();
+	}
 
-    public Set<BoardCell> getAdjList() {
-        return adjacencyList; // Empty at the moment
-    }
+	public void addAdjacency(BoardCell cell) {
+		adjacencyList.add(cell);
+	}
 
-    // Setter for checking if the given space is a room
-    public void setRoom(boolean isRoom) {
-        this.isRoom = isRoom;
-    }
+	public Set<BoardCell> getAdjList() {
+		return adjacencyList; // Empty at the moment
+	}
 
-    // Getter for checking if the given space is a room
-    public boolean isRoom() {
-        return isRoom;
-    }
+	// Setter for checking if the given space is a room
+	public void setRoom(Room room) {
+		this.room = room;
+		isRoom = true;
+	}
 
-    // Setter for checking if the given space is currently occupied by another player
-    public void setOccupied(boolean isOccupied) {
-        this.isOccupied = isOccupied;
-    }
+	// Getter for checking if the given space is a room
+	public boolean isRoom() {
+		return isRoom;
+	}
 
-    // Getter for checking if the given space is currently occupied by another player
-    public boolean isOccupied() {
-        return isOccupied;
-    }
+	// Setter for checking if the given space is currently occupied by another player
+	public void setOccupied(boolean isOccupied) {
+		this.isOccupied = isOccupied;
+		isOccupied = true;
+	}
+
+	// Getter for checking if the given space is currently occupied by another player
+	public boolean isOccupied() {
+		return isOccupied;
+	}
 
 	public boolean isDoorway() {
 		// TODO Auto-generated method stub
-		return true;
+		return isDoorway;
 	}
 
-	public Object[] getDoorDirection() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setDoorDirection(char scndChar) {
+		isDoorway = true;
+		switch (scndChar) {
+		case '<': 
+			doorDirection = DoorDirection.LEFT;
+			break;
+		case '>': 
+			doorDirection = DoorDirection.RIGHT;
+			break;
+		case '^': 
+			doorDirection = DoorDirection.UP;
+			break;
+		case 'v': 
+			doorDirection = DoorDirection.DOWN;
+			break;
+		}
+	}
+	public DoorDirection getDoorDirection() {
+		return doorDirection;
 	}
 
+	//Should return true or false if 
 	public boolean isLabel() {
-		// TODO Auto-generated method stub
-		return false;
+		return isLabel;
+	}
+
+	//Should return true or false if 
+	public boolean setLabel() {
+		return isLabel = true;
 	}
 
 	public boolean isRoomCenter() {
 		// TODO Auto-generated method stub
-		return false;
+		return isCenter;
+	}
+	public boolean setRoomCenter() {
+		// TODO Auto-generated method stub
+		return isCenter = true;
+	}
+
+	public void setSecretPassage(char value) {
+		// TODO Auto-generated method stub
+		this.secretPassage = value;
+		
 	}
 
 	public char getSecretPassage() {
 		// TODO Auto-generated method stub
-		return 0;
+		return secretPassage;
 	}
+
+	public char getInitial() {
+		return initial;
+	}
+
+	public void setInitial(char initial) {
+		this.initial = initial;
+	}
+
+
+
+
+
+
 
 }

@@ -1,5 +1,10 @@
 package clueGame;
-
+/*
+ * Room
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class Room {
     private String name;
     private BoardCell centerCell;
