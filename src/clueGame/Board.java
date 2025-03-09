@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import experiment.TestBoardCell;
+
 /*
  * Board
  * Authors/Contributors:
@@ -24,6 +26,8 @@ public class Board {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
+	private Set<BoardCell> templist;
+
 
 
 	// Singleton Pattern
@@ -60,8 +64,8 @@ public class Board {
 		}
 
 
-		targets = new HashSet<>();
-		visited = new HashSet<>();
+		//		targets = new HashSet<>();
+		//		visited = new HashSet<>();
 
 		// Calculate adjacency lists for each cell
 		calcAdjacencies();
@@ -140,9 +144,9 @@ public class Board {
 		}
 		//check if character is in setup config and populate board cells with info
 		processCell(tempList,ROWS,COLS);
-		
+
 	}
-	
+
 	//check if character is in setup config and populate board cells with info
 	private void processCell(ArrayList<String[]>tempList, int ROWS, int COLS) throws BadConfigFormatException {
 		for (int row = 0; row < ROWS; row++) {
@@ -198,18 +202,50 @@ public class Board {
 			}
 		}
 	}
-	
-	// Returns the cell at the specified row and column
-		public BoardCell getCell(int row, int column) {
-			return grid[row][column];
+	// Calculates possible move targets given a dice roll
+	public void calcTargets(BoardCell startCell, int pathlength) {
+		targets.clear();
+		visited.clear();
+		findAllTargets(startCell, pathlength);
+	}
+
+	// Recursive function to find all valid move targets
+	private void findAllTargets(BoardCell currentCell, int stepsRemaining) {
+		visited.add(currentCell);
+
+		if (stepsRemaining == 0) {
+			targets.add(currentCell);
+		} else {
+			for (BoardCell adj : currentCell.getAdjList()) {
+				if (!visited.contains(adj) && !adj.isOccupied()) {
+					findAllTargets(adj, stepsRemaining - 1);
+				}
+			}
 		}
+
+		visited.remove(currentCell); // Backtracking step
+	}
+	
+	public Set<BoardCell> getAdjList(int row, int col) {
+		//return getCell(row,col).getAdjList(); 
+		return templist = new HashSet<BoardCell>(); //temporary for failure
+	}
+
+	public Set<BoardCell> getTargets() {
+		return targets;
+	}
+
+	// Returns the cell at the specified row and column
+	public BoardCell getCell(int row, int column) {
+		return grid[row][column];
+	}
 
 	//getRoom can either take a boardCell or character as a parameter
 	public Room getRoom(BoardCell cell) {
 		char key = cell.getInitial();
 		return roomMap.get(key);
 	}
-	
+
 	public Room getRoom(char value) {
 		return roomMap.get(value);
 	}
