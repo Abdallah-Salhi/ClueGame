@@ -62,18 +62,41 @@ public class BoardAdjTargetTest {
 		assertFalse(testList.contains(board.getCell(16, 5)));
 		assertFalse(testList.contains(board.getCell(15, 4)));
 
-		//test inside chamber of secrets should not be able to have any adjacent cells
+		//test inside HufflePuff dormitory should not be able to have any adjacent cells
 		testList = board.getAdjList(36, 9);
 		assertEquals(0, testList.size());
-		assertFalse(testList.contains(board.getCell(16, 5)));
-		assertFalse(testList.contains(board.getCell(15, 4)));
+		assertFalse(testList.contains(board.getCell(36, 8)));
+		assertFalse(testList.contains(board.getCell(37, 9)));
 
 	}
 
-	//Locations that are at each edge of the board
+	//Locations that are at each edge of the board which in our board is all Unused spaces (no adjacencies)
 	@Test
 	public void testEdgeAdjacencies() {
+		//Right edge of board
+		Set<BoardCell> testList = board.getAdjList(17, 28);
+		assertEquals(0, testList.size());
+		assertFalse(testList.contains(board.getCell(17, 27)));
+		assertFalse(testList.contains(board.getCell(17, 29)));		
 
+		//Left edge of board
+		testList = board.getAdjList(25, 0);
+		assertEquals(0, testList.size());
+		assertFalse(testList.contains(board.getCell(26, 0)));
+		assertFalse(testList.contains(board.getCell(25, 1)));
+		
+		//top edge of board
+		testList = board.getAdjList(0, 13);
+		assertEquals(0, testList.size());
+		assertFalse(testList.contains(board.getCell(0, 14)));
+		assertFalse(testList.contains(board.getCell(1, 13)));
+		
+		//bottom edge of board
+		testList = board.getAdjList(41, 14);
+		assertEquals(0, testList.size());
+		assertFalse(testList.contains(board.getCell(42, 14)));
+		assertFalse(testList.contains(board.getCell(41, 13)));
+		
 	}
 
 	//Locations that are beside a room cell that is not a doorway
@@ -118,15 +141,26 @@ public class BoardAdjTargetTest {
 		board.calcTargets(board.getCell(17, 8), 3);
 		targets= board.getTargets();
 		assertEquals(3, targets.size());
-		assertTrue(targets.contains(board.getCell(15, 2)));
-		assertTrue(targets.contains(board.getCell(8, 2)));
-		assertTrue(targets.contains(board.getCell(11, 5)));
+		assertTrue(targets.contains(board.getCell(15, 6)));
+		assertTrue(targets.contains(board.getCell(15, 9)));
+		assertTrue(targets.contains(board.getCell(19, 7)));
+
+		// test a roll of 4
+		board.calcTargets(board.getCell(17, 8), 4);
+		targets= board.getTargets();
+		assertEquals(3, targets.size());
+		assertTrue(targets.contains(board.getCell(15, 6)));
+		assertTrue(targets.contains(board.getCell(14, 9)));
+		assertTrue(targets.contains(board.getCell(19, 10)));	
 	}
 
 	//Targets that allow the user to enter a room
 	@Test
 	public void testRoomEntranceTargets() {
-
+		// test a roll of 1
+		board.calcTargets(board.getCell(7, 22), 1);
+		Set<BoardCell> targets= board.getTargets();
+		assertTrue(targets.contains(board.getCell(15, 6)));
 	}
 
 	//Targets calculated when leaving a room without secret passage
@@ -135,7 +169,7 @@ public class BoardAdjTargetTest {
 
 	}
 
-	//Targets calculated when leaving a room without secret passage
+	//Targets calculated when leaving a room using a secret passage
 	@Test
 	public void testSecretPassageExitTargets() {
 
