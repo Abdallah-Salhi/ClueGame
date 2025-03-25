@@ -147,8 +147,8 @@ public class Board {
 		}
 		//check if character is in setup config and populate board cells with info
 		processCell(tempList,ROWS,COLS);
-		
-		
+
+
 
 	}
 
@@ -198,11 +198,11 @@ public class Board {
 	}
 	//Calculates adjacency lists for all cells on the board
 	private void calcAdjacencies() {
-		
+
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
 				BoardCell cell = grid[row][col];
-				
+
 				if(cell.getInitial() == 'W') {	
 					// Add the valid adjacent cells for walkways
 					if (row - 1 >= 0 && grid[row - 1][col].getInitial() == 'W') 
@@ -214,57 +214,58 @@ public class Board {
 					if (col + 1 < COLS && grid[row][col + 1].getInitial() == 'W') 
 						cell.addAdjacency(grid[row][col + 1]); // Right
 				}
-				
-				 //Make sure doorway cells connect to room centers
+
+				//Make sure doorway cells connect to room centers
 				if(cell.isDoorway() == true) {
 					if(cell.getDoorDirection() == DoorDirection.DOWN) {
 						Room room = roomMap.get(grid[row + 1][col].getInitial());
 						cell.addAdjacency(room.getCenterCell());
-						
+
 					}else if(cell.getDoorDirection() == DoorDirection.UP){
 						Room room = roomMap.get(grid[row - 1][col].getInitial());
 						cell.addAdjacency(room.getCenterCell());
 
-						
+
 					}else if(cell.getDoorDirection() == DoorDirection.LEFT){
 						Room room = roomMap.get(grid[row][col - 1].getInitial());
 						cell.addAdjacency(room.getCenterCell());
 
-						
+
 					}else if(cell.getDoorDirection() == DoorDirection.RIGHT){
 						Room room = roomMap.get(grid[row][col + 1].getInitial());
 						cell.addAdjacency(room.getCenterCell());
 
-						
+
 					}
 				}
-				
+
 			}
 		}
 		//loop through again for room center cells. Must be in different loop because we need doorway cells to be updated already
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
 				BoardCell cell = grid[row][col];
-					if(cell.isRoomCenter() == true) { //need to connect to walkway with door and room center of secret passage
-						if(roomMap.get(cell.getInitial()).getSecretPassage() != null){ //check that room has secret passage 
-							//add room center of secret passage 
-							Room tempRoom = roomMap.get(cell.getInitial());
-							char tempSecretInitial = (tempRoom.getSecretPassage()).getSecretPassage();
-							Room tempSecretRoom = roomMap.get(tempSecretInitial);
-							BoardCell secretRoomCenter = tempSecretRoom.getCenterCell();
-							cell.addAdjacency(secretRoomCenter);
-						}
-						//add doorway cells
-						for(BoardCell doorway : doorwayList) {//iterate through list of doorways
-							for(BoardCell doorAdj : doorway.getAdjList()) { //iterate through adjacency list of each doorway
-								if(doorAdj.isRoomCenter() && (doorAdj.getInitial() == cell.getInitial())) { 
-									cell.addAdjacency(doorway); //add doorway cell to room center cell
-								}
-							}
-							
-						}
-						
+
+				if(cell.isRoomCenter() == true) { //need to connect to walkway with door and room center of secret passage
+					if(roomMap.get(cell.getInitial()).getSecretPassage() != null){ //check that room has secret passage 
+						//add room center of secret passage 
+						Room tempRoom = roomMap.get(cell.getInitial());
+						char tempSecretInitial = (tempRoom.getSecretPassage()).getSecretPassage();
+						Room tempSecretRoom = roomMap.get(tempSecretInitial);
+						BoardCell secretRoomCenter = tempSecretRoom.getCenterCell();
+						cell.addAdjacency(secretRoomCenter);
 					}
+					//add doorway cells
+					for(BoardCell doorway : doorwayList) {//iterate through list of doorways
+						for(BoardCell doorAdj : doorway.getAdjList()) { //iterate through adjacency list of each doorway
+							if(doorAdj.isRoomCenter() && (doorAdj.getInitial() == cell.getInitial())) { 
+								cell.addAdjacency(doorway); //add doorway cell to room center cell
+							}
+						}
+
+					}
+
+				}
 			}
 		}
 	}
@@ -283,7 +284,7 @@ public class Board {
 			targets.add(currentCell);
 		} else {
 			for (BoardCell adj : currentCell.getAdjList()) {
-				if (!visited.contains(adj) && !adj.isOccupied()) {
+				if (!visited.contains(adj) && (!adj.isOccupied() || adj.isRoomCenter())) {
 					findAllTargets(adj, stepsRemaining - 1);
 				}
 			}
@@ -291,7 +292,7 @@ public class Board {
 
 		visited.remove(currentCell); // Backtracking step
 	}
-	
+
 	public Set<BoardCell> getAdjList(int row, int col) {
 		return getCell(row,col).getAdjList(); 
 		//return templist = new HashSet<BoardCell>(); //temporary for failure
