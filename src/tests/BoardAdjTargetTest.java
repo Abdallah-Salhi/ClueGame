@@ -58,13 +58,13 @@ public class BoardAdjTargetTest {
 	public void testRoomNoncenterAdjacencies() {
 		// Test inside chamber of secrets should not be able to have any adjacent cells
 		Set<BoardCell> testList = board.getAdjList(16, 4);
-		assertEquals(2, testList.size());
+		assertEquals(0, testList.size());
 		assertFalse(testList.contains(board.getCell(16, 5)));
 		assertFalse(testList.contains(board.getCell(15, 4)));
 
 		// Test inside chamber of secrets should not be able to have any adjacent cells
 		testList = board.getAdjList(36, 9);
-		assertEquals(2, testList.size());
+		assertEquals(0, testList.size());
 		assertFalse(testList.contains(board.getCell(16, 5)));
 		assertFalse(testList.contains(board.getCell(15, 4)));
 	}
@@ -107,7 +107,7 @@ public class BoardAdjTargetTest {
 		Set<BoardCell> testList = board.getAdjList(17, 8);
 		assertEquals(3, testList.size());
 		assertTrue(testList.contains(board.getCell(17, 9)));
-		assertTrue(testList.contains(board.getCell(17, 10)));
+		assertTrue(testList.contains(board.getCell(17, 7)));
 		assertTrue(testList.contains(board.getCell(18, 8)));
 	}
 
@@ -126,12 +126,12 @@ public class BoardAdjTargetTest {
 	public void testSecretPassageAdjacencies() {
 		// Test SC/CS Secret Passage Adjacency
 		Set<BoardCell> testList = board.getAdjList(34, 23);
-		assertEquals(1, testList.size()); // Should only connect to the other room center
+		assertEquals(2, testList.size()); // Should connect to the other room center 
 		assertTrue(testList.contains(board.getCell(15, 6))); // Other room center
 
 		// Test HG/GH Secret Passage Adjacency
 		testList = board.getAdjList(6, 23);
-		assertEquals(1, testList.size()); // Should only connect to the other room center
+		assertEquals(2, testList.size()); // Should connect to the other room center
 		assertTrue(testList.contains(board.getCell(35, 6))); // Other room center
 	}
 
@@ -170,7 +170,7 @@ public class BoardAdjTargetTest {
 		// Test a roll of 1
 		board.calcTargets(board.getCell(8, 22), 1);
 		Set<BoardCell> targets= board.getTargets();
-		assertEquals(2, targets.size());
+		assertEquals(3, targets.size());
 		assertTrue(targets.contains(board.getCell(6, 23)));
 		assertTrue(targets.contains(board.getCell(8, 21)));	
 

@@ -37,7 +37,7 @@ public class BoardCell {
 	}
 
 	public Set<BoardCell> getAdjList() {
-		return adjacencyList; // Empty at the moment
+		return adjacencyList; 
 	}
 
 	// Setter for checking if the given space is a room

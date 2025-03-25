@@ -9,6 +9,7 @@ public class Room {
     private String name;
     private BoardCell centerCell;
     private BoardCell labelCell;
+    private BoardCell secretPassageCell;
 
     // Constructor
     public Room(String name) {
@@ -23,6 +24,10 @@ public class Room {
     public void setLabelCell(BoardCell labelCell) {
         this.labelCell = labelCell;
     }
+    
+    public void setSecretPassage(BoardCell secretPassageCell) {
+    	this.secretPassageCell = secretPassageCell;
+    }
 
     // Getters
     public String getName() {
@@ -35,5 +40,9 @@ public class Room {
 
     public BoardCell getLabelCell() {
         return labelCell;
+    }
+    
+    public BoardCell getSecretPassage() {
+    	return secretPassageCell;
     }
 }
