@@ -115,14 +115,14 @@ public class BoardAdjTargetTest306 {
 	// These are LIGHT BLUE on the planning spreadsheet
 	@Test
 	public void testTargetsInDiningRoom() {
-		// test a roll of 1
+		// Test a roll of 1
 		board.calcTargets(board.getCell(12, 20), 1);
 		Set<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());
 		assertTrue(targets.contains(board.getCell(8, 17)));
 		assertTrue(targets.contains(board.getCell(12, 15)));	
 		
-		// test a roll of 3
+		// Test a roll of 3
 		board.calcTargets(board.getCell(12, 20), 3);
 		targets= board.getTargets();
 		assertEquals(9, targets.size());
@@ -131,7 +131,7 @@ public class BoardAdjTargetTest306 {
 		assertTrue(targets.contains(board.getCell(11, 14)));
 		assertTrue(targets.contains(board.getCell(14, 15)));	
 		
-		// test a roll of 4
+		// Test a roll of 4
 		board.calcTargets(board.getCell(12, 20), 4);
 		targets= board.getTargets();
 		assertEquals(17, targets.size());
@@ -143,7 +143,7 @@ public class BoardAdjTargetTest306 {
 	
 	@Test
 	public void testTargetsInKitchen() {
-		// test a roll of 1
+		// Test a roll of 1
 		board.calcTargets(board.getCell(20, 19), 1);
 		Set<BoardCell> targets= board.getTargets();
 		assertEquals(2, targets.size());

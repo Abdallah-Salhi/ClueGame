@@ -42,37 +42,31 @@ public class Board {
 		super() ;
 	}
 
-	// this method returns the only Board
+	// This method returns the only Board
 	public static Board getInstance() {
 		return theInstance;
 	}
 
-	//initialize the board (since we are using singleton pattern)
-	public void initialize(){
-		//reset memory
-		ROWS = 0;
-		COLS = 0;
-		targets = new HashSet<>();
-		visited = new HashSet<>();
+	public void initialize() {
+	    // Always reset in case tests re-call this (common in JUnit test suites)
+	    ROWS = 0;
+	    COLS = 0;
+	    targets = new HashSet<>();
+	    visited = new HashSet<>();
+	    roomMap = new HashMap<>();
+	    grid = null;
+	    doorwayList = new HashSet<>();
 
-		//Insert try catch to handle setup and badConfig exceptions
-		try {
-			//setConfigFiles("ClueLayout.csv","ClueSetup.txt"); may not need this
-			loadSetupConfig();
-			loadLayoutConfig();
-		}catch(BadConfigFormatException e){
-			System.out.println("Error: The config files are corrupt");
-		}catch(FileNotFoundException e) {
-			System.out.println("Error: Config files not found");
-		}
+	    try {
+	        loadSetupConfig();
+	        loadLayoutConfig();
+	    } catch (BadConfigFormatException e) {
+	        System.out.println("Error: The config files are corrupt");
+	    } catch (FileNotFoundException e) {
+	        System.out.println("Error: Config files not found");
+	    }
 
-
-		//		targets = new HashSet<>();
-		//		visited = new HashSet<>();
-
-		// Calculate adjacency lists for each cell
-		calcAdjacencies();
-
+	    calcAdjacencies();
 	}
 
 	public void setConfigFiles(String layout, String setup) {
@@ -84,17 +78,15 @@ public class Board {
 	}
 	//Load setup.txt file and insert value/key in hash map for future access
 	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException{
-		roomMap = new HashMap<>(); //contains rooms
-
-
+		roomMap = new HashMap<>(); // Contains rooms
+		
 		//Fill hashMap
-
 		try (Scanner scanner = new Scanner(new File(setupConfigFile))) {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine().trim();
 				if (line.isEmpty() || line.startsWith("/")) continue; // Skip empty and comment lines
 
-				String[] values = line.split(", "); // separate room/space names and character
+				String[] values = line.split(", "); // Separate room/space names and character
 
 				if(values[0].equals("Room") || values[0].equals("Space")) { //only input rooms
 
@@ -112,47 +104,38 @@ public class Board {
 		}
 	}
 
-	//Load layout.csv file and read through it ensuring it is not corrupted
-	public void loadLayoutConfig() throws BadConfigFormatException, FileNotFoundException{
+	// Load layout.csv file and read through it ensuring it is not corrupted
+	public void loadLayoutConfig() throws BadConfigFormatException, FileNotFoundException {
+	    try (Scanner scanner = new Scanner(new File(layoutConfigFile))) {
+	        ArrayList<String[]> tempList = new ArrayList<>();
 
-		Scanner scanner = new Scanner(new File(layoutConfigFile));
-		ArrayList<String[]> tempList = new ArrayList<>(); //temp storage
+	        while (scanner.hasNextLine()) {
+	            String line = scanner.nextLine().trim();
+	            if (line.isEmpty()) continue;
+	            String[] values = line.split(",");
+	            if (COLS == 0) {
+	                COLS = values.length;
+	            } else if (COLS != values.length) {
+	                throw new BadConfigFormatException("Inconsistent column count in layout");
+	            }
+	            tempList.add(values);
+	        }
 
-		//Fill grid with layout
-		while(scanner.hasNextLine()) {
-			String line = scanner.nextLine();
+	        ROWS = tempList.size();
+	        grid = new BoardCell[ROWS][COLS];
 
-			String[] values = line.split(",");
-
-			//check if columns and rows are consistent
-			if(COLS == 0) {
-				COLS = values.length; //first pass
-			}else if(COLS != values.length){
-				throw new BadConfigFormatException();
-			}
-
-			tempList.add(values);
-
-			ROWS++;
-		}
-
-		//initialize grid 
-		grid = new BoardCell[ROWS][COLS];
-
-		// Fill the board with TestBoardCell instances
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
-				grid[row][col] = new BoardCell(row, col);
-			}
-		}
-		//check if character is in setup config and populate board cells with info
-		processCell(tempList,ROWS,COLS);
+	        for (int row = 0; row < ROWS; row++) {
+	            for (int col = 0; col < COLS; col++) {
+	                grid[row][col] = new BoardCell(row, col);
+	            }
+	        }
 
 
-
+	        processCell(tempList, ROWS, COLS);
+	    }
 	}
 
-	//check if character is in setup config and populate board cells with info
+	// Check if character is in setup config and populate board cells with info
 	private void processCell(ArrayList<String[]>tempList, int ROWS, int COLS) throws BadConfigFormatException {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
@@ -196,79 +179,78 @@ public class Board {
 			}
 		}
 	}
-	//Calculates adjacency lists for all cells on the board
+	
+	// Calculates adjacency lists for all cells on the board
 	private void calcAdjacencies() {
 
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
-				BoardCell cell = grid[row][col];
+	    for (int row = 0; row < ROWS; row++) {
+	        for (int col = 0; col < COLS; col++) {
+	            BoardCell cell = grid[row][col];
 
-				if(cell.getInitial() == 'W') {	
-					// Add the valid adjacent cells for walkways
-					if (row - 1 >= 0 && grid[row - 1][col].getInitial() == 'W') 
-						cell.addAdjacency(grid[row - 1][col]); // Up
-					if (row + 1 < ROWS && grid[row + 1][col].getInitial() == 'W' ) 
-						cell.addAdjacency(grid[row + 1][col]); // Down
-					if (col - 1 >= 0 && grid[row][col - 1].getInitial() == 'W') 
-						cell.addAdjacency(grid[row][col - 1]); // Left
-					if (col + 1 < COLS && grid[row][col + 1].getInitial() == 'W') 
-						cell.addAdjacency(grid[row][col + 1]); // Right
-				}
+	            if (cell.getInitial() == 'W') {
+	                // Walkway adjacency
+	                if (row - 1 >= 0 && grid[row - 1][col].getInitial() == 'W')
+	                    cell.addAdjacency(grid[row - 1][col]);
+	                if (row + 1 < ROWS && grid[row + 1][col].getInitial() == 'W')
+	                    cell.addAdjacency(grid[row + 1][col]);
+	                if (col - 1 >= 0 && grid[row][col - 1].getInitial() == 'W')
+	                    cell.addAdjacency(grid[row][col - 1]);
+	                if (col + 1 < COLS && grid[row][col + 1].getInitial() == 'W')
+	                    cell.addAdjacency(grid[row][col + 1]);
+	            }
 
-				//Make sure doorway cells connect to room centers
-				if(cell.isDoorway() == true) {
-					if(cell.getDoorDirection() == DoorDirection.DOWN) {
-						Room room = roomMap.get(grid[row + 1][col].getInitial());
-						cell.addAdjacency(room.getCenterCell());
+	            if (cell.isDoorway()) {
+	                Room room = null;
+	                switch (cell.getDoorDirection()) {
+	                    case DOWN:
+	                        room = roomMap.get(grid[row + 1][col].getInitial());
+	                        break;
+	                    case UP:
+	                        room = roomMap.get(grid[row - 1][col].getInitial());
+	                        break;
+	                    case LEFT:
+	                        room = roomMap.get(grid[row][col - 1].getInitial());
+	                        break;
+	                    case RIGHT:
+	                        room = roomMap.get(grid[row][col + 1].getInitial());
+	                        break;
+	                }
+	                if (room != null && room.getCenterCell() != null) {
+	                    cell.addAdjacency(room.getCenterCell());
+	                }
+	            }
+	        }
+	    }
 
-					}else if(cell.getDoorDirection() == DoorDirection.UP){
-						Room room = roomMap.get(grid[row - 1][col].getInitial());
-						cell.addAdjacency(room.getCenterCell());
+	    // Second pass: update room center adjacencies
+	    for (int row = 0; row < ROWS; row++) {
+	        for (int col = 0; col < COLS; col++) {
+	            BoardCell cell = grid[row][col];
+	            if (cell.isRoomCenter()) {
+	                Room currentRoom = roomMap.get(cell.getInitial());
+	                if (currentRoom != null && currentRoom.getSecretPassage() != null) {
+	                    char passageInitial = currentRoom.getSecretPassage().getSecretPassage();
+	                    Room targetRoom = roomMap.get(passageInitial);
+	                    if (targetRoom != null && targetRoom.getCenterCell() != null) {
+	                        BoardCell targetCenter = targetRoom.getCenterCell();   
+	                        cell.addAdjacency(targetCenter);
+	                    }
+	                }
 
+	                // Add doorway cells connected to this room
+	                for (BoardCell doorway : doorwayList) {
+	                    for (BoardCell adj : doorway.getAdjList()) {
+	                        if (adj.isRoomCenter() && adj.getInitial() == cell.getInitial()) {
+	                            cell.addAdjacency(doorway);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    }
 
-					}else if(cell.getDoorDirection() == DoorDirection.LEFT){
-						Room room = roomMap.get(grid[row][col - 1].getInitial());
-						cell.addAdjacency(room.getCenterCell());
-
-
-					}else if(cell.getDoorDirection() == DoorDirection.RIGHT){
-						Room room = roomMap.get(grid[row][col + 1].getInitial());
-						cell.addAdjacency(room.getCenterCell());
-
-
-					}
-				}
-
-			}
-		}
-		//loop through again for room center cells. Must be in different loop because we need doorway cells to be updated already
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
-				BoardCell cell = grid[row][col];
-
-				if(cell.isRoomCenter() == true) { //need to connect to walkway with door and room center of secret passage
-					if(roomMap.get(cell.getInitial()).getSecretPassage() != null){ //check that room has secret passage 
-						//add room center of secret passage 
-						Room tempRoom = roomMap.get(cell.getInitial());
-						char tempSecretInitial = (tempRoom.getSecretPassage()).getSecretPassage();
-						Room tempSecretRoom = roomMap.get(tempSecretInitial);
-						BoardCell secretRoomCenter = tempSecretRoom.getCenterCell();
-						cell.addAdjacency(secretRoomCenter);
-					}
-					//add doorway cells
-					for(BoardCell doorway : doorwayList) {//iterate through list of doorways
-						for(BoardCell doorAdj : doorway.getAdjList()) { //iterate through adjacency list of each doorway
-							if(doorAdj.isRoomCenter() && (doorAdj.getInitial() == cell.getInitial())) { 
-								cell.addAdjacency(doorway); //add doorway cell to room center cell
-							}
-						}
-
-					}
-
-				}
-			}
-		}
 	}
+	
 	// Calculates possible move targets given a dice roll
 	public void calcTargets(BoardCell startCell, int pathlength) {
 		targets.clear();
@@ -285,7 +267,12 @@ public class Board {
 		} else {
 			for (BoardCell adj : currentCell.getAdjList()) {
 				if (!visited.contains(adj) && (!adj.isOccupied() || adj.isRoomCenter())) {
-					findAllTargets(adj, stepsRemaining - 1);
+					if(adj.isRoomCenter()) {
+						findAllTargets(adj, 0);
+					}else {
+						findAllTargets(adj, stepsRemaining - 1);
+					}
+					
 				}
 			}
 		}
@@ -324,5 +311,6 @@ public class Board {
 		return COLS;
 	}
 }
+
 
 
