@@ -117,7 +117,7 @@ public class BoardCell {
 		return doorDirection;
 	}
 
-	// Getter: for checking if the given space is a door way
+	// Getter for checking if the given space is a door way
 	public boolean isDoorway() {
 		return isDoorway;
 	}

@@ -24,7 +24,7 @@ import experiment.TestBoardCell;
 
 public class Board {
 
-	private int ROWS,COLS;
+	private int MAX_ROWS,MAX_COLS;
 	private String layoutConfigFile, setupConfigFile;
 	private Map<Character,Room> roomMap;
 	private BoardCell[][] grid;
@@ -51,8 +51,8 @@ public class Board {
 
 	public void initialize() {
 		// Always reset in case tests re-call this (common in JUnit test suites)
-		ROWS = 0;
-		COLS = 0;
+		MAX_ROWS = 0;
+		MAX_COLS = 0;
 		targets = new HashSet<>();
 		visited = new HashSet<>();
 		roomMap = new HashMap<>();
@@ -116,25 +116,25 @@ public class Board {
 				String line = scanner.nextLine().trim();
 				if (line.isEmpty()) continue;
 				String[] values = line.split(",");
-				if (COLS == 0) {
-					COLS = values.length;
-				} else if (COLS != values.length) {
+				if (MAX_COLS == 0) {
+					MAX_COLS = values.length;
+				} else if (MAX_COLS != values.length) {
 					throw new BadConfigFormatException("Inconsistent column count in layout");
 				}
 				tempList.add(values);
 			}
 
-			ROWS = tempList.size();
-			grid = new BoardCell[ROWS][COLS];
+			MAX_ROWS = tempList.size();
+			grid = new BoardCell[MAX_ROWS][MAX_COLS];
 
-			for (int row = 0; row < ROWS; row++) {
-				for (int col = 0; col < COLS; col++) {
+			for (int row = 0; row < MAX_ROWS; row++) {
+				for (int col = 0; col < MAX_COLS; col++) {
 					grid[row][col] = new BoardCell(row, col);
 				}
 			}
 
 
-			processCell(tempList, ROWS, COLS);
+			processCell(tempList, MAX_ROWS, MAX_COLS);
 		}
 	}
 
@@ -185,19 +185,19 @@ public class Board {
 	// Calculates adjacency lists for all cells on the board
 	private void calcAdjacencies() {
 
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
+		for (int row = 0; row < MAX_ROWS; row++) {
+			for (int col = 0; col < MAX_COLS; col++) {
 				BoardCell cell = grid[row][col];
 
 				if (cell.getInitial() == 'W') {
 					// Walkway adjacency
 					if (row - 1 >= 0 && grid[row - 1][col].getInitial() == 'W')
 						cell.addAdjacency(grid[row - 1][col]);
-					if (row + 1 < ROWS && grid[row + 1][col].getInitial() == 'W')
+					if (row + 1 < MAX_ROWS && grid[row + 1][col].getInitial() == 'W')
 						cell.addAdjacency(grid[row + 1][col]);
 					if (col - 1 >= 0 && grid[row][col - 1].getInitial() == 'W')
 						cell.addAdjacency(grid[row][col - 1]);
-					if (col + 1 < COLS && grid[row][col + 1].getInitial() == 'W')
+					if (col + 1 < MAX_COLS && grid[row][col + 1].getInitial() == 'W')
 						cell.addAdjacency(grid[row][col + 1]);
 				}
 
@@ -225,8 +225,8 @@ public class Board {
 		}
 
 		// Second pass: update room center adjacencies
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLS; col++) {
+		for (int row = 0; row < MAX_ROWS; row++) {
+			for (int col = 0; col < MAX_COLS; col++) {
 				BoardCell cell = grid[row][col];
 				if (cell.isRoomCenter()) {
 					Room currentRoom = roomMap.get(cell.getInitial());
@@ -306,10 +306,10 @@ public class Board {
 	}
 
 	public int getNumRows() {
-		return ROWS;
+		return MAX_ROWS;
 	}
 	public int getNumColumns() {
-		return COLS;
+		return MAX_COLS;
 	}
 }
 
