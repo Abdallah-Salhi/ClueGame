@@ -25,7 +25,6 @@ public class BoardCell {
 	private boolean isCenter = false;
 	private boolean isDoorway = false;
 	private DoorDirection doorDirection;
-	private boolean isRoom = false; // remove in another commit
 	private boolean isOccupied = false;
 	private Set<BoardCell> adjacencyList;
 	private Room room;
@@ -37,10 +36,12 @@ public class BoardCell {
 		this.adjacencyList = new HashSet<>();
 	}
 
+	// Adds a cell to this cell's adjacency list.
 	public void addAdjacency(BoardCell cell) {
 		adjacencyList.add(cell);
 	}
-	// 
+
+	// Returns the set of cells adjacent to this one.
 	public Set<BoardCell> getAdjList() {
 		return adjacencyList; 
 	}
@@ -48,18 +49,12 @@ public class BoardCell {
 	// Setter for checking if the given space is a room
 	public void setRoom(Room room) {
 		this.room = room;
-		isRoom = true; // remove is room
-	}
-
-	// Getter for checking if the given space is a room
-	public boolean isRoom() {
-		return isRoom; 
+		
 	}
 
 	// Setter for checking if the given space is currently occupied by another player
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
-		isOccupied = true; // remove for other commit
 	}
 
 	// Getter for checking if the given space is currently occupied by another player
@@ -90,41 +85,49 @@ public class BoardCell {
 			break;
 		}
 	}
+
+	// Returns the direction of the doorway (if this cell is a doorway).
 	public DoorDirection getDoorDirection() {
 		return doorDirection;
 	}
 
-	//Should return true or false if 
+	// Should return true or false if 
 	public boolean isLabel() {
 		return isLabel;
 	}
 
-	//Should return true if it is a label
+	// Should return true if it is a label
 	public boolean setLabel() {
 		return isLabel = true;
 	}
 
-	
+	// Returns true if this cell is the center of a room.
 	public boolean isRoomCenter() {
 		return isCenter;
 	}
+
+	// Marks this cell as the center of a room and returns true.
 	public boolean setRoomCenter() {
 		isCenter = true;
 		return isCenter;
 	}
 
+	// Returns the secret passage destination character.
 	public void setSecretPassage(char value) {
 		this.secretPassage = value;
 	}
 
+	// Returns the secret passage destination character.
 	public char getSecretPassage() {
 		return secretPassage;
 	}
 
+	// Returns the initial character representing the room.
 	public char getInitial() {
 		return initial;
 	}
 
+	// Sets the initial character representing the room.
 	public void setInitial(char initial) {
 		this.initial = initial;
 	}

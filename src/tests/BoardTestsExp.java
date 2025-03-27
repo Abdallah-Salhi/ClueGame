@@ -34,7 +34,7 @@ public class BoardTestsExp {
 	
 	@Test
 	public void testAdjacency() {
-	    //Top left corner (0,0)
+	    // Top left corner (0,0)
 	    TestBoardCell cell = board.getCell(0, 0);
 	    Set<TestBoardCell> testList = cell.getAdjList();
 	    Assert.assertTrue(testList.contains(board.getCell(0, 1))); 
@@ -42,14 +42,14 @@ public class BoardTestsExp {
 	    Assert.assertFalse(testList.contains(board.getCell(0, 0))); 
 	    Assert.assertFalse(testList.contains(board.getCell(3, 3))); 
 
-	    //Bottom right corner (3,3)
+	    // Bottom right corner (3,3)
 	    cell = board.getCell(3, 3);
 	    testList = cell.getAdjList();
 	    Assert.assertTrue(testList.contains(board.getCell(3, 2))); 
 	    Assert.assertTrue(testList.contains(board.getCell(2, 3))); 
 	    Assert.assertFalse(testList.contains(board.getCell(3, 3))); 
 
-	    //Right edge (1,3)
+	    // Right edge (1,3)
 	    cell = board.getCell(1, 3);
 	    testList = cell.getAdjList();
 	    Assert.assertTrue(testList.contains(board.getCell(0, 3)));
@@ -84,7 +84,7 @@ public class BoardTestsExp {
 	 */
 	@Test
 	void testTargetNormal() {
-		//Test Case 2 - Starting location
+		// Test Case 2 - Starting location
 		TestBoardCell cell = board.getCell(0, 0);
 		board.calcTargets(cell, 2);
 		Set<TestBoardCell> targets = board.getTargets();
@@ -93,7 +93,7 @@ public class BoardTestsExp {
 		Assert.assertTrue(targets.contains(board.getCell(1,1)));
 		Assert.assertTrue(targets.contains(board.getCell(2,0)));
 		
-		//Test Case 3 - Starting location
+		// Test Case 3 - Starting location
 		TestBoardCell cell2 = board.getCell(2, 0);
 		board.calcTargets(cell2, 2);
 		Set<TestBoardCell> targets2 = board.getTargets();
@@ -103,13 +103,13 @@ public class BoardTestsExp {
 		Assert.assertTrue(targets2.contains(board.getCell(2,2)));
 		Assert.assertTrue(targets2.contains(board.getCell(1,1)));
 		
-		//Test case 4 - Different steps from 0,0
+		// Test case 4 - Different steps from 0,0
 		board.calcTargets(cell, 1);
 		Assert.assertEquals(2, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(0,1)));
 		Assert.assertTrue(targets.contains(board.getCell(1,0)));
 		
-		//Test case 5 - Different steps from 0,0
+		// Test case 5 - Different steps from 0,0
 		board.calcTargets(cell, 4);
 		Assert.assertEquals(6, targets.size());
 		Assert.assertTrue(targets.contains(board.getCell(1,3)));
