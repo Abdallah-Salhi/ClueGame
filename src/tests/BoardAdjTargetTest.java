@@ -178,6 +178,7 @@ public class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(6, 23)));
 		assertTrue(targets.contains(board.getCell(10, 23)));
 		assertTrue(targets.contains(board.getCell(7, 20)));
+		assertFalse(targets.contains(board.getCell(9, 25)));
 
 		// Test a roll of 4
 		board.calcTargets(board.getCell(8, 22), 4);
@@ -186,7 +187,7 @@ public class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(6, 23)));
 		assertTrue(targets.contains(board.getCell(10, 22)));
 		assertTrue(targets.contains(board.getCell(6, 20)));
-		// assertFalse(targets.contains(board.getCell(6, 17)));
+		assertFalse(targets.contains(board.getCell(6, 17)));
 	}
 
 	// Targets calculated when leaving a room without secret passage
@@ -206,6 +207,7 @@ public class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(26, 13)));
 		assertTrue(targets.contains(board.getCell(35, 17)));
 		assertTrue(targets.contains(board.getCell(26, 17)));
+		assertFalse(targets.contains(board.getCell(7, 10)));
 	}
 
 
