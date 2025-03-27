@@ -147,13 +147,13 @@ public class Board {
 				char firstChar = tempList.get(row)[col].charAt(0); //get just the first Character not * or #
 
 				if(roomMap.containsKey(firstChar)) {
-					//Populate boardCells with info
-					grid[row][col].setInitial(firstChar); //set the initial of the cell
-					grid[row][col].setRoom(roomMap.get(firstChar)); //link to room object
-					grid[row][col].isRoom(); //returns true because it is a room cell
+					// Populate boardCells with info
+					grid[row][col].setInitial(firstChar); // Set the initial of the cell
+					grid[row][col].setRoom(roomMap.get(firstChar)); // Link to room object
+					grid[row][col].isRoom(); // Returns true because it is a room cell
 
-					if(tempList.get(row)[col].length() > 1) { //check if cell has other characters
-						char scndChar = tempList.get(row)[col].charAt(1); //get the second Character( * or # or letters)
+					if(tempList.get(row)[col].length() > 1) { // Check if cell has other characters
+						char scndChar = tempList.get(row)[col].charAt(1); // Get the second Character( * or # or letters)
 
 						if(scndChar == '*') {
 							grid[row][col].setRoomCenter();
