@@ -96,9 +96,6 @@ public class BoardAdjTargetTest {
 		assertEquals(0, testList.size());
 		assertFalse(testList.contains(board.getCell(40, 14)));
 		assertFalse(testList.contains(board.getCell(41, 13)));
-
-
-
 	}
 
 	// Locations that are beside a room cell that is not a doorway
@@ -161,7 +158,6 @@ public class BoardAdjTargetTest {
 		assertTrue(targets.contains(board.getCell(15, 6)));
 		assertTrue(targets.contains(board.getCell(14, 9)));
 		assertTrue(targets.contains(board.getCell(16, 11)));
-
 	}
 
 	// Targets that allow the user to enter a room

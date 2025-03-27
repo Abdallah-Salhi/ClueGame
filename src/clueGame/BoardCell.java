@@ -4,7 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /*
- * BoardCell 
+ * BoardCell:
+ * Represents a single cell on the Clue game board.
+ * A BoardCell may represent a walkway, room, doorway, or special location
+ * such as a room label or center. It also maintains information about
+ * adjacency, door direction, occupancy, and room association.
+ *
  * Authors/Contributors:
  * Abdallah Salhi
  * Montgomery Hughes
@@ -20,7 +25,7 @@ public class BoardCell {
 	private boolean isCenter = false;
 	private boolean isDoorway = false;
 	private DoorDirection doorDirection;
-	private boolean isRoom = false;
+	private boolean isRoom = false; // remove in another commit
 	private boolean isOccupied = false;
 	private Set<BoardCell> adjacencyList;
 	private Room room;
@@ -35,7 +40,7 @@ public class BoardCell {
 	public void addAdjacency(BoardCell cell) {
 		adjacencyList.add(cell);
 	}
-
+	// 
 	public Set<BoardCell> getAdjList() {
 		return adjacencyList; 
 	}
@@ -43,30 +48,31 @@ public class BoardCell {
 	// Setter for checking if the given space is a room
 	public void setRoom(Room room) {
 		this.room = room;
-		isRoom = true;
+		isRoom = true; // remove is room
 	}
 
 	// Getter for checking if the given space is a room
 	public boolean isRoom() {
-		return isRoom;
+		return isRoom; 
 	}
 
 	// Setter for checking if the given space is currently occupied by another player
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
-		isOccupied = true;
+		isOccupied = true; // remove for other commit
 	}
 
 	// Getter for checking if the given space is currently occupied by another player
 	public boolean isOccupied() {
 		return isOccupied;
 	}
-
+	
+	// Getter for checking if the given space is a door way
 	public boolean isDoorway() {
-		// TODO Auto-generated method stub
 		return isDoorway;
 	}
 
+	// Setter for isDoorway and Switch for door direction
 	public void setDoorDirection(char scndChar) {
 		isDoorway = true;
 		switch (scndChar) {
@@ -93,16 +99,18 @@ public class BoardCell {
 		return isLabel;
 	}
 
-	//Should return true or false if 
+	//Should return true if it is a label
 	public boolean setLabel() {
 		return isLabel = true;
 	}
 
+	
 	public boolean isRoomCenter() {
 		return isCenter;
 	}
 	public boolean setRoomCenter() {
-		return isCenter = true;
+		isCenter = true;
+		return isCenter;
 	}
 
 	public void setSecretPassage(char value) {
