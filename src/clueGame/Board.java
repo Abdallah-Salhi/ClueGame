@@ -222,7 +222,12 @@ public class Board {
 					case RIGHT:
 						room = roomMap.get(grid[row][col + 1].getInitial());
 						break;
+					case NONE:
+			        default:
+			            throw new IllegalStateException("Unexpected door direction: " + cell.getDoorDirection());
 					}
+					
+						
 					if (room != null && room.getCenterCell() != null) {
 						cell.addAdjacency(room.getCenterCell());
 					}
@@ -256,7 +261,6 @@ public class Board {
 				}
 			}
 		}
-
 	}
 
 	// Calculates possible move targets given a dice roll
@@ -318,6 +322,4 @@ public class Board {
 		return MAX_COLS;
 	}
 }
-
-
-
+	
