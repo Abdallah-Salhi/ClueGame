@@ -138,47 +138,53 @@ public class Board {
 		}
 	}
 
-	// Check if character is in setup config and populate board cells with info
-	private void processCell(ArrayList<String[]>tempList, int ROWS, int COLS) throws BadConfigFormatException {
+	// Moves through the board layout and populates grid cells with room and modifier info.
+	private void processCell(ArrayList<String[]> tempList, int ROWS, int COLS) throws BadConfigFormatException {
 		for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLS; col++) {
-				char firstChar = tempList.get(row)[col].charAt(0); //get just the first Character not * or #
+				String cellCode = tempList.get(row)[col];
+				if (cellCode.isEmpty()) {
+					throw new BadConfigFormatException("Empty cell at (" + row + ", " + col + ")");
+				}
 
-				if(roomMap.containsKey(firstChar)) {
-					// Populate boardCells with info
-					grid[row][col].setInitial(firstChar); // Set the initial of the cell
-					grid[row][col].setRoom(roomMap.get(firstChar)); // Link to room object
+				char firstChar = cellCode.charAt(0);
+				if (!roomMap.containsKey(firstChar)) {
+					throw new BadConfigFormatException("Unknown room symbol '" + firstChar + "' at (" + row + ", " + col + ")");
+				}
 
-					if(tempList.get(row)[col].length() > 1) { // Check if cell has other characters
-						char scndChar = tempList.get(row)[col].charAt(1); // Get the second Character( * or # or letters)
+				Room room = roomMap.get(firstChar);
+				grid[row][col].setInitial(firstChar);
+				grid[row][col].setRoom(room);
 
-						if(scndChar == '*') {
-							grid[row][col].setRoomCenter();
-							Room room = roomMap.get(firstChar);
-							room.setCenterCell(grid[row][col]);
-
-						}else if(scndChar == '#') {
-							grid[row][col].setLabel();
-							Room room = roomMap.get(firstChar);
-							room.setLabelCell(grid[row][col]);
-
-						}else if(scndChar == '<' ||scndChar == '>' || scndChar == 'v'|| scndChar == '^') {
-							grid[row][col].setDoorDirection(scndChar);
-							doorwayList.add(grid[row][col]); // Add to doorway list
-
-						}else if(roomMap.containsKey(scndChar)) {
-							grid[row][col].setSecretPassage(scndChar);
-							Room room = roomMap.get(firstChar);
-							room.setSecretPassage(grid[row][col]);
-
-						}else {
-							throw new BadConfigFormatException("Error: Second character in cell unknown");
-						}
-					}
-				}else {
-					throw new BadConfigFormatException("Error: CSV layout contains unknown symbol");
+				if (cellCode.length() > 1) {
+					processCellModifiers(cellCode.charAt(1), grid[row][col], room, row, col);
 				}
 			}
+		}
+	}
+
+	// Helper function, applies cell-specific modifiers like doors, labels, centers, or secret passages.
+	private void processCellModifiers(char modifier, BoardCell cell, Room room, int row, int col) throws BadConfigFormatException {
+		switch (modifier) {
+			case '*':
+				cell.setRoomCenter();
+				room.setCenterCell(cell);
+				break;
+			case '#':
+				cell.setLabel();
+				room.setLabelCell(cell);
+				break;
+			case '<': case '>': case '^': case 'v':
+				cell.setDoorDirection(modifier);
+				doorwayList.add(cell);
+				break;
+			default:
+				if (roomMap.containsKey(modifier)) {
+					cell.setSecretPassage(modifier);
+					room.setSecretPassage(cell);
+				} else {
+					throw new BadConfigFormatException("Unknown cell modifier '" + modifier + "' at (" + row + ", " + col + ")");
+				}
 		}
 	}
 
