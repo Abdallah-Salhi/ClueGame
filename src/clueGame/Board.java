@@ -338,9 +338,8 @@ public class Board {
 	    };
 	}
 	
+	// Chooses card person weapon for the solution and deals cards to players
 	private void selectAnswerAndDealCards() {
-		// Temp check added for tests that never load player data.
-		//if (players.isEmpty()) return;
 	    
 	    List<Card> deckList = new ArrayList<>(deck);
 	    Collections.shuffle(deckList);
