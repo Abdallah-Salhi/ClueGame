@@ -35,7 +35,7 @@ public class Board {
 	private Set<BoardCell> doorwayList = new HashSet<>();
     private Solution solution;
     private List<Player> players = new ArrayList<>();
-    private Set<Card> deck = new HashSet<>();
+    private Set<Card> deck;
 
 	// Singleton instance of the Board (only one Board exists in the game)
 	private static Board theInstance = new Board();
@@ -60,6 +60,7 @@ public class Board {
 		roomMap = new HashMap<>();
 		grid = null;
 		doorwayList = new HashSet<>();
+		deck = new HashSet<>();
 
 		// Load configuration files
 		try {
@@ -399,12 +400,11 @@ public class Board {
 	public int getNumRows() {
 		return MAX_ROWS;
 	}
+	
 	public int getNumColumns() {
 		return MAX_COLS;
 	}
-<<<<<<< HEAD
-	
-=======
+
 	public List<Player> getPlayers() {
 	    return players; 
 	}
@@ -414,6 +414,6 @@ public class Board {
 	public Solution getSolution() {
 	    return solution; 
 	}
->>>>>>> 3f4522757a4ebf827d6960b1041e1414e005ad57
+
 }
 	
