@@ -321,5 +321,6 @@ public class Board {
 	public int getNumColumns() {
 		return MAX_COLS;
 	}
+	
 }
 	
