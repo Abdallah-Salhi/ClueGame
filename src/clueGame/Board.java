@@ -33,20 +33,11 @@ public class Board {
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
 	private Set<BoardCell> doorwayList = new HashSet<>();
-<<<<<<< HEAD
     private Solution solution;
-    
     private List<Player> players = new ArrayList<>();
     private Set<Card> deck = new HashSet<>();
-    
-	// Singleton Pattern
-=======
-
-
-
 
 	// Singleton instance of the Board (only one Board exists in the game)
->>>>>>> fe012c63341217f298c3ffa8d725174e6ee06aa2
 	private static Board theInstance = new Board();
 
 
@@ -79,39 +70,24 @@ public class Board {
 		} catch (FileNotFoundException e) {
 			System.out.println("Error: Config files not found");
 		}
-
-<<<<<<< HEAD
+		
+		// After files are loaded, calculate adjacencies for movement logic
 	    calcAdjacencies();
 	    
 	    selectAnswerAndDealCards();
-=======
-		// After files are loaded, calculate adjacencies for movement logic
-		calcAdjacencies();
->>>>>>> fe012c63341217f298c3ffa8d725174e6ee06aa2
 	}
+	
 	// Ensures correct pathway for file reading
 	public void setConfigFiles(String layout, String setup) {
 		layoutConfigFile = "data/" + layout;
 		setupConfigFile = "data/" + setup;
-
-
 	}
-<<<<<<< HEAD
+	
+
 	//Load setup.txt file and insert value/key in hash map for future access
 	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException {
 	    roomMap = new HashMap<>();
-=======
-	// Load setup.txt file and insert value/key in hash map for future access
-	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException{
-		roomMap = new HashMap<>(); // Contains rooms
-
-		// Fill hashMap
-		try (Scanner scanner = new Scanner(new File(setupConfigFile))) {
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine().trim();
-				if (line.isEmpty() || line.startsWith("/")) continue; // Skip empty and comment lines
->>>>>>> fe012c63341217f298c3ffa8d725174e6ee06aa2
-
+	    
 	    try (Scanner scanner = new Scanner(new File(setupConfigFile))) {
 	        while (scanner.hasNextLine()) {
 	            String line = scanner.nextLine().trim();
