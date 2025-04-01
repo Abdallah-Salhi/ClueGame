@@ -11,3 +11,17 @@ Room, Hall, H
 // other spaces on board
 Space, Unused, X
 Space, Walkway, W
+// Weapons
+Weapon, Wand
+Weapon, Sword
+Weapon, Potion
+Weapon, Book
+Weapon, Broomstick
+Weapon, Goblet
+// Players
+Player, Harry Potter, red, Human, 6, 2
+Player, Draco Malfoy, green, Computer, 1, 1
+Player, Hermione Granger, purple, Computer, 3, 5
+Player, Luna Lovegood, blue, Computer, 4, 7
+Player, Neville Longbottom, yellow, Computer, 9, 9
+Player, Ron Weasley, orange, Computer, 12, 3

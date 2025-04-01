@@ -32,9 +32,9 @@ public class Board {
 	private BoardCell[][] grid;
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
-	private Set<BoardCell> doorwayList = new HashSet<>();
+	private Set<BoardCell> doorwayList;
     private Solution solution;
-    private List<Player> players = new ArrayList<>();
+    private List<Player> players;
     private Set<Card> deck;
 
 	// Singleton instance of the Board (only one Board exists in the game)
@@ -61,6 +61,7 @@ public class Board {
 		grid = null;
 		doorwayList = new HashSet<>();
 		deck = new HashSet<>();
+		players = new ArrayList<>();
 
 		// Load configuration files
 		try {
@@ -339,7 +340,7 @@ public class Board {
 	
 	private void selectAnswerAndDealCards() {
 		// Temp check added for tests that never load player data.
-		if (players.isEmpty()) return;
+		//if (players.isEmpty()) return;
 	    
 	    List<Card> deckList = new ArrayList<>(deck);
 	    Collections.shuffle(deckList);
