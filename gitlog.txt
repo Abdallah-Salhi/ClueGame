@@ -1,9 +1,144 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C15A-1, dated 03/07/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C15A-1, dated 03/07/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C18A-2, dated 03/28/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C18A-2, dated 03/28/2025.
 
 
+commit 14abc8d1bdd4dc11567c436234c206cef35b275b
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Mar 28 17:44:23 2025 -0600
 
-    Initializing repo, Added .gitignore and Junit library
+    Refactor #8 - Added logic to switch case in calc adjacency function. It was missing a NONE case and error handling in case the door direction was never updated
+
+commit f5e3952350618201e51cdfbe593c4ce9f37924ac
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Mar 28 17:31:09 2025 -0600
+
+    Refactor #7 - refactored process cell function to make more clear and split into 2 functions to make it more readable and organized
+
+commit 283bf011168b37d3011e18db9fd9fc5b90d47c48
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:43:50 2025 -0600
+
+    Refactor #6 - Updated Variable names to be more clear
+
+commit 25ab9c6b140f4edded4aafaa90fa753c6a2f53f9
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:38:11 2025 -0600
+
+    Refactor #5 - Ensured class organization regarding getters and setters as well as the constructors and other functions
+
+commit bd33c97be759a574182b04b4b5a3ed7def5ca3ac
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:28:44 2025 -0600
+
+    Refactor #4 - Added additional edge cases that are relevant to pass
+
+commit 755752a5a135382fa5905bb0982124abff567e36
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:26:19 2025 -0600
+
+    Refactor #3 - Removed Unused variables and unnecessary lines of code
+
+commit 52c904a8286576c1f780050a0679e5a2d570fdb0
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:18:55 2025 -0600
+
+    Refactor #2 - Maintained consistency with commit headers for classes and method function while adding descriptions
+
+commit 1beb42f31d3c6723a68591715d0062b689a1b7e5
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Mar 27 15:15:11 2025 -0600
+
+    Refactor #1 - Updated comment style and fixed clarity
+
+commit f655c32e199773fd07035878ec79734016d1e1cc
+Merge: bcc6fff d09841b
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Mar 25 18:41:53 2025 -0600
+
+    Finished Clue Board 2 test implementation
+
+commit bcc6fff0e09d8620c81f82e0833391c5053b704b
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Mar 25 17:33:47 2025 -0600
+
+    Updated Calc Targets
+
+commit d09841b7fb0a46738082f1673a7290429469cc7b
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Tue Mar 25 17:30:45 2025 -0600
+
+    Updated CalcAdjacencies and Initalize in order to resolve testing issue
+
+commit 4ca8ff1c53d7884718b2715685dc7432a15f7b83
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Mar 25 13:35:52 2025 -0600
+
+    removed unwanted file
+
+commit 2bf403f9ff6ebba19d5942610759eb157f2c8406
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Mar 25 13:30:25 2025 -0600
+
+    Updated Adjacency List function
+
+commit d9940ec1bb8d515ebe616cc17861363c335e39e6
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 23 14:47:15 2025 -0600
+
+    Fixed CSV file
+
+commit 77eee8d8495163315be7105a2e79a28166079912
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 23 14:35:59 2025 -0600
+
+    Updated test to account for merge conflicts
+
+commit 44a37792f6bad11362d653bbdb55e5d40aca615d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 23 14:26:21 2025 -0600
+
+    Fixed merge conflift
+
+commit 94e7c66117470158ea604230e6662e5ed05f1856
+Merge: fec66fb fe0c59d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 23 13:57:35 2025 -0600
+
+    fix before merge
+
+commit fec66fbed169fdfe47c2bea0200ac344531efece
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 23 13:54:26 2025 -0600
+
+    fix before merge
+
+commit 04085c98560a6a545f308ab48840ac22967a321d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Mar 9 11:03:32 2025 -0600
+
+    Progess on Clue Board
+
+commit fe0c59db782d1de9a7cd4f21d35f1d61ba1aa5b8
+Merge: c24399c 67d76a3
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Sat Mar 8 23:03:36 2025 -0700
+
+    Merge pull request #4 from Abdallah-Salhi/ClueBoard1Monty
+    
+    Finished tests for ClueBoard1
+
+commit 67d76a332d09025dfd9b0c1cff56123dc614b54f
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Sat Mar 8 23:02:34 2025 -0700
+
+    Finished tests for ClueBoard1
+
+commit c24399ccdfa780daed40f58df1f843c8ffa96529
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sat Mar 8 17:46:32 2025 -0700
+
+    Progress on ClueBoard Tests
+
 commit 257ca84f98b9145968bad22a8926f4e2fd13c5b1
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Sat Mar 8 14:05:47 2025 -0700
@@ -40,7 +175,8 @@ Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
 Date:   Mon Mar 3 21:41:25 2025 -0700
 
     Merge pull request #3 from Abdallah-Salhi/GitInit1Monnty
- 
+    
+    More changes to JUnit tests
 
 commit dcbec414da929b948c3ec15a2fc659cfd81d05c4
 Author: Montgomery Hughes <montgomeryhughes@mines.edu>
@@ -67,6 +203,7 @@ Date:   Mon Mar 3 17:28:03 2025 -0700
 
     Merge pull request #2 from Abdallah-Salhi/GitInit1Monty
     
+    Added Room.java and BadConfigFormatException.java
 
 commit 9bb8e3fae0531efca9c31db4ab933dd1d799f767
 Author: Montgomery Hughes <montgomeryhughes@mines.edu>
