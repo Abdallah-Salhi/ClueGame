@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.List;
+import java.util.Collections;
 
 import experiment.TestBoardCell;
 
@@ -31,9 +33,9 @@ public class Board {
 	private Set<BoardCell> targets;
 	private Set<BoardCell> visited;
 	private Set<BoardCell> doorwayList = new HashSet<>();
-
-
-
+    private Solution solution;
+    private List<Player> players = new ArrayList<>();
+    private Set<Card> deck = new HashSet<>();
 
 	// Singleton instance of the Board (only one Board exists in the game)
 	private static Board theInstance = new Board();
@@ -68,43 +70,72 @@ public class Board {
 		} catch (FileNotFoundException e) {
 			System.out.println("Error: Config files not found");
 		}
-
+		
 		// After files are loaded, calculate adjacencies for movement logic
-		calcAdjacencies();
+	    calcAdjacencies();
+	    
+	    selectAnswerAndDealCards();
 	}
+	
 	// Ensures correct pathway for file reading
 	public void setConfigFiles(String layout, String setup) {
 		layoutConfigFile = "data/" + layout;
 		setupConfigFile = "data/" + setup;
-
-
 	}
-	// Load setup.txt file and insert value/key in hash map for future access
-	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException{
-		roomMap = new HashMap<>(); // Contains rooms
+	
 
-		// Fill hashMap
-		try (Scanner scanner = new Scanner(new File(setupConfigFile))) {
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine().trim();
-				if (line.isEmpty() || line.startsWith("/")) continue; // Skip empty and comment lines
+	//Load setup.txt file and insert value/key in hash map for future access
+	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException {
+	    roomMap = new HashMap<>();
+	    
+	    try (Scanner scanner = new Scanner(new File(setupConfigFile))) {
+	        while (scanner.hasNextLine()) {
+	            String line = scanner.nextLine().trim();
+	            if (line.isEmpty() || line.startsWith("/")) continue;
 
-				String[] values = line.split(", "); // Separate room/space names and character
+	            String[] values = line.split(", ");
 
-				if(values[0].equals("Room") || values[0].equals("Space")) { //only input rooms
+	            switch (values[0]) {
+	                case "Room", "Space" -> {
+	                    String roomName = values[1];
+	                    char roomChar = values[2].charAt(0);
+	                    Room room = new Room(roomName);
+	                    roomMap.put(roomChar, room);
 
-					String roomCharStr = values[2]; // convert room character to char
-					char roomChar = roomCharStr.charAt(0);
+	                    if (values[0].equals("Room")) {
+	                        deck.add(new Card(roomName, CardType.ROOM)); // Only actual rooms get cards
+	                    }
+	                }
 
-					String roomNameStr = values[1];
-					Room room = new Room(roomNameStr); // create room object
+	                case "Weapon" -> {
+	                    String weaponName = values[1];
+	                    deck.add(new Card(weaponName, CardType.WEAPON));
+	                }
 
-					roomMap.put(roomChar, room);
-				}else { 
-					throw new BadConfigFormatException("Error: Setup txt file not configured correctly");
-				}
-			}
-		}
+	                case "Player" -> {
+	                    String name = values[1];
+	                    String colorName = values[2];
+	                    String type = values[3];
+	                    int row = Integer.parseInt(values[4]);
+	                    int col = Integer.parseInt(values[5]);
+
+	                    java.awt.Color color = convertColor(colorName);
+
+	                    Player player;
+	                    if (type.equalsIgnoreCase("Human")) {
+	                        player = new HumanPlayer(name, color, row, col);
+	                    } else {
+	                        player = new ComputerPlayer(name, color, row, col);
+	                    }
+
+	                    players.add(player);
+	                    deck.add(new Card(name, CardType.PERSON));
+	                }
+
+	                default -> throw new BadConfigFormatException("Unrecognized type in setup file: " + values[0]);
+	            }
+	        }
+	    }
 	}
 
 	// Load layout.csv file and read through it ensuring it is not corrupted
@@ -291,6 +322,56 @@ public class Board {
 
 		visited.remove(currentCell); // Backtracking step
 	}
+	
+	// Converts color data, used in loadSetupConfig
+	private java.awt.Color convertColor(String strColor) {
+	    return switch (strColor.toLowerCase()) {
+	        case "red" -> java.awt.Color.RED;
+	        case "green" -> java.awt.Color.GREEN;
+	        case "blue" -> java.awt.Color.BLUE;
+	        case "yellow" -> java.awt.Color.YELLOW;
+	        case "orange" -> java.awt.Color.ORANGE;
+	        case "purple" -> new java.awt.Color(128, 0, 128);
+	        default -> java.awt.Color.GRAY; // Fallback for unknown color
+	    };
+	}
+	
+	private void selectAnswerAndDealCards() {
+		// Temp check added for tests that never load player data.
+		if (players.isEmpty()) return;
+	    
+	    List<Card> deckList = new ArrayList<>(deck);
+	    Collections.shuffle(deckList);
+
+	    Card person = null;
+	    Card weapon = null;
+	    Card room = null;
+
+	    // Randomly pick one of each type for the solution
+	    for (Card c : deckList) {
+	        if (c.getType() == CardType.PERSON && person == null) person = c;
+	        else if (c.getType() == CardType.WEAPON && weapon == null) weapon = c;
+	        else if (c.getType() == CardType.ROOM && room == null) room = c;
+
+	        if (person != null && weapon != null && room != null) break;
+	    }
+
+	    // Save as the solution
+	    solution = new Solution(person, weapon, room);
+
+	    // Remove solution cards from the deck
+	    deckList.remove(person);
+	    deckList.remove(weapon);
+	    deckList.remove(room);
+
+	    // Deal remaining cards to players
+	    int playerIndex = 0;
+	    while (!deckList.isEmpty()) {
+	        Card nextCard = deckList.remove(0);
+	        players.get(playerIndex % players.size()).giveCard(nextCard);
+	        playerIndex++;
+	    }
+	}
 
 	public Set<BoardCell> getAdjList(int row, int col) {
 		return getCell(row,col).getAdjList(); 
@@ -321,6 +402,18 @@ public class Board {
 	public int getNumColumns() {
 		return MAX_COLS;
 	}
+<<<<<<< HEAD
 	
+=======
+	public List<Player> getPlayers() {
+	    return players; 
+	}
+	public Set<Card> getDeck() {
+	    return deck; 
+	}
+	public Solution getSolution() {
+	    return solution; 
+	}
+>>>>>>> 3f4522757a4ebf827d6960b1041e1414e005ad57
 }
 	
