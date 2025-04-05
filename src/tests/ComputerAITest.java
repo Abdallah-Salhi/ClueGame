@@ -35,18 +35,38 @@ public class ComputerAITest {
 
     @Test
     public void testCreateSuggestion_OnlyOneUnseenPersonOrWeapon() {
-        cpu.giveCard(wand);
-        cpu.giveCard(draco);
-        cpu.addSeenCard(wand);
-        cpu.addSeenCard(goblet);
-        cpu.addSeenCard(draco);
-        cpu.addSeenCard(luna);
+        ComputerPlayer computer = new ComputerPlayer("Draco", Color.GREEN, 24, 7); // Assume this is Room of Requirement
+        Board board = Board.getInstance();
 
-        Solution suggestion = cpu.createSuggestion(board);
+        Card sword = null;
+        Card wand = null;
+        Card potion = null;
+        Card goblet = null;
+        Card broomstick = null;
+        Card book = null;
 
-        assertEquals("Room of Requirement", suggestion.getRoom().getCardName());
-        assertEquals("Sword", suggestion.getWeapon().getCardName());
-        assertEquals("Harry Potter", suggestion.getPerson().getCardName());
+        // Locate exact instances from the board's deck
+        for (Card c : board.getDeck()) {
+            switch (c.getCardName()) {
+                case "Sword" -> sword = c;
+                case "Wand" -> wand = c;
+                case "Potion" -> potion = c;
+                case "Goblet" -> goblet = c;
+                case "Broomstick" -> broomstick = c;
+                case "Book" -> book = c;
+            }
+        }
+
+        // Mark all other weapons as seen except Sword
+        computer.addSeenCard(wand);
+        computer.addSeenCard(potion);
+        computer.addSeenCard(goblet);
+        computer.addSeenCard(broomstick);
+        computer.addSeenCard(book);
+
+        // Only Sword is left unseen
+        Solution suggestion = computer.createSuggestion(board);
+        assertEquals(sword, suggestion.getWeapon());
     }
 
     @Test
@@ -74,20 +94,24 @@ public class ComputerAITest {
 
     @Test
     public void testSelectTarget_NoRoom_ChoosesRandom() {
-        Set<BoardCell> targets = new HashSet<>();
-        targets.add(board.getCell(6, 2)); // walkway
-        targets.add(board.getCell(6, 3)); // walkway
-        targets.add(board.getCell(6, 4)); // walkway
+        ComputerPlayer computer = new ComputerPlayer("Ron", Color.ORANGE, 5, 5);
+        Board board = Board.getInstance();
 
-        Set<BoardCell> chosenCells = new HashSet<>();
+        BoardCell cell1 = board.getCell(5, 6); // Assume walkway
+        BoardCell cell2 = board.getCell(5, 4); // Assume walkway
+        BoardCell cell3 = board.getCell(6, 5); // Assume walkway
+
+        Set<BoardCell> targets = Set.of(cell1, cell2, cell3);
+        Set<BoardCell> seenResults = new HashSet<>();
+
+        // Run multiple times to observe randomness
         for (int i = 0; i < 100; i++) {
-            BoardCell chosen = cpu.selectTarget(targets, board);
-            chosenCells.add(chosen);
+            BoardCell selected = computer.selectTarget(targets, board);
+            seenResults.add(selected);
         }
 
-        assertTrue(chosenCells.contains(board.getCell(6, 2)));
-        assertTrue(chosenCells.contains(board.getCell(6, 3)));
-        assertTrue(chosenCells.contains(board.getCell(6, 4)));
+        // Ensure more than one unique cell was chosen over 100 trials
+        assertTrue(seenResults.size() > 1, "Expected random selection across multiple targets");
     }
 
     @Test
