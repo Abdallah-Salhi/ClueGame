@@ -34,7 +34,7 @@ public class ComputerAITest {
     }
 
     @Test
-    public void testCreateSuggestion_OnlyOneUnseenPersonOrWeapon() {
+    public void suggestionWithSingleUnseenCard() {
         ComputerPlayer computer = new ComputerPlayer("Draco", Color.GREEN, 24, 7); // Assume this is Room of Requirement
         Board board = Board.getInstance();
 
@@ -70,7 +70,7 @@ public class ComputerAITest {
     }
 
     @Test
-    public void testCreateSuggestion_WeaponAndPersonRandom() {
+    public void suggestionRandomAmongUnseenCards() {
         Set<String> seenWeapons = new HashSet<>();
         Set<String> seenPeople = new HashSet<>();
 
@@ -93,7 +93,7 @@ public class ComputerAITest {
     }
 
     @Test
-    public void testSelectTarget_NoRoom_ChoosesRandom() {
+    public void selectTargetRandom_NoRooms() {
         ComputerPlayer computer = new ComputerPlayer("Ron", Color.ORANGE, 5, 5);
         Board board = Board.getInstance();
 
@@ -115,7 +115,7 @@ public class ComputerAITest {
     }
 
     @Test
-    public void testSelectTarget_UnseenRoomPreferred() {
+    public void selectsUnseenRoomOverWalkway() {
         Set<BoardCell> targets = new HashSet<>();
         BoardCell chamberCell = board.getCell(15, 6); // center of Chamber of Secrets
         targets.add(board.getCell(6, 2)); // walkway
@@ -129,7 +129,7 @@ public class ComputerAITest {
     }
 
     @Test
-    public void testSelectTarget_SeenRoomEqualChance() {
+    public void seenRoomRandomLikeWalkways() {
         Set<BoardCell> targets = new HashSet<>();
         BoardCell chamberCell = board.getCell(15, 6);
         targets.add(board.getCell(6, 2));
