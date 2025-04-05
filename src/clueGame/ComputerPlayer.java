@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -36,8 +37,11 @@ public class ComputerPlayer extends Player {
         }
 
         Random rand = new Random();
-        Card personCard = unseenPeople.get(rand.nextInt(unseenPeople.size()));
-        Card weaponCard = unseenWeapons.get(rand.nextInt(unseenWeapons.size()));
+        Card personCard = unseenPeople.size() == 1 ? unseenPeople.get(0) :
+            unseenPeople.get(rand.nextInt(unseenPeople.size()));
+
+        Card weaponCard = unseenWeapons.size() == 1 ? unseenWeapons.get(0) :
+            unseenWeapons.get(rand.nextInt(unseenWeapons.size()));
 
         return new Solution(personCard, weaponCard, roomCard);
     }
@@ -45,6 +49,7 @@ public class ComputerPlayer extends Player {
     public BoardCell selectTarget(Set<BoardCell> targets, Board board) {
         List<BoardCell> unseenRooms = new ArrayList<>();
 
+        // First, collect all unseen room centers from the target list
         for (BoardCell cell : targets) {
             if (cell.isRoomCenter()) {
                 Room room = board.getRoom(cell);
@@ -56,11 +61,15 @@ public class ComputerPlayer extends Player {
         }
 
         Random rand = new Random();
+
         if (!unseenRooms.isEmpty()) {
+            // Pick randomly from unseen rooms
             return unseenRooms.get(rand.nextInt(unseenRooms.size()));
         }
 
+        // Fallback: randomly choose from all available targets
         List<BoardCell> allTargets = new ArrayList<>(targets);
-        return allTargets.get(rand.nextInt(allTargets.size()));
+        Collections.shuffle(allTargets); // Ensure real randomness
+        return allTargets.get(0);
     }
 }
