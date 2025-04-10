@@ -1,7 +1,4 @@
-package tests;
-
-import clueGame.Card;
-import clueGame.Player;
+package clueGame;
 
 public class Suggestion {
 

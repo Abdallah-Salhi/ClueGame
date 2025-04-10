@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import clueGame.Accusation;
 import clueGame.Board;
 import clueGame.Card;
 import clueGame.CardType;
@@ -17,6 +18,7 @@ import clueGame.HumanPlayer;
 import clueGame.ComputerPlayer;
 import clueGame.Player;
 import clueGame.Solution;
+import clueGame.Suggestion;
 
 
 class GameSolutionTest {
@@ -43,6 +45,7 @@ class GameSolutionTest {
 	
 	private static Solution solution;
 	private static Suggestion suggestion;
+	private static Accusation accusation;
 	private static ArrayList<Player> players;
 
 	private static HumanPlayer player1;
@@ -99,43 +102,26 @@ class GameSolutionTest {
 
 	@Test
 	void checkAccusationTest() {
-		HashSet<Card> accusation = new HashSet<>();
 		
 		//solution that is correct
-		accusation.add(potterCard);
-		accusation.add(wandCard);
-		accusation.add(slytherinCard);
-		
+		accusation = new Accusation(randomPlayer, potterCard, wandCard, slytherinCard);
 		boolean check = board.checkAccusation(accusation, solution);
 		assertTrue(check);
-		accusation.clear();
 		
 		//solution that has wrong person
-		accusation.add(malfoyCard);
-		accusation.add(wandCard);
-		accusation.add(slytherinCard);
-		
+		accusation = new Accusation(randomPlayer, malfoyCard, wandCard, slytherinCard);
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
-		accusation.clear();
 		
 		//solution that has wrong weapon
-		accusation.add(potterCard);
-		accusation.add(potionCard);
-		accusation.add(slytherinCard);
-		
+		accusation = new Accusation(randomPlayer, potterCard, potionCard, slytherinCard);
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
-		accusation.clear();
 		
 		//solution that has wrong room
-		accusation.add(potterCard);
-		accusation.add(wandCard);
-		accusation.add(greatHallCard);
-		
+		accusation = new Accusation(randomPlayer, potterCard, wandCard, greatHallCard);	
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
-		accusation.clear();
 
 
 	}
