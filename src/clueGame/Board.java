@@ -377,7 +377,7 @@ public class Board {
 	
 	// returns true if accusation matches theAnswer/solution
 	public boolean checkAccusation(HashSet<Card> accusation, Solution solution) {
-		/*
+		
 		for(Card c : accusation) {
 			if(c != solution.getPerson() && c != solution.getRoom() && c != solution.getWeapon()) {
 				return false;
@@ -385,24 +385,24 @@ public class Board {
 		}
 		
 		return true;
-		*/
-		return false;
+		
 	}
 	
 	// Process all the players in turn, each to see if they can dispute the suggestion and return the first card that disputed the suggestion
 	public Card handleSuggestion(Suggestion suggestion, ArrayList<Player> players) {
-		/*
+		
 		for(Player player : players) {
-			for(Card c : player.getHand()) {
-				if(c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
-					return c;
+			if(suggestion.getSuggestor() != player) {
+				for(Card c : player.getHand()) {
+					if(c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
+						return c;
+					}
 				}
 			}
 		}
-		*/
-		//return null;
 		
-		return new Card("Not real", CardType.PERSON);
+		return null;
+		
 	}
 
 	public Set<BoardCell> getAdjList(int row, int col) {

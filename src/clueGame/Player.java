@@ -27,22 +27,21 @@ public abstract class Player {
    
     // Allows player to check if they can disprove a suggestion and returns the card that disproves it
     public Card disproveSuggestion(Suggestion suggestion) {
-    	/*
+    	
     	ArrayList<Card> possibleDisprove = new ArrayList<>();
     	Random random = new Random();
     	
     	
     	for(Card card : this.hand) {
-    		if(suggestion.contains(card)) {
+    		if(card == suggestion.getPerson() || card == suggestion.getWeapon() || card == suggestion.getRoom()) {
     			possibleDisprove.add(card);
     		}
     	}
     	
-    	if(possibleDisprove != null) {
-    		Card randomCard = possibleDisprove.get(random.nextInt(possibleDisprove.size()));
-    		return randomCard;
+    	if(possibleDisprove.isEmpty() == false) {
+    		return possibleDisprove.get(random.nextInt(possibleDisprove.size()));
     	}
-    	*/
+    	
     	return null;
     }
     
@@ -50,16 +49,13 @@ public abstract class Player {
     	seen.add(seenCard);
     }
     
-//    public void updateSuggestion(Card suggestionCard) {
-//    	suggestion.add(suggestionCard);
-//    }
+
 
     public String getName() { return name; }
     public java.awt.Color getColor() { return color; }
     public int getRow() { return row; }
     public int getColumn() { return column; }
-//    public HashSet<Card> getSuggestion(){ return suggestion;}
-//    public void resetSuggestion() { suggestion.clear(); }
+
     public void giveCard(Card c) { hand.add(c); }
     public Set<Card> getHand() { return hand; }
     public void resetHand() { hand.clear(); }
