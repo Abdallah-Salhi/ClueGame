@@ -1,6 +1,133 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C18A-2, dated 03/28/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C18A-2, dated 03/28/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C20A, dated 04/10/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C20A, dated 04/10/2025.
 
+
+    Initializing repo, Added .gitignore and Junit library
+commit 3a2b50fd61a81aab3afd9349f13e5d545bb535a8
+Merge: 6d3b4ff 8ccdb8d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 16:05:42 2025 -0600
+
+    Merge branch 'master' of https://github.com/Abdallah-Salhi/ClueGame
+
+commit 6d3b4ff5126243c897b0ad6dfba6267569471ceb
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 16:04:54 2025 -0600
+
+    Refactored functions, added accusation class
+
+commit 857f0af0ffb3a4a7f68aeb28a41f3b83f06325b5
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 15:49:56 2025 -0600
+
+    Implemented function for new tests. All tests passing
+
+commit 0a9dfb38968e7815c64be6456baaa0c2d0ac4534
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 15:15:21 2025 -0600
+
+    Implemented GameSolutionTest and Suggestion classes and implemented JUnit tests. All tests currently failing
+
+commit 8ccdb8dad9aadb4752f5ba6993ae3a2f11e9424e
+Merge: 7384308 9b029ae
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Fri Apr 4 18:51:04 2025 -0600
+
+    Merge pull request #7 from Abdallah-Salhi/CluePlayers2Monty
+    
+    Small Refactoring, cleaning up test names and small logic stuff
+
+commit 9b029ae094bcae8657ebae0789a9ac6bd1ac738c
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Fri Apr 4 18:50:34 2025 -0600
+
+    Small Refactoring, cleaning up test names and small logic stuff
+
+commit 7384308d00c3f116a70156b176636912c43d3d38
+Merge: 1ae5db3 80d59f8
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Fri Apr 4 18:46:07 2025 -0600
+
+    Merge pull request #6 from Abdallah-Salhi/CluePlayers2Monty
+    
+    Added further needed implementation for ComputerPlayer.java, all tests passing
+
+commit 80d59f80f16a19f9412db4e3977a34a78f586eea
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Fri Apr 4 18:42:05 2025 -0600
+
+    Added further needed implementation for ComputerPlayer.java, all tests passing
+
+commit 1ae5db3e0215da59001e2bb1b9d295ce6d642bf5
+Merge: 26324d8 d860407
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Fri Apr 4 18:31:30 2025 -0600
+
+    Merge pull request #5 from Abdallah-Salhi/CluePlayers2Monty
+    
+    Implemented ComputerAITest.java Tests, all failing not erroring
+
+commit d860407fc4cdbddf264f915b3bd80f351fc23962
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Fri Apr 4 18:30:52 2025 -0600
+
+    Implemented ComputerAITest.java Tests, all failing not erroring
+
+commit 26324d86eb920aa1d405ec886da20af4ab1ed579
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Apr 1 15:03:24 2025 -0600
+
+    Refactored SelectAnswerAndDealCards function
+
+commit f2136ec5456ea28ea99698c17602db5ab2c58e1e
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Apr 1 14:50:28 2025 -0600
+
+    Failing tests all pass now
+
+commit 9c998f1a39d0bef10d1edda6400d5496b5545068
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Apr 1 12:08:13 2025 -0600
+
+    Resolved test failures. All tests passing now
+
+commit 99562f8b3595e998e2738146278e124897dc1742
+Merge: 64cb525 3f45227
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Mar 31 21:24:55 2025 -0600
+
+    Pulled new file
+
+commit 64cb52598e8ba8673a7089a84f3ef5a3ce0f8da1
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Mar 31 21:08:01 2025 -0600
+
+    save before merge
+
+commit 3f4522757a4ebf827d6960b1041e1414e005ad57
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 31 20:59:05 2025 -0600
+
+    Resolved merge conflict pt. 2
+
+commit 61849c4db9a9dfebeb6b7092d3160f9021ee526f
+Merge: ea6c530 fe012c6
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 31 20:54:44 2025 -0600
+
+    Resolved Merge conflict
+
+commit ea6c530d8a6bacb4b9f1f2dfc45d22c119e266cc
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Mon Mar 31 20:50:29 2025 -0600
+
+    Wrote initial tests, classes, and basic implementation of some of the changes needed for CluePlayers1
+
+commit fe012c63341217f298c3ffa8d725174e6ee06aa2
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Fri Mar 28 17:50:43 2025 -0600
+
+    updated git log
 
 commit 14abc8d1bdd4dc11567c436234c206cef35b275b
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
@@ -24,7 +151,7 @@ commit 25ab9c6b140f4edded4aafaa90fa753c6a2f53f9
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Thu Mar 27 15:38:11 2025 -0600
 
-    Refactor #5 - Ensured class organization regarding getters and setters as well as the constructors and other functions
+    Refactor #5 - Ensured class organization regarding getters and setters as well as the contructors and other functions
 
 commit bd33c97be759a574182b04b4b5a3ed7def5ca3ac
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
@@ -36,13 +163,13 @@ commit 755752a5a135382fa5905bb0982124abff567e36
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Thu Mar 27 15:26:19 2025 -0600
 
-    Refactor #3 - Removed Unused variables and unnecessary lines of code
+    Refactor #3 - Removed Unused variables and unnessary lines of code
 
 commit 52c904a8286576c1f780050a0679e5a2d570fdb0
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Thu Mar 27 15:18:55 2025 -0600
 
-    Refactor #2 - Maintained consistency with commit headers for classes and method function while adding descriptions
+    Refactor #2 - Maintained consitency with commet headers for classes and method function while adding descriptions
 
 commit 1beb42f31d3c6723a68591715d0062b689a1b7e5
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
