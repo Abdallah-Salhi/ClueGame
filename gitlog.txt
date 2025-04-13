@@ -1,8 +1,20 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C20A, dated 04/10/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C20A, dated 04/10/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C21A-1, dated 04/10/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C21A-1, dated 04/10/2025.
 
 
-    Initializing repo, Added .gitignore and Junit library
+   
+commit 0ff3238690bb22c1db48970f4219a09622fc8e21
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 19:22:40 2025 -0600
+
+    Implemented GameControlPanel GUI by adding GameContolPanel class
+
+commit 50193d52196e7f54d4dca38aa51fffe466f15bd4
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Thu Apr 10 16:31:59 2025 -0600
+
+    Deleted duplicate gitlog.txt
+
 commit 3a2b50fd61a81aab3afd9349f13e5d545bb535a8
 Merge: 6d3b4ff 8ccdb8d
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
