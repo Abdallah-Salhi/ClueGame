@@ -1,8 +1,12 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C21A-1, dated 04/10/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C21A-1, dated 04/10/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C21A-2, dated 04/12/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C21A-2, dated 04/12/2025.
 
+commit 335d3b3a2d508fa7782f78708a06e94cad6bd1b2
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sat Apr 12 18:07:34 2025 -0600
 
-   
+    Finished GUI for Known Cards panel
+
 commit 0ff3238690bb22c1db48970f4219a09622fc8e21
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Thu Apr 10 19:22:40 2025 -0600
