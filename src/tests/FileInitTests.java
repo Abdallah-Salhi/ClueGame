@@ -105,7 +105,7 @@ public class FileInitTests {
 	    assertNotNull(room);
 
 	    // Test a label cell
-	    cell = board.getCell(5, 4);
+	    cell = board.getCell(5, 6);
 		assertNotNull(room);
 	    assertTrue(cell.isLabel());
 

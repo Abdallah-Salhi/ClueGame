@@ -188,6 +188,18 @@ public class Board {
 				Room room = roomMap.get(firstChar);
 				grid[row][col].setInitial(firstChar);
 				grid[row][col].setRoom(room);
+				
+				if(firstChar == 'W') {
+					grid[row][col].setWalkway();
+					grid[row][col].isRoom = false;
+				}
+				
+				if(firstChar == 'X') {
+					
+					grid[row][col].setUnused();
+					grid[row][col].isRoom = false;
+
+				}
 
 				if (cellCode.length() > 1) {
 					processCellModifiers(cellCode.charAt(1), grid[row][col], room, row, col);
@@ -442,6 +454,11 @@ public class Board {
 	public Solution getSolution() {
 		return solution; 
 	}
+	
+	public BoardCell[][] getGrid(){
+		return grid;
+	}
+
 
 }
 

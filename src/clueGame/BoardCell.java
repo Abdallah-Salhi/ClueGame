@@ -1,5 +1,7 @@
 package clueGame;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +25,10 @@ public class BoardCell {
 	private char secretPassage;
 	private boolean isLabel = false;
 	private boolean isCenter = false;
-	private boolean isDoorway = false;
+	protected boolean isDoorway = false;
+	private boolean isWalkway = false;
+	public boolean isRoom = false;
+	private boolean isUnused = false;
 	private DoorDirection doorDirection;
 	private boolean isOccupied = false;
 	private Set<BoardCell> adjacencyList;
@@ -36,6 +41,36 @@ public class BoardCell {
 		this.adjacencyList = new HashSet<>();
 	}
 
+	// Uses Graphics object in paintCompnent to draw the board in JPanel
+	public void draw(Graphics g, int cellWidth, int cellHeight, int posX, int posY) {
+
+
+		// draw cell first (background then border)
+		if(this.isRoom()) {
+			g.setColor(Color.yellow);
+			g.fillRect(posX, posY, cellWidth, cellHeight);
+			g.drawRect(posX, posY, cellWidth, cellHeight);
+		}else if(this.isWalkway()) {
+			g.setColor(Color.pink);
+			g.fillRect(posX, posY, cellWidth, cellHeight);
+
+			g.setColor(Color.BLACK);
+			g.drawRect(posX, posY, cellWidth, cellHeight);
+		}else if(this.isUnused){
+			g.setColor(Color.green);
+			g.fillRect(posX, posY, cellWidth, cellHeight);
+			g.drawRect(posX, posY, cellWidth, cellHeight);
+		}else {
+			g.setColor(Color.RED); // highlight errors
+			g.fillRect(posX, posY, cellWidth, cellHeight);
+			g.drawRect(posX, posY, cellWidth, cellHeight);
+		}
+
+
+
+	}
+
+
 	// Adds a cell to this cell's adjacency list.
 	public void addAdjacency(BoardCell cell) {
 		adjacencyList.add(cell);
@@ -43,6 +78,7 @@ public class BoardCell {
 
 	// Setter for checking if the given space is a room
 	public void setRoom(Room room) {
+		isRoom = true;
 		this.room = room;
 
 	}
@@ -107,6 +143,16 @@ public class BoardCell {
 		return adjacencyList; 
 	}
 
+	// Setter for walkway cells
+	public void setWalkway() {
+		isWalkway = true;		
+	}
+
+	// Setter for Unused spaces (Important for draw method)
+	public void setUnused() {
+		isUnused = true;
+	}
+
 	// Getter: Checks if the given space is currently occupied by another player
 	public boolean isOccupied() {
 		return isOccupied;
@@ -131,6 +177,29 @@ public class BoardCell {
 	public boolean isRoomCenter() {
 		return isCenter;
 	}
+
+	// Getter for returning walkway cells
+	private boolean isWalkway() {
+		return isWalkway;
+	}
+
+	// Getter for returning room cells
+	private boolean isRoom() {
+		return isRoom;
+	}
+
+	// Getter for Unused spaces (Important for draw method)
+	public boolean isUnused() {
+		return isUnused;
+	}
+
+	// Getter for room name (Important for draw method)
+	public String getRoom() {
+		return room.getName();
+	}
+
+
+
 
 
 }

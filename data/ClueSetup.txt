@@ -19,9 +19,9 @@ Weapon, Book
 Weapon, Broomstick
 Weapon, Goblet
 // Players
-Player, Harry Potter, red, Human, 6, 2
-Player, Draco Malfoy, green, Computer, 1, 1
-Player, Hermione Granger, purple, Computer, 3, 5
-Player, Luna Lovegood, blue, Computer, 4, 7
-Player, Neville Longbottom, yellow, Computer, 9, 9
-Player, Ron Weasley, orange, Computer, 12, 3
+Player, Harry Potter, red, Human, 10, 14
+Player, Draco Malfoy, green, Computer, 18, 25
+Player, Hermione Granger, purple, Computer, 30, 4
+Player, Luna Lovegood, blue, Computer, 28, 20
+Player, Neville Longbottom, yellow, Computer, 37, 15
+Player, Ron Weasley, orange, Computer, 12, 2
