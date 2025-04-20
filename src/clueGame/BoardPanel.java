@@ -5,16 +5,25 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class BoardPanel extends JPanel{
 	private Board theInstance = Board.getInstance();
 	private static Board board;
-
+	
+	private BoardCell clickedCell;
+	private Player currentPlayer;
+	private boolean isHumanTurn;
+	private Set<BoardCell> targetCells;
+	
 
 	private int numRows;
 	private int numCols;
@@ -35,6 +44,7 @@ public class BoardPanel extends JPanel{
 		panel.setLayout(new FlowLayout());
 
 		add(panel);
+		addMouseListener(new mouseListener());
 	}
 
 	// Draws the board by invoking draw method in boardCells
@@ -163,6 +173,36 @@ public class BoardPanel extends JPanel{
 		}
 
 	}
+	
+	private class mouseListener extends MouseAdapter{ // use MouseAdapter so need for other 4 empty methods of mouselistener
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if(!isHumanTurn) return; // no need for mouse listener if not the user's turn
+			
+			int x = e.getX();
+			int y = e.getY();
+			
+			// adjust to account for the padding we added around the panel
+			x -= padding;
+			y -= padding;
+			
+			// convert to know where on the panel
+			
+			int col = x / cellWidth;
+			int row = y / cellHeight;
+			
+			clickedCell = theInstance.getCell(row,col);// use for calc targets function
+			targetCells = theInstance.getTargets();
+			
+			if(clickedCell == null || !targetCells.contains(clickedCell)) { //is the clicked cell one of the valid targets 
+				JOptionPane.showMessageDialog(null, "That is not a target", "Message", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+			
+			//movePlayer(clickeCell);
+		}
+	}
 
 	public static void setUp() {
 		// Board is singleton, get the only instance
@@ -172,8 +212,20 @@ public class BoardPanel extends JPanel{
 		// Initialize will load config files 
 		board.initialize();
 	}
-
-
+	
+	private void checkTurn() {
+		//currentPlayer = getTurn();
+		if(currentPlayer instanceof HumanPlayer) {
+			this.isHumanTurn = true;
+		}
+	}
+	
+	/*
+	private Player getPlayerTurn() {
+		return player
+	}
+	*/
+	
 	public static void main(String[] args) {
 		setUp(); // initialize board (needed for size of cells)
 		JFrame frame = new JFrame();  // create the frame 

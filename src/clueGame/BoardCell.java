@@ -65,9 +65,6 @@ public class BoardCell {
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
 		}
-
-
-
 	}
 
 
@@ -80,7 +77,6 @@ public class BoardCell {
 	public void setRoom(Room room) {
 		isRoom = true;
 		this.room = room;
-
 	}
 
 	// Should return true if it is a label

@@ -1,5 +1,17 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C21A-2, dated 04/12/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C21A-2, dated 04/12/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C22A, dated 04/15/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C22A, dated 04/15/2025.
+
+commit 5940b93a3f53cb862afb691f4dcab8833503c762
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Apr 14 09:45:23 2025 -0600
+
+    Implemented GUI for Clue Board
+
+commit 79f9cfff90f23797bf1659cdd44ab57c512debbc
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sat Apr 12 18:17:13 2025 -0600
+
+    Update Gitlog.txt
 
 commit 335d3b3a2d508fa7782f78708a06e94cad6bd1b2
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
