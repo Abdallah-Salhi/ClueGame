@@ -17,6 +17,7 @@ public class GameControlPanel extends JPanel {
 	private JTextField rollTextfield;
 	private JTextField guessTextfield;
 	private JTextField guessResultTextfield;
+	private BoardPanel boardPanel;
 
 
 	// Constructor which does 90% of the work
@@ -74,6 +75,11 @@ public class GameControlPanel extends JPanel {
 		JPanel nextPanel = new JPanel(); 
 		nextPanel.setLayout(new GridLayout(1,1));
 		JButton nextButton = new JButton("Next");
+		nextButton.addActionListener(e -> {
+		    if (boardPanel != null) {
+		        boardPanel.nextTurn();  // advance the game
+		    }
+		});
 		nextPanel.add(nextButton);
 
 		//add panels to outer
@@ -121,6 +127,10 @@ public class GameControlPanel extends JPanel {
 	
 	public void setRoll(String roll) {
 		rollTextfield.setText(roll);
+	}
+	
+	public void setBoardPanel(BoardPanel boardPanel) {
+	    this.boardPanel = boardPanel;
 	}
 	
 	public void setTurn(Player player, int roll) {

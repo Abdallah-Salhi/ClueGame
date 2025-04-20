@@ -421,7 +421,7 @@ public class Board {
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
-
+	
 	// Returns the cell at the specified row and column
 	public BoardCell getCell(int row, int column) {
 		return grid[row][column];
