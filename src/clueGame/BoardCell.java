@@ -33,6 +33,7 @@ public class BoardCell {
 	private boolean isOccupied = false;
 	private Set<BoardCell> adjacencyList;
 	private Room room;
+	private boolean highlight = false;
 
 	// Constructor
 	public BoardCell(int row, int col) {
@@ -43,24 +44,30 @@ public class BoardCell {
 
 	// Uses Graphics object in paintCompnent to draw the board in JPanel
 	public void draw(Graphics g, int cellWidth, int cellHeight, int posX, int posY) {
+		// Draw highlighted cell first
+		if (this.highlight) {
+			g.setColor(Color.cyan);
+			g.fillRect(posX, posY, cellWidth, cellHeight);
+			g.setColor(Color.BLACK);
+			g.drawRect(posX, posY, cellWidth, cellHeight);
+			return;
+		}
 
-
-		// draw cell first (background then border)
-		if(this.isRoom()) {
+		// draw cell background then border
+		if (this.isRoom()) {
 			g.setColor(Color.yellow);
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
-		}else if(this.isWalkway()) {
+		} else if (this.isWalkway()) {
 			g.setColor(Color.pink);
 			g.fillRect(posX, posY, cellWidth, cellHeight);
-
 			g.setColor(Color.BLACK);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
-		}else if(this.isUnused){
+		} else if (this.isUnused) {
 			g.setColor(Color.green);
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
-		}else {
+		} else {
 			g.setColor(Color.RED); // highlight errors
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
@@ -148,6 +155,10 @@ public class BoardCell {
 	public void setUnused() {
 		isUnused = true;
 	}
+	
+	public void setHighlight(boolean value) {
+		this.highlight = value;
+	}
 
 	// Getter: Checks if the given space is currently occupied by another player
 	public boolean isOccupied() {
@@ -195,7 +206,16 @@ public class BoardCell {
 	}
 
 
+	public boolean isHighlighted() {
+		return highlight;
+	}
+	
+	public int getRow() {
+		return row;
+	}
 
-
+	public int getColumn() {
+		return col;
+	}
 
 }

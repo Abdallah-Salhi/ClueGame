@@ -47,7 +47,10 @@ public abstract class Player {
     	seen.add(seenCard);
     }
     
-
+    public void movePlayer(BoardCell cell) {
+    	this.row = cell.getRow();
+    	this.column = cell.getColumn();
+    }
 
     public String getName() { return name; }
     public java.awt.Color getColor() { return color; }

@@ -4,41 +4,53 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class ClueGame extends JFrame {
-	private Board theInstance = Board.getInstance();
 	private static Board board;
-	
-	public ClueGame() {
-		KnownCardsPanel knownCardsPanel = new KnownCardsPanel();
-		knownCardsPanel.setPreferredSize(new Dimension(180, 0));
-		
-		GameControlPanel gameControlPanel = new GameControlPanel();
-		
-		BoardPanel boardPanel = new BoardPanel();
-		
-		add(knownCardsPanel, BorderLayout.EAST);
-		add(gameControlPanel, BorderLayout.SOUTH);
-		add(boardPanel, BorderLayout.CENTER);
 
+	public ClueGame() {
+		// Create panels
+		GameControlPanel controlPanel = new GameControlPanel();
+		BoardPanel boardPanel = new BoardPanel(controlPanel);
+		KnownCardsPanel knownCardsPanel = new KnownCardsPanel();
+
+		controlPanel.setBoardPanel(boardPanel);
+
+		// Set up layout
+		setLayout(new BorderLayout());
+		add(controlPanel, BorderLayout.SOUTH);
+		add(boardPanel, BorderLayout.CENTER);
+		add(knownCardsPanel, BorderLayout.EAST);
+
+		knownCardsPanel.setPreferredSize(new Dimension(180, 0));
+		boardPanel.nextTurn();
 	}
-	
+
 	public static void setUp() {
-		// Board is singleton, get the only instance
 		board = Board.getInstance();
-		// set the file names to use my config files
-		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");		
-		// Initialize will load config files 
+		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
 	}
 
 	public static void main(String[] args) {
-		JFrame clueGame = new ClueGame();  // create the frame 
-		setUp(); // initialize board 
-		clueGame.setTitle("Clue Game");
-		clueGame.setSize(1000, 1000);  // size the frame
-		clueGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		clueGame.setVisible(true); // make it visible
+		setUp(); // Load config files and setup board
 
+
+		// Launch game window
+		JFrame clueGame = new ClueGame();
+		clueGame.setTitle("Clue Game");
+		clueGame.setSize(1000, 1000);
+		clueGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		clueGame.setVisible(true);
+
+		// Show splash screen dialog
+		JOptionPane.showMessageDialog(
+			null,
+			"You are Harry Potter.\nCan you find the solution before the Computer players?",
+			"Welcome to Clue",
+			JOptionPane.INFORMATION_MESSAGE
+			);
+		
 	}
 }
