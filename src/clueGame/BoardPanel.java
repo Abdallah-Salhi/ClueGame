@@ -139,6 +139,7 @@ public class BoardPanel extends JPanel {
 		cellHeight = panelHeight / numRows;
 	}
 
+	// Helper method to generally draw the board cells correctly
 	private void drawBoardCells(Graphics g) {
 		BoardCell[][] grid = theInstance.getGrid();
 		for (int row = 0; row < grid.length; row++) {
@@ -149,6 +150,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 
+	// Helper method to ensure players are properly drawn
 	private void drawPlayers(Graphics g) {
 		List<Player> players = theInstance.getPlayers();
 		for (Player player : players) {
@@ -166,6 +168,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 
+	// Helper method for drawing doors and labels
 	private void drawDoorsAndLabels(Graphics g) {
 		BoardCell[][] grid = theInstance.getGrid();
 		for (int row = 0; row < grid.length; row++) {
@@ -180,7 +183,8 @@ public class BoardPanel extends JPanel {
 			}
 		}
 	}
-
+	
+	// Helper method to draw room labels
 	private void drawRoomLabel(Graphics g, String label, int row, int col) {
 		String[] words = label.split(" ");
 		Font font = new Font("SansSerif", Font.BOLD, 11);
