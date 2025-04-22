@@ -31,7 +31,7 @@ public abstract class Player {
     
    
     // Allows player to check if they can disprove a suggestion and returns the card that disproves it
-    public Card disproveSuggestion(Suggestion suggestion) {
+    public Card disproveSuggestion(AccusationOrSuggestion suggestion) {
     	
     	ArrayList<Card> possibleDisprove = new ArrayList<>();
     	Random random = new Random();

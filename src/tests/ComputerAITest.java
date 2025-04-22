@@ -65,7 +65,7 @@ public class ComputerAITest {
         computer.addSeenCard(book);
 
         // Only Sword is left unseen
-        Suggestion suggestion = computer.createSuggestion(board);
+        AccusationOrSuggestion suggestion = computer.createSuggestion(board);
         assertEquals(sword, suggestion.getWeapon());
     }
 
@@ -80,7 +80,7 @@ public class ComputerAITest {
             cpu.addSeenCard(wand); // Only sword and goblet unseen
             cpu.addSeenCard(draco); // Only harry and luna unseen
 
-            Suggestion suggestion = cpu.createSuggestion(board);
+            AccusationOrSuggestion suggestion = cpu.createSuggestion(board);
             seenWeapons.add(suggestion.getWeapon().getCardName());
             seenPeople.add(suggestion.getPerson().getCardName());
         }

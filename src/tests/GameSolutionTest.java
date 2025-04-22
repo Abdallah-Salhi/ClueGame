@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import clueGame.Accusation;
+import clueGame.AccusationOrSuggestion;
 import clueGame.Board;
 import clueGame.Card;
 import clueGame.CardType;
@@ -18,7 +18,6 @@ import clueGame.HumanPlayer;
 import clueGame.ComputerPlayer;
 import clueGame.Player;
 import clueGame.Solution;
-import clueGame.Suggestion;
 
 
 class GameSolutionTest {
@@ -44,8 +43,8 @@ class GameSolutionTest {
 
 	
 	private static Solution solution;
-	private static Suggestion suggestion;
-	private static Accusation accusation;
+	private static AccusationOrSuggestion suggestion;
+	private static AccusationOrSuggestion accusation;
 	private static ArrayList<Player> players;
 
 	private static HumanPlayer player1;
@@ -104,22 +103,22 @@ class GameSolutionTest {
 	void checkAccusationTest() {
 		
 		//solution that is correct
-		accusation = new Accusation(randomPlayer, potterCard, wandCard, slytherinCard);
+		accusation = new AccusationOrSuggestion(randomPlayer, potterCard, wandCard, slytherinCard);
 		boolean check = board.checkAccusation(accusation, solution);
 		assertTrue(check);
 		
 		//solution that has wrong person
-		accusation = new Accusation(randomPlayer, malfoyCard, wandCard, slytherinCard);
+		accusation = new AccusationOrSuggestion(randomPlayer, malfoyCard, wandCard, slytherinCard);
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
 		
 		//solution that has wrong weapon
-		accusation = new Accusation(randomPlayer, potterCard, potionCard, slytherinCard);
+		accusation = new AccusationOrSuggestion(randomPlayer, potterCard, potionCard, slytherinCard);
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
 		
 		//solution that has wrong room
-		accusation = new Accusation(randomPlayer, potterCard, wandCard, greatHallCard);	
+		accusation = new AccusationOrSuggestion(randomPlayer, potterCard, wandCard, greatHallCard);	
 		check = board.checkAccusation(accusation, solution);
 		assertFalse(check);
 
@@ -128,7 +127,7 @@ class GameSolutionTest {
 
 	@Test
 	void disproveSuggestionTest() {
-		suggestion = new Suggestion(randomPlayer, malfoyCard, wandCard, greatHallCard);
+		suggestion = new AccusationOrSuggestion(randomPlayer, malfoyCard, wandCard, greatHallCard);
 		
 		ArrayList<Card> validList = new ArrayList<>();
 		validList.add(malfoyCard);
@@ -192,25 +191,25 @@ class GameSolutionTest {
 		player3.giveCard(greatHallCard);
 
 		// Suggestion no one can disprove returns null
-		suggestion = new Suggestion(randomPlayer, weasleyCard,  bookCard, hufflepuffCard);
+		suggestion = new AccusationOrSuggestion(randomPlayer, weasleyCard,  bookCard, hufflepuffCard);
 		Card card = board.handleSuggestion(suggestion, players);
 		assertNull(card);
 		
 		
 		// Suggestion only suggesting player can disprove returns null
-		suggestion = new Suggestion(player2, weasleyCard, wandCard, hufflepuffCard);
+		suggestion = new AccusationOrSuggestion(player2, weasleyCard, wandCard, hufflepuffCard);
 		card = board.handleSuggestion(suggestion, players);
 		assertNull(card);
 		
 		
 		// Suggestion only human can disprove returns answer (i.e., card that disproves suggestion)
-		suggestion = new Suggestion(randomPlayer, weasleyCard, swordCard, hufflepuffCard);
+		suggestion = new AccusationOrSuggestion(randomPlayer, weasleyCard, swordCard, hufflepuffCard);
 		card = board.handleSuggestion(suggestion, players);
 		assertNotNull(card);
 		assertEquals(card,swordCard);
 		
 		// Suggestion that two players can disprove, correct player (based on starting with next player in list) returns answer
-		suggestion = new Suggestion(randomPlayer, potterCard, bookCard, slytherinCard); //player2 and player 3 can disprove but player 2 should be next in list
+		suggestion = new AccusationOrSuggestion(randomPlayer, potterCard, bookCard, slytherinCard); //player2 and player 3 can disprove but player 2 should be next in list
 		card = board.handleSuggestion(suggestion, players);
 		assertNotNull(card);
 		assertEquals(card,slytherinCard);

@@ -387,7 +387,7 @@ public class Board {
 	}
 
 	// returns true if accusation matches theAnswer/solution
-	public boolean checkAccusation(Accusation accusation, Solution solution) {
+	public boolean checkAccusation(AccusationOrSuggestion accusation, Solution solution) {
 
 		if(accusation.getPerson() != solution.getPerson() || accusation.getRoom() != solution.getRoom() || accusation.getWeapon() != solution.getWeapon()) {
 			return false;
@@ -398,7 +398,7 @@ public class Board {
 	}
 
 	// Process all the players in turn, each to see if they can dispute the suggestion and return the first card that disputed the suggestion
-	public Card handleSuggestion(Suggestion suggestion, ArrayList<Player> players) {
+	public Card handleSuggestion(AccusationOrSuggestion suggestion, ArrayList<Player> players) {
 
 		for(Player player : players) {
 			if(suggestion.getSuggestor() != player) {
