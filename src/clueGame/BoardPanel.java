@@ -49,6 +49,11 @@ public class BoardPanel extends JPanel {
 	private int panelWidth;
 	private int panelHeight;
 
+	private int mouseX;
+	private int mouseY;
+	private int clickedRow;
+	private int clickedCol;
+	
 	private int cellWidth;
 	private int cellHeight;
 
@@ -59,6 +64,8 @@ public class BoardPanel extends JPanel {
 	private int currentPlayerIndex = 0;
 	private boolean humanTurnFinished = false;
 	private GameControlPanel controlPanel;
+	
+	private int roll;
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
 	public BoardPanel(GameControlPanel controlPanel) {
@@ -77,7 +84,7 @@ public class BoardPanel extends JPanel {
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
 		
 		// Get a roll using random 
-		int roll = new Random().nextInt(6) + 1;
+		roll = new Random().nextInt(6) + 1;
 		playerMoved = false;
 		
 		for (BoardCell[] row : theInstance.getGrid()) {
@@ -220,42 +227,34 @@ public class BoardPanel extends JPanel {
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if(!(currentPlayer instanceof HumanPlayer)) return; // no need for mouse listener if not the user's turn
-			if(playerMoved) return; // Make it so user can only pick a cell to move to once
-			
-			int x = e.getX();
-			int y = e.getY();
-			
+			if (!(currentPlayer instanceof HumanPlayer)) return; // No need for mouse listener if not the user's turn
+			if (playerMoved) return; // Make it so user can only pick a cell to move to once
+
 			// Adjust to account for the padding we added around the panel
-			x -= padding;
-			y -= padding;
-			
+			mouseX = e.getX() - padding;
+			mouseY = e.getY() - padding;
+
 			// Convert to know where on the panel
-			
-			int col = x / cellWidth;
-			int row = y / cellHeight;
-			
-			clickedCell = theInstance.getCell(row,col); // Use for calc targets function
-			
-			if(clickedCell == null || !targetCells.contains(clickedCell)) { // Is the clicked cell one of the valid targets 
+			clickedCol = mouseX / cellWidth;
+			clickedRow = mouseY / cellHeight;
+
+			clickedCell = theInstance.getCell(clickedRow, clickedCol); // Use for calc targets function
+
+			if (clickedCell == null || !targetCells.contains(clickedCell)) {
 				JOptionPane.showMessageDialog(null, "That is not a target", "Message", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			
+
 			// Move the player 
-			
 			for (BoardCell[] gridrow : theInstance.getGrid()) {
 				for (BoardCell cell : gridrow) {
 					cell.setHighlight(false); // Remove highlight once cell selected
 				}
 			}
-			
+
 			playerAnimation(currentPlayer, clickedCell);
 			currentPlayer.movePlayer(clickedCell);
-			
-			
 		}
-	}
 	
 	// Helper method to animate player movement using Timer and action Listener
 	private void playerAnimation(Player player, BoardCell destCell) {
@@ -324,6 +323,7 @@ public class BoardPanel extends JPanel {
 		frame.setSize(700, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
 	}
 }
 
