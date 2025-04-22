@@ -40,18 +40,18 @@ public class GameControlPanel extends JPanel {
 		mainPanel.add(upperPanel);
 		mainPanel.add(lowerPanel);
 
-		add(mainPanel); //add to gameControlPanel
+		add(mainPanel); // Add to gameControlPanel
 
 	}
 	
 	// Separate main panel into two large panels (upper + lower), which will include smaller inner panels
 	public JPanel createUpperPanel() {
 		
-		//outer panel
+		// Outer panel
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1,4));
 
-		// first inner panel
+		// First inner panel
 		JPanel turnPanel = new JPanel(new GridLayout(2,1)); 
 		JLabel turnLabel = new JLabel("Whose turn?"); 
 		
@@ -61,7 +61,7 @@ public class GameControlPanel extends JPanel {
 		turnPanel.add(turnTextfield);
 
 
-		// second inner panel
+		// Second inner panel
 		JPanel rollPanel = new JPanel(new FlowLayout()); 
 		JLabel rollLabel = new JLabel("Roll:");
 
@@ -71,25 +71,25 @@ public class GameControlPanel extends JPanel {
 		rollPanel.add(rollTextfield);
 
 
-		// third inner panel
+		// Third inner panel
 		JPanel accusationPanel = new JPanel(new GridLayout(1,1)); 
 		JButton accusationButton = new JButton("Make Accusation");
 		
 
-		// fourth inner panel
+		// Fourth inner panel
 		JPanel nextPanel = new JPanel(new GridLayout(1,1)); 
 		JButton nextButton = new JButton("Next");
 		
 		nextButton.addActionListener(e -> {
 		    if (boardPanel != null) {
-		        boardPanel.nextTurn();  // advance the game
+		        boardPanel.nextTurn();  // Advance the game
 		    }
 		});
 		
 		accusationPanel.add(accusationButton);
 		nextPanel.add(nextButton);
 
-		//add panels to outer
+		// Add panels to outer
 		panel.add(turnPanel);
 		panel.add(rollPanel);
 		panel.add(accusationPanel);		
@@ -151,13 +151,13 @@ public class GameControlPanel extends JPanel {
 
 	public static void main(String[] args) {
 		GameControlPanel panel = new GameControlPanel();
-		JFrame frame = new JFrame();  // create the frame 
-		frame.setContentPane(panel); // put the panel in the frame
-		frame.setSize(750, 180);  // size the frame
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		frame.setVisible(true); // make it visible
+		JFrame frame = new JFrame();  // Create the frame 
+		frame.setContentPane(panel); // Put the panel in the frame
+		frame.setSize(750, 180);  // Size the frame
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Allow it to close
+		frame.setVisible(true); // Make it visible
 
-		// test filling in the data
+		// Test filling in the data
 		panel.setTurn(new ComputerPlayer( "Col. Mustard", Color.orange , 0, 0), 5);
 		panel.setGuess( "I have no guess!");
 		panel.setGuessResult( "So you have nothing?");

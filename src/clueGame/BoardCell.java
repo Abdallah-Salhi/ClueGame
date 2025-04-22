@@ -53,7 +53,7 @@ public class BoardCell {
 			return;
 		}
 
-		// draw cell background then border
+		// Draw cell background then border
 		if (this.isRoom()) {
 			g.setColor(Color.yellow);
 			g.fillRect(posX, posY, cellWidth, cellHeight);
@@ -146,12 +146,12 @@ public class BoardCell {
 		return adjacencyList; 
 	}
 
-	// Setter for walkway cells
+	// Setter: Used for walkway cells
 	public void setWalkway() {
 		isWalkway = true;		
 	}
 
-	// Setter for Unused spaces (Important for draw method)
+	// Setter: For Unused spaces (Important for draw method)
 	public void setUnused() {
 		isUnused = true;
 	}
@@ -170,7 +170,7 @@ public class BoardCell {
 		return doorDirection;
 	}
 
-	// Getter for checking if the given space is a door way
+	// Getter: Uused for checking if the given space is a door way
 	public boolean isDoorway() {
 		return isDoorway;
 	}
@@ -185,22 +185,22 @@ public class BoardCell {
 		return isCenter;
 	}
 
-	// Getter for returning walkway cells
+	// Getter: Used for returning walkway cells
 	private boolean isWalkway() {
 		return isWalkway;
 	}
 
-	// Getter for returning room cells
+	// Getter: Used for returning room cells
 	private boolean isRoom() {
 		return isRoom;
 	}
 
-	// Getter for Unused spaces (Important for draw method)
+	// Getter: Used for Unused spaces (Important for draw method)
 	public boolean isUnused() {
 		return isUnused;
 	}
 
-	// Getter for room name (Important for draw method)
+	// Getter: Used for room name (Important for draw method)
 	public String getRoom() {
 		return room.getName();
 	}
