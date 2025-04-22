@@ -55,16 +55,16 @@ public class BoardCell {
 
 		// Draw cell background then border
 		if (this.isRoom()) {
-			g.setColor(Color.yellow);
+			g.setColor(new Color(192, 192, 152));
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
 		} else if (this.isWalkway()) {
-			g.setColor(Color.pink);
+			g.setColor(	new Color(112, 128, 144));
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.setColor(Color.BLACK);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
 		} else if (this.isUnused) {
-			g.setColor(Color.green);
+			g.setColor(new Color(87, 166, 57));
 			g.fillRect(posX, posY, cellWidth, cellHeight);
 			g.drawRect(posX, posY, cellWidth, cellHeight);
 		} else {
