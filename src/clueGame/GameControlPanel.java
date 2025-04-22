@@ -3,7 +3,6 @@ package clueGame;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +11,15 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+/*
+ * Game Control Panel:
+ * Represents the Clue game GUI for the control panel, including the next and accusation button along with turn information. The class itself extends JPanel because it is only one section of the frame and so it is 
+ * fitting to add everything to a panel
+ *
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class GameControlPanel extends JPanel {
 	private JTextField turnTextfield;
 	private JTextField rollTextfield;
@@ -36,7 +44,8 @@ public class GameControlPanel extends JPanel {
 		add(mainPanel); //add to gameControlPanel
 
 	}
-
+	
+	// Separate main panel into two large panels (upper + lower), which will include smaller inner panels
 	public JPanel createUpperPanel() {
 
 		JPanel panel = new JPanel(); //outer panel
@@ -93,7 +102,8 @@ public class GameControlPanel extends JPanel {
 
 		return panel;
 	}
-
+	
+	// Second of larger panels (lower) which will be added to main panel.
 	public JPanel createLowerPanel() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1,2));
@@ -117,25 +127,30 @@ public class GameControlPanel extends JPanel {
 
 	}
 	
+	// Setter for Guess string
 	public void setGuess(String guess) {
 		guessTextfield.setText(guess);
 	}
-
+	
+	// Setter for Guess result/response string
 	public void setGuessResult(String guessResult) {
 		guessResultTextfield.setText(guessResult);
 	}
 	
+	// Setter for roll string
 	public void setRoll(String roll) {
 		rollTextfield.setText(roll);
 	}
 	
+	// Setter to connect GameControlPanel to BoardPanel
 	public void setBoardPanel(BoardPanel boardPanel) {
 	    this.boardPanel = boardPanel;
 	}
 	
+	// Setter for whose turn it is. Needed for player name and roll int
 	public void setTurn(Player player, int roll) {
 		turnTextfield.setText(player.name);
-		turnTextfield.setBackground(player.color);
+		turnTextfield.setBackground(player.color); // Makes whole textField the same color of player
 		rollTextfield.setText(String.valueOf(roll));
 	}
 	

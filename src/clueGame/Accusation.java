@@ -1,5 +1,13 @@
 package clueGame;
 
+/*
+* Accusation:
+* Represents accusation objects to store information when an accusation occurs. Necessary for modularization and for ease in access.
+* 
+* Authors/Contributors:
+* Abdallah Salhi
+* Montgomery Hughes
+*/
 public class Accusation {
 
 	private Player accuser;
@@ -7,13 +15,15 @@ public class Accusation {
 	private Card weapon;
 	private Card room;
 	
+	// Main constructor, which sets information about the accusation and who made it
 	public Accusation(Player accuser, Card person, Card weapon, Card room) {
-		super();
 		this.accuser = accuser;
 		this.person = person;
 		this.weapon = weapon;
 		this.room = room;
 	}
+	
+	// Getters and setters 
 	
 	public Player getSuggestor() {
 		return accuser;

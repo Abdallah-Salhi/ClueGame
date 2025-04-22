@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-
+/*
+* Player class:
+* Represents the player class, which will have several methods that are needed for any type of player but will be abstract to ensure the creation of Human and Computer player types
+*
+* Authors/Contributors:
+* Abdallah Salhi
+* Montgomery Hughes
+*/
 public abstract class Player {
     protected String name;
     protected java.awt.Color color;
@@ -14,7 +21,7 @@ public abstract class Player {
     protected Set<Card> seen = new HashSet<>();
     protected HashSet<Card> suggestion = new HashSet<>();
 
-
+    // Main constructor, which sets name, color, and starting position of players
     public Player(String name, java.awt.Color color, int row, int col) {
         this.name = name;
         this.color = color;
@@ -36,27 +43,29 @@ public abstract class Player {
     		}
     	}
     	
-    	if(possibleDisprove.isEmpty() == false) {
+    	if(!possibleDisprove.isEmpty()) {
     		return possibleDisprove.get(random.nextInt(possibleDisprove.size()));
     	}
     	
     	return null;
     }
     
+    // Add cards to seen list which allows for dynamic changes as game progresses
     public void updateSeen(Card seenCard) {
     	seen.add(seenCard);
     }
     
+    // Sets new position cell for players to establish movement for game logic
     public void movePlayer(BoardCell cell) {
     	this.row = cell.getRow();
     	this.column = cell.getColumn();
     }
 
+    // Getters
     public String getName() { return name; }
     public java.awt.Color getColor() { return color; }
     public int getRow() { return row; }
     public int getColumn() { return column; }
-
     public void giveCard(Card c) { hand.add(c); }
     public Set<Card> getHand() { return hand; }
     public void resetHand() { hand.clear(); }

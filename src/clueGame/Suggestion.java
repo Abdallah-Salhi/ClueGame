@@ -1,5 +1,13 @@
 package clueGame;
 
+/*
+* Suggestion:
+* Represents suggestion objects to store information when an accusation occurs. Necessary for modularization and for ease in access.
+* 
+* Authors/Contributors:
+* Abdallah Salhi
+* Montgomery Hughes
+*/
 public class Suggestion {
 
 	private Player suggestor;
@@ -7,14 +15,16 @@ public class Suggestion {
 	private Card weapon;
 	private Card room;
 	
+	// Main constructor, which sets information about the suggestion and who made it
 	public Suggestion(Player suggestor, Card person, Card weapon, Card room) {
-		super();
 		this.suggestor = suggestor;
 		this.person = person;
 		this.weapon = weapon;
 		this.room = room;
 	}
 	
+	// Getters and setters 
+
 	public Player getSuggestor() {
 		return suggestor;
 	}

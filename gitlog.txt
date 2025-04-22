@@ -1,6 +1,24 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C22A, dated 04/15/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C22A, dated 04/15/2025.
+I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C23A, dated 04/20/2025.
+I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C23A, dated 04/20/2025.
 
+commit 4e7721a515ebf050db6334347882042da51bb02a (HEAD -> master, origin/master)
+Merge: 5994940 64a9425
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sun Apr 20 22:09:09 2025 -0600
+
+    Finished implementation of Moving Players (GUI/nextTurn logic)
+
+commit 59949402fe836170820c6ee80cbc20a406dc790a
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Sat Apr 19 20:17:51 2025 -0600
+
+    Progress on Events on BoardPanel
+
+commit 64a942569d177626fcd676ec27caf8c6a96f9d49 (origin/C23AMonty)
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Sat Apr 19 20:01:29 2025 -0600
+
+    Added splash screen, next button logic, and highlighting which spaces players can move to
 commit 5940b93a3f53cb862afb691f4dcab8833503c762
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Mon Apr 14 09:45:23 2025 -0600

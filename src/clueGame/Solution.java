@@ -1,5 +1,13 @@
 package clueGame;
 
+/*
+* Suggestion:
+* Represents solution object to store and access the solution for the game. Necessary for modularization and for ease in access.
+* 
+* Authors/Contributors:
+* Abdallah Salhi
+* Montgomery Hughes
+*/
 public class Solution {
     private Card person;
     private Card weapon;

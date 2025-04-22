@@ -1,6 +1,7 @@
 package clueGame;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -17,6 +18,15 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+/*
+ * Known Cards Panel:
+ * Represents the Clue game GUI for known cards and seen cards. The class itself extends JPanel because it is only one section of the frame and so it is 
+ * fitting to add everything to a panel
+ *
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class KnownCardsPanel extends JPanel {
 
 	private static JTextField noneTextfield;
@@ -31,7 +41,7 @@ public class KnownCardsPanel extends JPanel {
 	private JPanel seenWeaponPanel;
 
 
-
+	// Main Constructor calls all the methods to create inner panels and adds them to the main panel
 	public KnownCardsPanel() {
 		setLayout(new BorderLayout());
 

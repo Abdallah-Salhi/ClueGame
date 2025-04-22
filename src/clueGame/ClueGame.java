@@ -6,9 +6,20 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/*
+ * ClueGame:
+ * Represents the entire Clue game GUI, in essence a hub for all GUI JPanels to be grouped in 1 frame. The class itself extends JFrame because it is  
+ * the shell for the entire game that will store all the panels needed for GUI. It is also the main entry point for the game and therefore requires
+ * a call to setup/initialize the instance from the singleton pattern
+ *
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class ClueGame extends JFrame {
 	private static Board board;
-
+	
+	// Main constructor which makes an instance of all the necessary panels while also connecting controlPanel to boadPanel. Also intiates the Human Player's (user) turn
 	public ClueGame() {
 		// Create panels
 		GameControlPanel controlPanel = new GameControlPanel();
@@ -26,13 +37,15 @@ public class ClueGame extends JFrame {
 		knownCardsPanel.setPreferredSize(new Dimension(180, 0));
 		boardPanel.nextTurn();
 	}
-
+	
+	// Must create an instance of board and initialize everything to get going
 	public static void setUp() {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
 		board.initialize();
 	}
 
+	// Main entry point for the game
 	public static void main(String[] args) {
 		setUp(); // Load config files and setup board
 

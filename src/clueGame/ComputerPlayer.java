@@ -7,21 +7,33 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+/*
+ * Computer Player:
+ * Represents the computer players that are involved in the game, which are children of the player class. Necessary for modularization of classes and 
+ * ease in computer player logic. 
+ *
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class ComputerPlayer extends Player {
     private Set<Card> seen = new HashSet<>();
 
+    // Constructor only calls super because each computer player only has the same information as player object. Only diff is in logic.
     public ComputerPlayer(String name, java.awt.Color color, int row, int col) {
         super(name, color, row, col);
     }
-
+    
+    // Add cards to seen list which allows for dynamic changes as game progresses
     public void addSeenCard(Card card) {
         seen.add(card);
     }
-
+    // Getter for seen list
     public Set<Card> getSeenCards() {
         return seen;
     }
-
+    
+    // Method to create a new suggestion based on what the computer player has in their hand or has already seen
     public Solution createSuggestion(Board board) {
         Room currentRoom = board.getRoom(board.getCell(row, column));
         Card roomCard = new Card(currentRoom.getName(), CardType.ROOM);
@@ -35,7 +47,7 @@ public class ComputerPlayer extends Player {
                 else if (c.getType() == CardType.WEAPON) unseenWeapons.add(c);
             }
         }
-
+        // Use random to pick from unseen cards which will help progress the computer player to making an accusation that is correct
         Random rand = new Random();
         Card personCard = unseenPeople.size() == 1 ? unseenPeople.get(0) :
             unseenPeople.get(rand.nextInt(unseenPeople.size()));
@@ -46,6 +58,7 @@ public class ComputerPlayer extends Player {
         return new Solution(personCard, weaponCard, roomCard);
     }
 
+    // select target for player to move to based on if the target is a room or from available targets all done randomly
     public BoardCell selectTarget(Set<BoardCell> targets, Board board) {
         List<BoardCell> unseenRooms = new ArrayList<>();
 

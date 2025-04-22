@@ -18,6 +18,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+/*
+ * Board Panel:
+ * Represents the Clue game GUI for the main board, including the grid of cells and the players. The class itself extends JPanel because it is only one section of the frame and so it is 
+ * fitting to add everything to a panel
+ *
+ * Authors/Contributors:
+ * Abdallah Salhi
+ * Montgomery Hughes
+ */
 public class BoardPanel extends JPanel {
 	private Board theInstance = Board.getInstance();
 	private static Board board;
@@ -51,6 +60,7 @@ public class BoardPanel extends JPanel {
 	private boolean humanTurnFinished = false;
 	private GameControlPanel controlPanel;
 
+	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
 	public BoardPanel(GameControlPanel controlPanel) {
 		this.controlPanel = controlPanel;
 
@@ -60,10 +70,13 @@ public class BoardPanel extends JPanel {
 		addMouseListener(new mouseListener());
 	}
 
+	// nextTurn runs all the logic for turn events, such as highlighting target cells, calling the calcTargets function and handling Human and Computer player logic
 	public void nextTurn() {
 		players = theInstance.getPlayers();
 		currentPlayer = players.get(currentPlayerIndex);
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
+		
+		// Get a roll using random 
 		int roll = new Random().nextInt(6) + 1;
 		playerMoved = false;
 		
@@ -98,7 +111,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 
-	// Draws the board by invoking draw method in boardCells
+	// Draws the board by invoking draw method in boardCells along with players and doors
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -145,12 +158,13 @@ public class BoardPanel extends JPanel {
 			for(int col = 0; col < grid[row].length; col++) {
 				if(grid[row][col].isDoorway) {
 					DoorDirection dir = grid[row][col].getDoorDirection();
-					drawDoorWay(g, dir, row, col, cellWidth, cellHeight);
+					drawDoorWay(g, dir, row, col, cellWidth, cellHeight); // call helper method
 				}
-				if(grid[row][col].isLabel()) {
+				if(grid[row][col].isLabel()) {  // Draw labels
 					String roomLabel = grid[row][col].getRoom();
 					String[] words = roomLabel.split(" ");
-
+					
+					// Style label to be able to fit in rooms 
 					Font font = new Font("SansSerif", Font.BOLD, 11);
 					g.setFont(font);
 					g.setColor(Color.blue);
@@ -171,11 +185,12 @@ public class BoardPanel extends JPanel {
 			}
 		}
 	}
-
+	// Helper method for paint Component to be able to draw the doorways
 	private void drawDoorWay(Graphics g, DoorDirection direction, int row, int col, int width, int height) {
 		int targetRow = row;
 		int targetCol = col;
-
+		
+		// Ensure the doorway is being drawn in the cell that the doorway points to not the cell with door indicator
 		switch(direction) {
 			case DOWN -> targetRow++;
 			case UP -> targetRow--;
@@ -183,12 +198,13 @@ public class BoardPanel extends JPanel {
 			case RIGHT -> targetCol++;
 			default -> throw new IllegalStateException("Unexpected door direction");
 		}
-
-		if (targetRow >= 0 && targetRow < numRows && targetCol >= 0 && targetCol < numCols) {
-			int newRow = targetRow * cellHeight + padding;
+		
+		if (targetRow >= 0 && targetRow < numRows && targetCol >= 0 && targetCol < numCols) { // Make sure cell is in bounds
+			int newRow = targetRow * cellHeight + padding; // adjust for board GUI
 			int newCol = targetCol * cellWidth + padding;
 			g.setColor(Color.BLUE);
-
+			
+			// draw rectangle based on door direction 
 			switch(direction) {
 				case DOWN -> g.fillRect(newCol, newRow, width, 5);
 				case UP -> g.fillRect(newCol, newRow + height - 5, width ,5);
@@ -199,7 +215,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 	
-	
+	// mouseListener allows for user to click on boardPanel and handles logic of what happens when a click is detected
 	private class mouseListener extends MouseAdapter{ // use MouseAdapter so need for other 4 empty methods of mouselistener
 		
 		@Override
@@ -241,6 +257,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 	
+	// Helper method to animate player movement using Timer and action Listener
 	private void playerAnimation(Player player, BoardCell destCell) {
 		playerPixelX = player.getColumn() * cellWidth;
 		playerPixelY = player.getRow() * cellHeight;
@@ -287,6 +304,7 @@ public class BoardPanel extends JPanel {
 		animationTimer.start();
 	}
 
+	// Must make an instance for testing 
 	public static void setUp() {
 		board = Board.getInstance();
 		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
