@@ -86,7 +86,7 @@ public class Board {
 	}
 
 
-	//Load setup.txt file and insert value/key in hash map for future access
+	// Load setup.txt file and insert value/key in hash map for future access
 	public void loadSetupConfig() throws BadConfigFormatException, FileNotFoundException {
 		roomMap = new HashMap<>();
 
@@ -386,7 +386,7 @@ public class Board {
 		}
 	}
 
-	// returns true if accusation matches theAnswer/solution
+	// Returns true if accusation matches theAnswer/solution
 	public boolean checkAccusation(AccusationOrSuggestion accusation, Solution solution) {
 
 		if(accusation.getPerson() != solution.getPerson() || accusation.getRoom() != solution.getRoom() || accusation.getWeapon() != solution.getWeapon()) {
@@ -432,7 +432,7 @@ public class Board {
 		char key = cell.getInitial();
 		return roomMap.get(key);
 	}
-	// getter for room based on char parameter
+	// Getter for room based on char parameter
 	public Room getRoom(char value) {
 		return roomMap.get(value);
 	}

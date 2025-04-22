@@ -1,6 +1,6 @@
 package clueGame;
 /*
- * CardTpe:
+ * CardType:
  * Creates enum class for the 3 types of cards in the game
  *
  */

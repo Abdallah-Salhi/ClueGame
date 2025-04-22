@@ -49,7 +49,7 @@ public class ComputerPlayer extends Player {
         return new AccusationOrSuggestion(this, personCard, weaponCard, roomCard);
     }
 
-    // select target for player to move to based on if the target is a room or from available targets all done randomly
+    // Select target for player to move to based on if the target is a room or from available targets all done randomly
     public BoardCell selectTarget(Set<BoardCell> targets, Board board) {
         List<BoardCell> unseenRooms = new ArrayList<>();
 

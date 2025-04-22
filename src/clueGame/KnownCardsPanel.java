@@ -49,12 +49,12 @@ public class KnownCardsPanel extends JPanel {
 		JPanel mainPanel = new JPanel(new GridLayout(3,1));
 		mainPanel.setBorder(new TitledBorder (new EtchedBorder(),"Known Cards"));
 
-		// create 1st panel for people cards
+		// Create 1st panel for people cards
 		JPanel peoplePanel = new JPanel();
 		peoplePanel.setLayout(new BoxLayout(peoplePanel, BoxLayout.Y_AXIS));
 		peoplePanel.setBorder(new TitledBorder (new EtchedBorder(),"People"));
 
-		//create in Hand and seen panels. Must be separate to add to them dynamically
+		// Create in Hand and seen panels. Must be separate to add to them dynamically
 		personPanel = createInHandPersonPanel();
 		seenPersonPanel = createSeenPersonPanel();
 
@@ -62,7 +62,7 @@ public class KnownCardsPanel extends JPanel {
 		peoplePanel.add(Box.createVerticalStrut(10));
 		peoplePanel.add(seenPersonPanel);
 
-		// create 2nd panel for room cards
+		// Create 2nd panel for room cards
 		JPanel roomsPanel = new JPanel();
 		roomsPanel.setLayout(new BoxLayout(roomsPanel, BoxLayout.Y_AXIS));
 		roomsPanel.setBorder(new TitledBorder (new EtchedBorder(),"Rooms"));
@@ -91,7 +91,7 @@ public class KnownCardsPanel extends JPanel {
 		mainPanel.add(roomsPanel);
 		mainPanel.add(weaponsPanel);
 
-		add(mainPanel); //add to gameControlPanel
+		add(mainPanel); // Add to gameControlPanel
 	}
 
 	// Panel for people cards in hand
@@ -217,13 +217,13 @@ public class KnownCardsPanel extends JPanel {
 
 	public static void main(String[] args) {
 		KnownCardsPanel panel = new KnownCardsPanel();
-		JFrame frame = new JFrame();  // create the frame 
-		frame.setContentPane(panel); // put the panel in the frame
-		frame.setSize(180, 750);  // size the frame
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // allow it to close
-		frame.setVisible(true); // make it visible
+		JFrame frame = new JFrame();  // Create the frame 
+		frame.setContentPane(panel); // Put the panel in the frame
+		frame.setSize(180, 750);  // Size the frame
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Allow it to close
+		frame.setVisible(true); // Make it visible
 
-		// test filling in the data
+		// Test filling in the data
 		Player randomPlayer = new HumanPlayer("Harry Potter", Color.YELLOW, 10, 10);
 		Player randomPlayer1 = new HumanPlayer("Luna Lovegood", Color.CYAN, 10, 10);
 		Player randomPlayer2 = new HumanPlayer("Neville Longbottom", Color.MAGENTA, 10, 10);

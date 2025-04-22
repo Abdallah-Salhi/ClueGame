@@ -119,7 +119,7 @@ public class BoardPanel extends JPanel {
 		numRows = theInstance.getNumRows();
 		numCols = theInstance.getNumColumns();
 
-		padding = 10; // set equal amount of space all around border
+		padding = 10; // Set equal amount of space all around border
 		panelWidth = getWidth() - 2 * padding; // Needed to calculate size of cells dynamically 
 		panelHeight = getHeight()- 2 * padding;
 		cellWidth = panelWidth / numCols;
@@ -200,11 +200,11 @@ public class BoardPanel extends JPanel {
 		}
 		
 		if (targetRow >= 0 && targetRow < numRows && targetCol >= 0 && targetCol < numCols) { // Make sure cell is in bounds
-			int newRow = targetRow * cellHeight + padding; // adjust for board GUI
+			int newRow = targetRow * cellHeight + padding; // Adjust for board GUI
 			int newCol = targetCol * cellWidth + padding;
 			g.setColor(Color.BLUE);
 			
-			// draw rectangle based on door direction 
+			// Draw rectangle based on door direction 
 			switch(direction) {
 				case DOWN -> g.fillRect(newCol, newRow, width, 5);
 				case UP -> g.fillRect(newCol, newRow + height - 5, width ,5);
@@ -226,18 +226,18 @@ public class BoardPanel extends JPanel {
 			int x = e.getX();
 			int y = e.getY();
 			
-			// adjust to account for the padding we added around the panel
+			// Adjust to account for the padding we added around the panel
 			x -= padding;
 			y -= padding;
 			
-			// convert to know where on the panel
+			// Convert to know where on the panel
 			
 			int col = x / cellWidth;
 			int row = y / cellHeight;
 			
-			clickedCell = theInstance.getCell(row,col);// use for calc targets function
+			clickedCell = theInstance.getCell(row,col); // Use for calc targets function
 			
-			if(clickedCell == null || !targetCells.contains(clickedCell)) { //is the clicked cell one of the valid targets 
+			if(clickedCell == null || !targetCells.contains(clickedCell)) { // Is the clicked cell one of the valid targets 
 				JOptionPane.showMessageDialog(null, "That is not a target", "Message", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -246,7 +246,7 @@ public class BoardPanel extends JPanel {
 			
 			for (BoardCell[] gridrow : theInstance.getGrid()) {
 				for (BoardCell cell : gridrow) {
-					cell.setHighlight(false); //remove highlight once cell selected
+					cell.setHighlight(false); // Remove highlight once cell selected
 				}
 			}
 			
@@ -265,7 +265,7 @@ public class BoardPanel extends JPanel {
 		destPixelY = destCell.getRow() * cellHeight;
 		
 		animationTimer = new Timer(10, null);
-		final int speed = 1; // pixels the animation will move per tick
+		final int speed = 1; // Pixels the animation will move per tick
 		
 		animationTimer.addActionListener(e-> {
 			playerMoved = false;
