@@ -34,7 +34,7 @@ public class ComputerPlayer extends Player {
     }
     
     // Method to create a new suggestion based on what the computer player has in their hand or has already seen
-    public Solution createSuggestion(Board board) {
+    public Suggestion createSuggestion(Board board) {
         Room currentRoom = board.getRoom(board.getCell(row, column));
         Card roomCard = new Card(currentRoom.getName(), CardType.ROOM);
 
@@ -55,7 +55,7 @@ public class ComputerPlayer extends Player {
         Card weaponCard = unseenWeapons.size() == 1 ? unseenWeapons.get(0) :
             unseenWeapons.get(rand.nextInt(unseenWeapons.size()));
 
-        return new Solution(personCard, weaponCard, roomCard);
+        return new Suggestion(this, personCard, weaponCard, roomCard);
     }
 
     // select target for player to move to based on if the target is a room or from available targets all done randomly
