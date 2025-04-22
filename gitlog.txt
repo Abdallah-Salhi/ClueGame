@@ -1,7 +1,79 @@
-I, Abdallah Salhi, certify that I participated equitably in the creation of assignment C23A, dated 04/20/2025.
-I, Montgomery Hughes, certify that I participated equitably in the creation of assignment C23A, dated 04/20/2025.
+commit 0cc24a3f770f1a65d2df7be0ddf6fc5d547fade1
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Tue Apr 22 12:15:13 2025 -0600
 
-commit 4e7721a515ebf050db6334347882042da51bb02a (HEAD -> master, origin/master)
+    Refactor 8: Rewrote paintComponent() method in order to align with SRP
+
+commit 7ce612ec7c2999c781826f059a436058e651b302
+Merge: e14c036 6bf9555
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Tue Apr 22 11:49:30 2025 -0600
+
+    Merge pull request #10 from Abdallah-Salhi/Refactor3Monty
+    
+    Refactor 3: Updated color scheme for the board
+
+commit 6bf9555fe30050ce56e4a9570aa04a76c59b02ed
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Tue Apr 22 11:48:46 2025 -0600
+
+    Refactor 3: Updated color scheme for the board so it wasn't quite as jarring to look at
+
+commit e14c03670c262f118002613fa747f192ae9b5e4f
+Merge: a7363b9 d051af7
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Tue Apr 22 11:35:01 2025 -0600
+
+    Merge pull request #9 from Abdallah-Salhi/Refactor2Monty
+    
+    Refactor 2: Moved variable declarations to top of class
+
+commit d051af7a2995a3c06cf7afc01d3093aa6b9eb008
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Tue Apr 22 11:33:48 2025 -0600
+
+    Refactor 2: Moved variable declarations to top of class for consistency / style
+
+commit a7363b95f05fa5fac2ae312b0756f2e78c1ac9ba
+Merge: 52745d2 a214a75
+Author: MontgomeryHughes <129995822+MontgomeryHughes@users.noreply.github.com>
+Date:   Tue Apr 22 10:54:17 2025 -0600
+
+    Merge pull request #8 from Abdallah-Salhi/MontyRefactor1
+    
+    Refactor 1: Adjusted commenting format for readability / consistency
+
+commit a214a75b631fc0d600a1a081dad1561935af75ec
+Author: Montgomery Hughes <montgomeryhughes@mines.edu>
+Date:   Tue Apr 22 10:53:18 2025 -0600
+
+    Refactor 1: Adjusted commenting format for readability / consistency
+
+commit 52745d2fbe293b2b94b875730093784a73fab59d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Tue Apr 22 10:28:16 2025 -0600
+
+    Refactor 7: Reorganized methods and classes to be more readable while removing unnessary lines of code
+
+commit 52b5b11c6448765427810cbca4a346016420410d
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Apr 21 20:48:31 2025 -0600
+
+    Refactor 6: Removed duplicate classes/code and update logic in all classes that are relvant to suggestion or accusation code
+
+commit a2e2296da1a516b217b65df5c64ffac88dad2950
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Apr 21 20:40:02 2025 -0600
+
+    Refactor 5: Revised create suggestion method logic in ComputerPlayer class
+
+commit 3fe4127bb1e11a7e0d6012c0448688f9bdb04e90
+Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
+Date:   Mon Apr 21 19:12:39 2025 -0600
+
+    Git Refactor 4: Added comments to explain complex code logic and to make code more readable
+
+commit 4e7721a515ebf050db6334347882042da51bb02a
 Merge: 5994940 64a9425
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Sun Apr 20 22:09:09 2025 -0600
@@ -14,11 +86,12 @@ Date:   Sat Apr 19 20:17:51 2025 -0600
 
     Progress on Events on BoardPanel
 
-commit 64a942569d177626fcd676ec27caf8c6a96f9d49 (origin/C23AMonty)
+commit 64a942569d177626fcd676ec27caf8c6a96f9d49
 Author: Montgomery Hughes <montgomeryhughes@mines.edu>
 Date:   Sat Apr 19 20:01:29 2025 -0600
 
     Added splash screen, next button logic, and highlighting which spaces players can move to
+
 commit 5940b93a3f53cb862afb691f4dcab8833503c762
 Author: Abdallah Salhi <abdallahsalhi@Abdallahs-MacBook-Air.local>
 Date:   Mon Apr 14 09:45:23 2025 -0600
