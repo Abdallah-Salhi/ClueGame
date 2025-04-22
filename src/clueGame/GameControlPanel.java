@@ -32,13 +32,12 @@ public class GameControlPanel extends JPanel {
 	public GameControlPanel() {
 
 		// Create a layout with 2 rows
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(2,1));
+		JPanel mainPanel = new JPanel(new GridLayout(2,1));
 		
 		JPanel upperPanel = createUpperPanel();
+		JPanel lowerPanel = createLowerPanel();
+		
 		mainPanel.add(upperPanel);
-		JPanel lowerPanel = new JPanel();
-		lowerPanel = createLowerPanel();
 		mainPanel.add(lowerPanel);
 
 		add(mainPanel); //add to gameControlPanel
@@ -47,48 +46,47 @@ public class GameControlPanel extends JPanel {
 	
 	// Separate main panel into two large panels (upper + lower), which will include smaller inner panels
 	public JPanel createUpperPanel() {
-
-		JPanel panel = new JPanel(); //outer panel
+		
+		//outer panel
+		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(1,4));
 
 		// first inner panel
-		JPanel turnPanel = new JPanel(); 
-		turnPanel.setLayout(new GridLayout(2,1));
-
+		JPanel turnPanel = new JPanel(new GridLayout(2,1)); 
 		JLabel turnLabel = new JLabel("Whose turn?"); 
-		turnPanel.add(turnLabel);
-
+		
 		turnTextfield = new JTextField();
+		
+		turnPanel.add(turnLabel);
 		turnPanel.add(turnTextfield);
 
 
 		// second inner panel
-		JPanel rollPanel = new JPanel(); 
-		rollPanel.setLayout(new FlowLayout());
-
+		JPanel rollPanel = new JPanel(new FlowLayout()); 
 		JLabel rollLabel = new JLabel("Roll:");
-		rollPanel.add(rollLabel);
 
 		rollTextfield = new JTextField(10);
+		
+		rollPanel.add(rollLabel);
 		rollPanel.add(rollTextfield);
 
 
 		// third inner panel
-		JPanel accusationPanel = new JPanel(); 
-		accusationPanel.setLayout(new GridLayout(1,1));
+		JPanel accusationPanel = new JPanel(new GridLayout(1,1)); 
 		JButton accusationButton = new JButton("Make Accusation");
-		accusationPanel.add(accusationButton);
-
+		
 
 		// fourth inner panel
-		JPanel nextPanel = new JPanel(); 
-		nextPanel.setLayout(new GridLayout(1,1));
+		JPanel nextPanel = new JPanel(new GridLayout(1,1)); 
 		JButton nextButton = new JButton("Next");
+		
 		nextButton.addActionListener(e -> {
 		    if (boardPanel != null) {
 		        boardPanel.nextTurn();  // advance the game
 		    }
 		});
+		
+		accusationPanel.add(accusationButton);
 		nextPanel.add(nextButton);
 
 		//add panels to outer
@@ -97,29 +95,25 @@ public class GameControlPanel extends JPanel {
 		panel.add(accusationPanel);		
 		panel.add(nextPanel);
 
-
-
-
 		return panel;
 	}
 	
 	// Second of larger panels (lower) which will be added to main panel.
 	public JPanel createLowerPanel() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(1,2));
+		JPanel panel = new JPanel(new GridLayout(1,2));	
 		
-		JPanel guessPanel = new JPanel();
-		guessPanel.setLayout(new FlowLayout());
+		// Guess text field
+		JPanel guessPanel = new JPanel(new FlowLayout());
 		guessPanel.setBorder(new TitledBorder (new EtchedBorder(),"Guess"));
 		guessTextfield = new JTextField(25);
-		guessPanel.add(guessTextfield);
 		
-		JPanel guessResultPanel = new JPanel();
-		guessResultPanel.setLayout(new FlowLayout());
+		// GuessResult text field
+		JPanel guessResultPanel = new JPanel(new FlowLayout());
 		guessResultPanel.setBorder(new TitledBorder (new EtchedBorder(),"Guess Result"));
 		guessResultTextfield = new JTextField(25);
+	
+		guessPanel.add(guessTextfield);
 		guessResultPanel.add(guessResultTextfield);
-		
 		panel.add(guessPanel);
 		panel.add(guessResultPanel);
 		

@@ -24,15 +24,6 @@ public class ComputerPlayer extends Player {
         super(name, color, row, col);
     }
     
-    // Add cards to seen list which allows for dynamic changes as game progresses
-    public void addSeenCard(Card card) {
-        seen.add(card);
-    }
-    // Getter for seen list
-    public Set<Card> getSeenCards() {
-        return seen;
-    }
-    
     // Method to create a new suggestion based on what the computer player has in their hand or has already seen
     public AccusationOrSuggestion createSuggestion(Board board) {
         Room currentRoom = board.getRoom(board.getCell(row, column));
@@ -84,5 +75,14 @@ public class ComputerPlayer extends Player {
         List<BoardCell> allTargets = new ArrayList<>(targets);
         Collections.shuffle(allTargets); // Ensure real randomness
         return allTargets.get(0);
+    }
+    
+    // Add cards to seen list which allows for dynamic changes as game progresses
+    public void addSeenCard(Card card) {
+        seen.add(card);
+    }
+    // Getter for seen list
+    public Set<Card> getSeenCards() {
+        return seen;
     }
 }
