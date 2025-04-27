@@ -65,5 +65,7 @@ public class ClueGame extends JFrame {
 			JOptionPane.INFORMATION_MESSAGE
 			);
 		
+		
+		
 	}
 }

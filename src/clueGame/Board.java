@@ -388,8 +388,15 @@ public class Board {
 
 	// Returns true if accusation matches theAnswer/solution
 	public boolean checkAccusation(AccusationOrSuggestion accusation, Solution solution) {
+		String accusedPerson = accusation.getPerson().getCardName();
+		String accusedRoom = accusation.getRoom().getCardName();
+		String accusedWeapon = accusation.getWeapon().getCardName();
+		
+		String actualPerson = solution.getPerson().getCardName();
+		String actualRoom = solution.getRoom().getCardName();
+		String actualWeapon= solution.getWeapon().getCardName();
 
-		if(accusation.getPerson() != solution.getPerson() || accusation.getRoom() != solution.getRoom() || accusation.getWeapon() != solution.getWeapon()) {
+		if(!accusedPerson.equals(actualPerson) || !accusedRoom.equals(actualRoom) || !accusedWeapon.equals(actualWeapon)) {
 			return false;
 		}
 

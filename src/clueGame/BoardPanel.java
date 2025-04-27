@@ -36,7 +36,7 @@ public class BoardPanel extends JPanel {
 	private boolean isHumanTurn;
 	private Set<BoardCell> targetCells;
 	private List<Player> players;
-	private boolean playerMoved;
+	protected boolean playerMoved;
 	private Timer animationTimer;
 	private int playerPixelX;
 	private int playerPixelY;
@@ -62,7 +62,7 @@ public class BoardPanel extends JPanel {
 	private int padding;
 
 	private int currentPlayerIndex = 0;
-	private boolean humanTurnFinished = false;
+	protected boolean humanTurnFinished = false;
 	private GameControlPanel controlPanel;
 	
 	private int roll;
@@ -112,9 +112,9 @@ public class BoardPanel extends JPanel {
 			// Computer player logic
 			ComputerPlayer cpu = (ComputerPlayer) currentPlayer;
 			BoardCell target = cpu.selectTarget(targetCells, theInstance);
-			currentPlayer.row = target.getRow();
-			currentPlayer.column = target.getColumn();
-			repaint();
+			playerAnimation(currentPlayer, target);
+			currentPlayer.movePlayer(target);
+			
 		}
 	}
 
@@ -267,7 +267,12 @@ public class BoardPanel extends JPanel {
 
 			playerAnimation(currentPlayer, clickedCell);
 			currentPlayer.movePlayer(clickedCell);
+			
+			if(currentPlayer instanceof HumanPlayer) {
+				humanTurnFinished = true;
+			}
 		}
+	}
 
 		// Helper method to animate player movement using Timer and action Listener
 		private void playerAnimation(Player player, BoardCell destCell) {
@@ -337,6 +342,6 @@ public class BoardPanel extends JPanel {
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.setVisible(true);
 		}
-	}
+	
 }
 
