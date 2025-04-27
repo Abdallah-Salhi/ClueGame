@@ -91,7 +91,7 @@ public class BoardCell {
 		return isLabel = true;
 	}
 
-	// Setter for checking if the given space is currently occupied by another player
+	// Setter for making cell occupied by another player
 	public void setOccupied(boolean isOccupied) {
 		this.isOccupied = isOccupied;
 	}

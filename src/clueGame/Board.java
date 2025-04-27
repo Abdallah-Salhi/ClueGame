@@ -165,8 +165,15 @@ public class Board {
 					grid[row][col] = new BoardCell(row, col);
 				}
 			}
+			// Set cells with player as occupied now that grid is initialized
+			for(Player player : players) {
+				int row = player.getRow();
+				int col = player.getColumn();
+				
+				grid[row][col].setOccupied(true);
 
-
+			}
+			// Call helper method to handle rest of initialization
 			processCell(tempList, MAX_ROWS, MAX_COLS);
 		}
 	}

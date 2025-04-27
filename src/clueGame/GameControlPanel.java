@@ -94,7 +94,11 @@ public class GameControlPanel extends JPanel {
 
 		nextButton.addActionListener(e -> {
 			if (boardPanel != null) {
-				boardPanel.nextTurn();  // Advance the game
+				if(boardPanel.humanTurnFinished) { // only 
+					boardPanel.nextTurn();  // Advance the game
+				}else {
+					JOptionPane.showMessageDialog(null, "You must finish your turn before moving on!", "Message", JOptionPane.ERROR_MESSAGE);	
+				}
 			}
 		});
 

@@ -42,7 +42,7 @@ public class BoardPanel extends JPanel {
 	private int playerPixelY;
 	private int destPixelX;
 	private int destPixelY;
-	
+
 	private int numRows;
 	private int numCols;
 
@@ -53,7 +53,7 @@ public class BoardPanel extends JPanel {
 	private int mouseY;
 	private int clickedRow;
 	private int clickedCol;
-	
+
 	private int cellWidth;
 	private int cellHeight;
 
@@ -64,7 +64,7 @@ public class BoardPanel extends JPanel {
 	private int currentPlayerIndex = 0;
 	protected boolean humanTurnFinished = false;
 	private GameControlPanel controlPanel;
-	
+
 	private int roll;
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
@@ -82,11 +82,11 @@ public class BoardPanel extends JPanel {
 		players = theInstance.getPlayers();
 		currentPlayer = players.get(currentPlayerIndex);
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
-		
+
 		// Get a roll using random 
 		roll = new Random().nextInt(6) + 1;
 		playerMoved = false;
-		
+
 		for (BoardCell[] row : theInstance.getGrid()) {
 			for (BoardCell cell : row) {
 				cell.setHighlight(false);
@@ -99,7 +99,7 @@ public class BoardPanel extends JPanel {
 		BoardCell startCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
 
 		if (currentPlayer.wasMovedBySuggestion()) {
-		    currentPlayer.setMovedBySuggestion(false);
+			currentPlayer.setMovedBySuggestion(false);
 		}
 
 		theInstance.calcTargets(startCell, roll);
@@ -119,7 +119,7 @@ public class BoardPanel extends JPanel {
 			BoardCell target = cpu.selectTarget(targetCells, theInstance);
 			playerAnimation(currentPlayer, target);
 			currentPlayer.movePlayer(target);
-			
+
 		}
 	}
 
@@ -133,7 +133,7 @@ public class BoardPanel extends JPanel {
 		drawPlayers(g);
 		drawDoorsAndLabels(g);
 	}
-	
+
 	private void computeLayoutMetrics(Graphics g) {
 		numRows = theInstance.getNumRows();
 		numCols = theInstance.getNumColumns();
@@ -188,7 +188,7 @@ public class BoardPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	// Helper method to draw room labels
 	private void drawRoomLabel(Graphics g, String label, int row, int col) {
 		String[] words = label.split(" ");
@@ -209,37 +209,37 @@ public class BoardPanel extends JPanel {
 			g.drawString(word, drawX, drawY + i * metrics.getHeight());
 		}
 	}
-	
+
 	// Helper method for paint Component to be able to draw the doorways
 	private void drawDoorWay(Graphics g, DoorDirection direction, int row, int col, int width, int height) {
 		int targetRow = row;
 		int targetCol = col;
-		
+
 		// Ensure the doorway is being drawn in the cell that the doorway points to not the cell with door indicator
 		switch(direction) {
-			case DOWN -> targetRow++;
-			case UP -> targetRow--;
-			case LEFT -> targetCol--;
-			case RIGHT -> targetCol++;
-			default -> throw new IllegalStateException("Unexpected door direction");
+		case DOWN -> targetRow++;
+		case UP -> targetRow--;
+		case LEFT -> targetCol--;
+		case RIGHT -> targetCol++;
+		default -> throw new IllegalStateException("Unexpected door direction");
 		}
-		
+
 		if (targetRow >= 0 && targetRow < numRows && targetCol >= 0 && targetCol < numCols) { // Make sure cell is in bounds
 			int newRow = targetRow * cellHeight + padding; // Adjust for board GUI
 			int newCol = targetCol * cellWidth + padding;
 			g.setColor(Color.BLUE);
-			
+
 			// Draw rectangle based on door direction 
 			switch(direction) {
-				case DOWN -> g.fillRect(newCol, newRow, width, 5);
-				case UP -> g.fillRect(newCol, newRow + height - 5, width ,5);
-				case LEFT -> g.fillRect(newCol + width - 5, newRow, 5, height);
-				case RIGHT -> g.fillRect(newCol, newRow, 5, height);
-				default -> throw new IllegalStateException("Unexpected door direction");
+			case DOWN -> g.fillRect(newCol, newRow, width, 5);
+			case UP -> g.fillRect(newCol, newRow + height - 5, width ,5);
+			case LEFT -> g.fillRect(newCol + width - 5, newRow, 5, height);
+			case RIGHT -> g.fillRect(newCol, newRow, 5, height);
+			default -> throw new IllegalStateException("Unexpected door direction");
 			}
 		}
 	}
-	
+
 	// mouseListener allows for user to click on boardPanel and handles logic of what happens when a click is detected
 	private class mouseListener extends MouseAdapter{ // use MouseAdapter so need for other 4 empty methods of mouselistener
 
@@ -270,83 +270,95 @@ public class BoardPanel extends JPanel {
 				}
 			}
 
+
+			// move the player and start animation
 			playerAnimation(currentPlayer, clickedCell);
 			currentPlayer.movePlayer(clickedCell);
-			
+
+			clickedCell.setOccupied(true);
+
 			if(currentPlayer instanceof HumanPlayer) {
 				humanTurnFinished = true;
 			}
 		}
 	}
 
-		// Helper method to animate player movement using Timer and action Listener
-		private void playerAnimation(Player player, BoardCell destCell) {
-			playerPixelX = player.getColumn() * cellWidth;
-			playerPixelY = player.getRow() * cellHeight;
-			destPixelX = destCell.getColumn() * cellWidth;
-			destPixelY = destCell.getRow() * cellHeight;
+	// Helper method to animate player movement using Timer and action Listener
+	private void playerAnimation(Player player, BoardCell destCell) {
+		playerPixelX = player.getColumn() * cellWidth;
+		playerPixelY = player.getRow() * cellHeight;
+		destPixelX = destCell.getColumn() * cellWidth;
+		destPixelY = destCell.getRow() * cellHeight;
 
-			animationTimer = new Timer(10, null);
-			final int speed = 1; // Pixels the animation will move per tick
+		animationTimer = new Timer(10, null);
+		final int speed = 1; // Pixels the animation will move per tick
 
-			animationTimer.addActionListener(e-> {
-				playerMoved = false;
+		// before moving player we need to make the cell the player is in appear unoccupied
+		int prevRow = currentPlayer.getRow();
+		int prevCol = currentPlayer.getColumn();
 
-				if (playerPixelX < destPixelX) {
-					playerPixelX += speed;
-					if (playerPixelX > destPixelX) playerPixelX = destPixelX;
-					playerMoved = true;
-				} else if (playerPixelX > destPixelX) {
-					playerPixelX -= speed;
-					if (playerPixelX < destPixelX) playerPixelX = destPixelX;
-					playerMoved = true;
-				}
+		BoardCell[][] grid = theInstance.getGrid();
+		BoardCell prevCell = grid[prevRow][prevCol];
+		prevCell.setOccupied(false);
 
-				if (playerPixelY < destPixelY) {
-					playerPixelY += speed;
-					if (playerPixelY > destPixelY) playerPixelY = destPixelY;
-					playerMoved = true;
-				} else if (playerPixelY > destPixelY) {
-					playerPixelY -= speed;
-					if (playerPixelY < destPixelY) playerPixelY = destPixelY;
-					playerMoved = true;
-				}
+		animationTimer.addActionListener(e-> {
+			playerMoved = false;
 
-				repaint();
+			if (playerPixelX < destPixelX) {
+				playerPixelX += speed;
+				if (playerPixelX > destPixelX) playerPixelX = destPixelX;
+				playerMoved = true;
+			} else if (playerPixelX > destPixelX) {
+				playerPixelX -= speed;
+				if (playerPixelX < destPixelX) playerPixelX = destPixelX;
+				playerMoved = true;
+			}
 
-				if (!playerMoved) {
-					((Timer) e.getSource()).stop();
-					// Update actual player position in board terms
-					player.movePlayer(destCell);
+			if (playerPixelY < destPixelY) {
+				playerPixelY += speed;
+				if (playerPixelY > destPixelY) playerPixelY = destPixelY;
+				playerMoved = true;
+			} else if (playerPixelY > destPixelY) {
+				playerPixelY -= speed;
+				if (playerPixelY < destPixelY) playerPixelY = destPixelY;
+				playerMoved = true;
+			}
 
-				}
-			});
+			repaint();
 
+			if (!playerMoved) {
+				((Timer) e.getSource()).stop();
+				// Update actual player position in board terms
+				player.movePlayer(destCell);
 
-			animationTimer.start();
-		}
-
-		// Must make an instance for testing 
-		public static void setUp() {
-			board = Board.getInstance();
-			board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
-			board.initialize();
-		}
+			}
+		});
 
 
+		animationTimer.start();
+	}
+
+	// Must make an instance for testing 
+	public static void setUp() {
+		board = Board.getInstance();
+		board.setConfigFiles("ClueLayout.csv", "ClueSetup.txt");
+		board.initialize();
+	}
 
 
-		public static void main(String[] args) {
-			setUp();
-			JFrame frame = new JFrame();
-			GameControlPanel controlPanel = new GameControlPanel();
-			BoardPanel panel = new BoardPanel(controlPanel);
 
-			frame.setContentPane(panel);
-			frame.setSize(700, 700);
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			frame.setVisible(true);
-		}
-	
+
+	public static void main(String[] args) {
+		setUp();
+		JFrame frame = new JFrame();
+		GameControlPanel controlPanel = new GameControlPanel();
+		BoardPanel panel = new BoardPanel(controlPanel);
+
+		frame.setContentPane(panel);
+		frame.setSize(700, 700);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+
 }
 
