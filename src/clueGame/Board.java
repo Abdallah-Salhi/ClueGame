@@ -400,18 +400,44 @@ public class Board {
 	// Process all the players in turn, each to see if they can dispute the suggestion and return the first card that disputed the suggestion
 	public Card handleSuggestion(AccusationOrSuggestion suggestion, ArrayList<Player> players) {
 
-		for(Player player : players) {
-			if(suggestion.getSuggestor() != player) {
-				for(Card c : player.getHand()) {
-					if(c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
-						return c;
-					}
-				}
-			}
-		}
+	    // Move suggested player to suggested room.
+	    Player suggestedPlayer = null;
+	    for (Player player : players) {
+	        if (player.getName().equals(suggestion.getPerson().getCardName())) {
+	            suggestedPlayer = player;
+	            break;
+	        }
+	    }
 
-		return null;
+	    if (suggestedPlayer != null) {
+	    	Room targetRoom = getRoomByName(suggestion.getRoom().getCardName());
+	        BoardCell roomCenter = targetRoom.getCenterCell();
 
+	        suggestedPlayer.movePlayer(roomCenter);
+	        suggestedPlayer.setMovedBySuggestion(true);
+	    }
+
+	    // Handle trying to disprove a suggestion
+	    for (Player player : players) {
+	        if (suggestion.getSuggestor() != player) {
+	            for (Card c : player.getHand()) {
+	                if (c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
+	                    return c;
+	                }
+	            }
+	        }
+	    }
+	    return null;
+	}
+	
+	// Helper method for handleSuggestion, translates card data to room data.
+	public Room getRoomByName(String name) {
+	    for (Room room : roomMap.values()) {
+	        if (room.getName().equals(name)) {
+	            return room;
+	        }
+	    }
+	    return null; // Should not happen if data is valid
 	}
 
 	public Set<BoardCell> getAdjList(int row, int col) {

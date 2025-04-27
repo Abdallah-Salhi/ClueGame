@@ -20,6 +20,7 @@ public abstract class Player {
     protected Set<Card> hand = new HashSet<>();
     protected Set<Card> seen = new HashSet<>();
     protected HashSet<Card> suggestion = new HashSet<>();
+    protected boolean movedBySuggestion = false;
 
     // Main constructor, which sets name, color, and starting position of players
     public Player(String name, java.awt.Color color, int row, int col) {
@@ -70,5 +71,11 @@ public abstract class Player {
     public Set<Card> getHand() { return hand; }
     public void resetHand() { hand.clear(); }
     
-    	
+    // Get / Set to check for suggestion moving
+    public boolean wasMovedBySuggestion() {
+        return movedBySuggestion;
+    }
+    public void setMovedBySuggestion(boolean moved) {
+        this.movedBySuggestion = moved;
+    }	
 }

@@ -96,8 +96,13 @@ public class BoardPanel extends JPanel {
 		// Set current player and roll in the control panel
 		controlPanel.setTurn(currentPlayer, roll);
 
-		BoardCell currentCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
-		theInstance.calcTargets(currentCell, roll);
+		BoardCell startCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
+
+		if (currentPlayer.wasMovedBySuggestion()) {
+		    currentPlayer.setMovedBySuggestion(false);
+		}
+
+		theInstance.calcTargets(startCell, roll);
 
 		targetCells = theInstance.getTargets();
 
