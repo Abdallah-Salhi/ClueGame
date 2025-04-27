@@ -204,6 +204,11 @@ public class BoardCell {
 	public String getRoom() {
 		return room.getName();
 	}
+	
+	// Getter for getting room object
+	public Room getRoomObj() {
+		return room;
+	}
 
 
 	public boolean isHighlighted() {

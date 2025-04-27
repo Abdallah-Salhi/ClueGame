@@ -181,7 +181,6 @@ public class GameControlPanel extends JPanel {
 		}
 
 		accusation = new AccusationOrSuggestion(currentPlayer, person, weapon, room);
-		//accusationAttempt = new Solution(person, weapon, room);
 
 	
 }

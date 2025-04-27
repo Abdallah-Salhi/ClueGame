@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -13,7 +14,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -66,6 +69,7 @@ public class BoardPanel extends JPanel {
 	private GameControlPanel controlPanel;
 
 	private int roll;
+	private AccusationOrSuggestion suggestion;
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
 	public BoardPanel(GameControlPanel controlPanel) {
@@ -87,6 +91,7 @@ public class BoardPanel extends JPanel {
 		roll = new Random().nextInt(6) + 1;
 		playerMoved = false;
 
+		// refresh highlighted cells/clean board
 		for (BoardCell[] row : theInstance.getGrid()) {
 			for (BoardCell cell : row) {
 				cell.setHighlight(false);
@@ -98,12 +103,12 @@ public class BoardPanel extends JPanel {
 
 		BoardCell startCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
 
+		// this is so your turn doesn't end if you are moved by a suggestion
 		if (currentPlayer.wasMovedBySuggestion()) {
 			currentPlayer.setMovedBySuggestion(false);
 		}
 
 		theInstance.calcTargets(startCell, roll);
-
 		targetCells = theInstance.getTargets();
 
 		// Human player logic
@@ -111,7 +116,7 @@ public class BoardPanel extends JPanel {
 			for (BoardCell cell : targetCells) {
 				cell.setHighlight(true);
 			}
-			humanTurnFinished = false;
+			humanTurnFinished = false; // need to reset this to stop user from clicking next 
 			repaint();
 		} else {
 			// Computer player logic
@@ -120,25 +125,25 @@ public class BoardPanel extends JPanel {
 			playerAnimation(currentPlayer, target);
 			currentPlayer.movePlayer(target);
 
-			
+
 			if (theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn()).isRoomCenter()) {
-			    AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance);
+				AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance);
 
-			    controlPanel.setGuess(
-			    	    suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName()
-			    	);
+				controlPanel.setGuess(
+						suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName()
+						);
 
-			    // Handle the suggestion by checking if anyone can disprove it
-			    Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
+				// Handle the suggestion by checking if anyone can disprove it
+				Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
 
-			    if (disprovingCard != null) {
-			        controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.");
-			        cpu.addSeenCard(disprovingCard); // Important: CPU should now know about the disproving card
-			    } else {
-			        controlPanel.setGuessResult("No one could disprove the suggestion.");
-			    }
+				if (disprovingCard != null) {
+					controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.");
+					cpu.addSeenCard(disprovingCard); // Important: CPU should now know about the disproving card
+				} else {
+					controlPanel.setGuessResult("No one could disprove the suggestion.");
+				}
 			}
-			
+
 
 		}
 	}
@@ -294,8 +299,12 @@ public class BoardPanel extends JPanel {
 			// move the player and start animation
 			playerAnimation(currentPlayer, clickedCell);
 			currentPlayer.movePlayer(clickedCell);
-
 			clickedCell.setOccupied(true);
+
+			// open suggestion dialog screen
+			if(clickedCell.isRoomCenter()) {
+				createSuggestionPane(clickedCell.getRoomObj());
+			}
 
 			if(currentPlayer instanceof HumanPlayer) {
 				humanTurnFinished = true;
@@ -356,6 +365,52 @@ public class BoardPanel extends JPanel {
 
 
 		animationTimer.start();
+	}
+
+	// Create the suggestion dialog screen
+	private void createSuggestionPane(Room room) {
+		String[] suspects = { "Harry Potter", "Hermione Granger", "Ron Weasley", "Draco Malfoy", "Luna Lovegood", "Neville Longbottom" };
+		String[] weapons = { "Wand", "Potion", "Sword", "Broomstick", "Book", "Goblet" };
+
+		JLabel roomBox = new JLabel(room.getName());
+		JComboBox<String> personBox = new JComboBox<>(suspects);
+		JComboBox<String> weaponBox = new JComboBox<>(weapons);
+
+		Card roomCard = null;
+		Card weapon = null;
+		Card person = null;
+
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(3, 2, 5, 5));  // vertical stacking
+		panel.add(new JLabel("Current Room:"));
+		panel.add(roomBox);
+		panel.add(new JLabel("Select Suspect:"));
+		panel.add(personBox);
+		panel.add(new JLabel("Select Weapon:"));
+		panel.add(weaponBox);
+
+		int result = JOptionPane.showConfirmDialog(
+				null,
+				panel,
+				"Make a Suggestion",
+				JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE
+				);
+
+		if (result == JOptionPane.OK_OPTION) {
+			
+			String selectedPerson = (String) personBox.getSelectedItem();
+			String selectedWeapon = (String) weaponBox.getSelectedItem();
+
+			roomCard = new Card(room.getName(),CardType.ROOM);
+			weapon = new Card(selectedWeapon, CardType.WEAPON);
+			person = new Card(selectedPerson, CardType.PERSON);
+
+		}
+
+		suggestion = new AccusationOrSuggestion(currentPlayer, person, weapon, roomCard);
+
+
 	}
 
 	// Must make an instance for testing 
