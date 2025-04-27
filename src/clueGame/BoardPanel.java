@@ -120,6 +120,24 @@ public class BoardPanel extends JPanel {
 			playerAnimation(currentPlayer, target);
 			currentPlayer.movePlayer(target);
 			
+			if (theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn()).isRoomCenter()) {
+			    AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance);
+
+			    controlPanel.setGuess(
+			    	    suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName()
+			    	);
+
+			    // Handle the suggestion by checking if anyone can disprove it
+			    Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
+
+			    if (disprovingCard != null) {
+			        controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.");
+			        cpu.addSeenCard(disprovingCard); // Important: CPU should now know about the disproving card
+			    } else {
+			        controlPanel.setGuessResult("No one could disprove the suggestion.");
+			    }
+			}
+			
 		}
 	}
 
