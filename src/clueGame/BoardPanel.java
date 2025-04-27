@@ -83,6 +83,9 @@ public class BoardPanel extends JPanel {
 		currentPlayer = players.get(currentPlayerIndex);
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
 
+		controlPanel.setGuess("", Color.WHITE);
+		controlPanel.setGuessResult("", Color.WHITE);
+		
 		// Get a roll using random 
 		roll = new Random().nextInt(6) + 1;
 		playerMoved = false;
@@ -125,22 +128,32 @@ public class BoardPanel extends JPanel {
 			    AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance);
 
 			    controlPanel.setGuess(
-			    	    suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName()
+			    	    suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName(),
+			    	    currentPlayer.getColor()
 			    	);
 
 			    // Handle the suggestion by checking if anyone can disprove it
 			    Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
 
 			    if (disprovingCard != null) {
-			        controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.");
-			        cpu.addSeenCard(disprovingCard); // Important: CPU should now know about the disproving card
+			        // Find which player disproved (not the suggester!)
+			        Player disprover = findPlayerWithCard(disprovingCard);
+			        controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.", disprover.getColor());
+			        cpu.addSeenCard(disprovingCard);
 			    } else {
-			        controlPanel.setGuessResult("No one could disprove the suggestion.");
+			        controlPanel.setGuessResult("No one could disprove the suggestion.", Color.LIGHT_GRAY);
 			    }
 			}
-			
-
 		}
+	}
+	
+	private Player findPlayerWithCard(Card card) {
+	    for (Player p : players) {
+	        if (p.getHand().contains(card)) {
+	            return p;
+	        }
+	    }
+	    return null; // Should not happen unless logic error
 	}
 
 	// Draws the board by invoking draw method in boardCells along with players and doors

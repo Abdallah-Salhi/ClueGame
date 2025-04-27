@@ -210,13 +210,15 @@ public JPanel createLowerPanel() {
 }
 
 // Setter for Guess string
-public void setGuess(String guess) {
+public void setGuess(String guess, java.awt.Color color) {
 	guessTextfield.setText(guess);
+	guessTextfield.setBackground(color);
 }
 
 // Setter for Guess result/response string
-public void setGuessResult(String guessResult) {
+public void setGuessResult(String guessResult, java.awt.Color color) {
 	guessResultTextfield.setText(guessResult);
+	guessResultTextfield.setBackground(color);
 }
 
 // Setter for roll string
@@ -252,7 +254,7 @@ public static void main(String[] args) {
 
 	// Test filling in the data
 	panel.setTurn(new ComputerPlayer( "Col. Mustard", Color.orange , 0, 0), 5);
-	panel.setGuess( "I have no guess!");
-	panel.setGuessResult( "So you have nothing?");
+	panel.setGuess("I have no guess!", Color.ORANGE);
+	panel.setGuessResult("So you have nothing?", Color.ORANGE);
 }
 }

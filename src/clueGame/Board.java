@@ -349,10 +349,10 @@ public class Board {
 		return switch (strColor.toLowerCase()) {
 		case "red" -> java.awt.Color.RED;
 		case "green" -> java.awt.Color.GREEN;
-		case "blue" -> java.awt.Color.BLUE;
+		case "blue" -> new java.awt.Color(135, 206, 235);
 		case "yellow" -> java.awt.Color.YELLOW;
 		case "orange" -> java.awt.Color.ORANGE;
-		case "purple" -> new java.awt.Color(128, 0, 128);
+		case "purple" -> new java.awt.Color(200, 100, 200);
 		default -> java.awt.Color.GRAY; // Fallback for unknown color
 		};
 	}
