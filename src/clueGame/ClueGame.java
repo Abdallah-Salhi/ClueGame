@@ -23,8 +23,9 @@ public class ClueGame extends JFrame {
 	public ClueGame() {
 		// Create panels
 		GameControlPanel controlPanel = new GameControlPanel();
-		BoardPanel boardPanel = new BoardPanel(controlPanel);
 		KnownCardsPanel knownCardsPanel = new KnownCardsPanel();
+		BoardPanel boardPanel = new BoardPanel(controlPanel, knownCardsPanel);
+
 
 		controlPanel.setBoardPanel(boardPanel);
 

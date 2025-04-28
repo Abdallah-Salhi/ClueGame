@@ -74,11 +74,31 @@ public class BoardPanel extends JPanel {
 	private AccusationOrSuggestion suggestion;
 	private int speed;
 	private Map<Player, AnimationState> playerAnimations = new HashMap<>();
+	private KnownCardsPanel knownCardsPanel;
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
-	public BoardPanel(GameControlPanel controlPanel) {
+	public BoardPanel(GameControlPanel controlPanel, KnownCardsPanel knownCardsPanel) {
 		this.controlPanel = controlPanel;
+		this.knownCardsPanel = knownCardsPanel;
+		players = theInstance.getPlayers();
+		currentPlayer = players.get(0); // Human always first
+		
+		// Update knownCards Panel with user's cards
+		if(currentPlayer instanceof HumanPlayer) {
+			for(Card card : currentPlayer.getHand()) {
+				if(card.getType() == CardType.PERSON) {
+					knownCardsPanel.updatePanels(knownCardsPanel.personPanel, card, currentPlayer);
 
+		        }else if(card.getType() == CardType.ROOM) {
+		    		knownCardsPanel.updatePanels(knownCardsPanel.roomPanel, card, currentPlayer);
+
+		        }else {
+		    		knownCardsPanel.updatePanels(knownCardsPanel.weaponPanel, card, currentPlayer);
+
+		        }
+			}
+		}
+		
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		add(panel);
@@ -109,13 +129,13 @@ public class BoardPanel extends JPanel {
 		controlPanel.setTurn(currentPlayer, roll);
 
 		BoardCell startCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
-
+		/*
 		// this is so your turn doesn't end if you are moved by a suggestion
 		if (currentPlayer.wasMovedBySuggestion()) {
 			currentPlayer.setMovedBySuggestion(false);
 		}
-
-		theInstance.calcTargets(startCell, roll);
+		*/
+		theInstance.calcTargets(startCell, roll, currentPlayer);
 		targetCells = theInstance.getTargets();
 
 		// Human player logic
@@ -129,6 +149,7 @@ public class BoardPanel extends JPanel {
 			// Computer player logic
 			ComputerPlayer cpu = (ComputerPlayer) currentPlayer;
 			BoardCell target = cpu.selectTarget(targetCells, theInstance);
+			cpu.setMovedBySuggestion(false); // after cpu chooses on their own 
 			playerAnimation(currentPlayer, target, 1);
 			currentPlayer.movePlayer(target);
 			repaint();
@@ -144,21 +165,21 @@ public class BoardPanel extends JPanel {
 						);
 
 
+
 				// Handle the suggestion by checking if anyone can disprove it
 				Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
 
 				// Move suggested player to suggested room.
 				moveSuggestedPlayer(suggestion);
 
-				// process disprove
-				if (disprovingCard != null) {
-					// Find which player disproved (not the suggester!)
-					Player disprover = findPlayerWithCard(disprovingCard);
-					controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.", disprover.getColor());
-					cpu.addSeenCard(disprovingCard);
-				} else {
-					controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
-				}
+				// Process disprove card
+			    if (disprovingCard != null) {
+			        Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
+			        controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
+			        cpu.addSeenCard(disprovingCard);
+			    } else {
+			        controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
+			    }
 			}
 		}
 	}
@@ -185,9 +206,14 @@ public class BoardPanel extends JPanel {
 			animateAfterPrevious(() -> {
 				playerAnimation(playerToMove, destinationCell, 1);
 				playerToMove.movePlayer(destinationCell);
-				playerToMove.setMovedBySuggestion(true);
 			});
-		}		
+		}
+		if(currentPlayer.equals(suggestedPlayer)) {
+			suggestedPlayer.setMovedBySuggestion(false);
+			return;
+		}
+		suggestedPlayer.setMovedBySuggestion(true);
+
 	}
 
 	private Player findPlayerWithCard(Card card) {
@@ -353,6 +379,7 @@ public class BoardPanel extends JPanel {
 			// move the player and start animation
 			playerAnimation(currentPlayer, clickedCell, 1);
 			currentPlayer.movePlayer(clickedCell);
+			currentPlayer.setMovedBySuggestion(false);
 			clickedCell.setOccupied(true);
 
 			// open suggestion dialog screen
@@ -463,9 +490,40 @@ public class BoardPanel extends JPanel {
 			weapon = new Card(selectedWeapon, CardType.WEAPON);
 			person = new Card(selectedPerson, CardType.PERSON);
 
+		}else {
+			return;
 		}
 
 		suggestion = new AccusationOrSuggestion(currentPlayer, person, weapon, roomCard);
+		Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList) players);
+		
+		// update control Panel
+		controlPanel.setGuess( 
+				suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName(),
+				currentPlayer.getColor()
+				);
+		
+		// Move suggested player to suggested room.
+		moveSuggestedPlayer(suggestion);
+
+		// Process disprove card
+	    if (disprovingCard != null) {
+	        Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
+	        controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
+	        
+	        if(disprovingCard.getType().equals(CardType.PERSON)) {
+		        knownCardsPanel.updatePanels(knownCardsPanel.seenPersonPanel, disprovingCard, disprover);
+
+	        }else if(disprovingCard.getType().equals(CardType.ROOM)) {
+		        knownCardsPanel.updatePanels(knownCardsPanel.seenRoomPanel, disprovingCard, disprover);
+
+	        }else {
+		        knownCardsPanel.updatePanels(knownCardsPanel.seenWeaponPanel, disprovingCard, disprover);
+	        }
+	    } else {
+	        controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
+	    }
+		
 
 
 	}
@@ -525,7 +583,8 @@ public class BoardPanel extends JPanel {
 		setUp();
 		JFrame frame = new JFrame();
 		GameControlPanel controlPanel = new GameControlPanel();
-		BoardPanel panel = new BoardPanel(controlPanel);
+		KnownCardsPanel knownCardsPanel = new KnownCardsPanel();
+		BoardPanel panel = new BoardPanel(controlPanel, knownCardsPanel);
 
 		frame.setContentPane(panel);
 		frame.setSize(700, 700);

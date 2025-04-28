@@ -36,6 +36,7 @@ public class Board {
 	private Solution solution;
 	private List<Player> players;
 	private Set<Card> deck;
+	private Player disprovingPlayer;
 
 	// Singleton instance of the Board (only one Board exists in the game)
 	private static Board theInstance = new Board();
@@ -163,13 +164,15 @@ public class Board {
 			for (int row = 0; row < MAX_ROWS; row++) {
 				for (int col = 0; col < MAX_COLS; col++) {
 					grid[row][col] = new BoardCell(row, col);
+
+				
 				}
 			}
 			// Set cells with player as occupied now that grid is initialized
 			for(Player player : players) {
 				int row = player.getRow();
 				int col = player.getColumn();
-				
+
 				grid[row][col].setOccupied(true);
 
 			}
@@ -195,14 +198,14 @@ public class Board {
 				Room room = roomMap.get(firstChar);
 				grid[row][col].setInitial(firstChar);
 				grid[row][col].setRoom(room);
-				
+
 				if(firstChar == 'W') {
 					grid[row][col].setWalkway();
 					grid[row][col].isRoom = false;
 				}
-				
+
 				if(firstChar == 'X') {
-					
+
 					grid[row][col].setUnused();
 					grid[row][col].isRoom = false;
 
@@ -316,38 +319,44 @@ public class Board {
 	}
 
 	// Calculates possible move targets given a dice roll
-	public void calcTargets(BoardCell startCell, int pathlength) {
+	public void calcTargets(BoardCell startCell, int pathlength, Player player) {
 		targets.clear();
 		visited.clear();
 		findAllTargets(startCell, pathlength);
+		// Add start cell (room) to targets if player was moved by a suggestion 
+		if(startCell.isRoomCenter() && player.wasMovedBySuggestion()) {
+			targets.add(startCell);
+		}
+		player.setMovedBySuggestion(false);
 	}
 
 	// Recursive function to find all valid move targets
 	private void findAllTargets(BoardCell currentCell, int stepsRemaining) {
 		visited.add(currentCell);
 
-		if (stepsRemaining == 0) {
-			targets.add(currentCell);
-		} else {
-			for (BoardCell adj : currentCell.getAdjList()) {
-				if (!visited.contains(adj) && (!adj.isOccupied() || adj.isRoomCenter())) {
-					if(adj.isRoomCenter()) {
-						findAllTargets(adj, 0);
-					}else {
-						findAllTargets(adj, stepsRemaining - 1);
-					}
 
+		for (BoardCell adj : currentCell.getAdjList()) {
+			if (visited.contains(adj)) continue; // Already visited
+			// Only move onto adj if its a room center or it is not occupied.
+			if (adj.isRoomCenter() || !adj.isOccupied()) {
+				visited.add(adj);
+
+				if (stepsRemaining == 1 || adj.isRoomCenter()) {
+					targets.add(adj);
+				} else {
+					findAllTargets(adj, stepsRemaining - 1);
 				}
+
+				visited.remove(adj); // Backtrack
 			}
 		}
-
-		visited.remove(currentCell); // Backtracking step
+		visited.remove(currentCell); // Backtrack
 	}
 
 	// Converts color data, used in loadSetupConfig
 	private java.awt.Color convertColor(String strColor) {
 		return switch (strColor.toLowerCase()) {
-		case "red" -> java.awt.Color.RED;
+		case "red" -> new java.awt.Color(255,102,102);
 		case "green" -> java.awt.Color.GREEN;
 		case "blue" -> new java.awt.Color(135, 206, 235);
 		case "yellow" -> java.awt.Color.YELLOW;
@@ -398,7 +407,7 @@ public class Board {
 		String accusedPerson = accusation.getPerson().getCardName();
 		String accusedRoom = accusation.getRoom().getCardName();
 		String accusedWeapon = accusation.getWeapon().getCardName();
-		
+
 		String actualPerson = solution.getPerson().getCardName();
 		String actualRoom = solution.getRoom().getCardName();
 		String actualWeapon= solution.getWeapon().getCardName();
@@ -414,27 +423,41 @@ public class Board {
 	// Process all the players in turn, each to see if they can dispute the suggestion and return the first card that disputed the suggestion
 	public Card handleSuggestion(AccusationOrSuggestion suggestion, ArrayList<Player> players) {
 
-	    // Handle trying to disprove a suggestion
-	    for (Player player : players) {
-	        if (suggestion.getSuggestor() != player) {
+		// Handle trying to disprove a suggestion
+		for (Player player : players) {
+			if (suggestion.getSuggestor() != player) { // Skip suggestor
+				Card disprovingCard = player.disproveSuggestion(suggestion);
+				if( disprovingCard != null) {
+					disprovingPlayer = player; // Save the player who disproved
+					return disprovingCard; // Return the card that disproved
+				}
+				/*
 	            for (Card c : player.getHand()) {
-	                if (c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
-	                    return c;
+	                if (c.equals(suggestion.getPerson()) || c.equals(suggestion.getWeapon()) || c.equals(suggestion.getRoom())) {
+	                    disprovingPlayer = player; // Save the player who disproved
+	                    return c; // Return the card that disproved
 	                }
+
 	            }
-	        }
-	    }
-	    return null;
+				 */
+			}
+		}
+		disprovingPlayer = null; // No one disproved
+		return null;
 	}
-	
+
 	// Helper method for handleSuggestion, translates card data to room data.
 	public Room getRoomByName(String name) {
-	    for (Room room : roomMap.values()) {
-	        if (room.getName().equals(name)) {
-	            return room;
-	        }
-	    }
-	    return null; // Should not happen if data is valid
+		for (Room room : roomMap.values()) {
+			if (room.getName().equals(name)) {
+				return room;
+			}
+		}
+		return null; // Should not happen if data is valid
+	}
+
+	public Player getDisprovingPlayer() {
+		return disprovingPlayer;
 	}
 
 	public Set<BoardCell> getAdjList(int row, int col) {
@@ -444,7 +467,7 @@ public class Board {
 	public Set<BoardCell> getTargets() {
 		return targets;
 	}
-	
+
 	// Returns the cell at the specified row and column
 	public BoardCell getCell(int row, int column) {
 		return grid[row][column];
@@ -477,7 +500,7 @@ public class Board {
 	public Solution getSolution() {
 		return solution; 
 	}
-	
+
 	public BoardCell[][] getGrid(){
 		return grid;
 	}

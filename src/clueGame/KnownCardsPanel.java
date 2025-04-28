@@ -32,13 +32,14 @@ public class KnownCardsPanel extends JPanel {
 	private static JTextField noneTextfield;
 	private static JTextField newTextField;
 
-	private JPanel personPanel;
-	private JPanel roomPanel;
-	private JPanel weaponPanel;
+	protected JPanel personPanel;
+	protected JPanel roomPanel;
+	protected JPanel weaponPanel;
 
-	private JPanel seenPersonPanel;
-	private JPanel seenRoomPanel;
-	private JPanel seenWeaponPanel;
+	protected JPanel seenPersonPanel;
+	protected JPanel seenRoomPanel;
+	protected JPanel seenWeaponPanel;
+	
 
 
 	// Main Constructor calls all the methods to create inner panels and adds them to the main panel
@@ -91,7 +92,7 @@ public class KnownCardsPanel extends JPanel {
 		mainPanel.add(roomsPanel);
 		mainPanel.add(weaponsPanel);
 
-		add(mainPanel); // Add to gameControlPanel
+		add(mainPanel); // Add to KnownCardsPanel
 	}
 
 	// Panel for people cards in hand
@@ -106,6 +107,7 @@ public class KnownCardsPanel extends JPanel {
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 
 		panel.add(noneTextfield);
+		
 
 		return panel;
 	}
