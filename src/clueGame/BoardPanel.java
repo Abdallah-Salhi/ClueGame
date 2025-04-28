@@ -10,7 +10,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -70,6 +72,8 @@ public class BoardPanel extends JPanel {
 
 	private int roll;
 	private AccusationOrSuggestion suggestion;
+	private int speed;
+	private Map<Player, AnimationState> playerAnimations = new HashMap<>();
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
 	public BoardPanel(GameControlPanel controlPanel) {
@@ -86,6 +90,9 @@ public class BoardPanel extends JPanel {
 		players = theInstance.getPlayers();
 		currentPlayer = players.get(currentPlayerIndex);
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
+
+		controlPanel.setGuess("", Color.WHITE);
+		controlPanel.setGuessResult("", Color.WHITE);
 
 		// Get a roll using random 
 		roll = new Random().nextInt(6) + 1;
@@ -122,30 +129,74 @@ public class BoardPanel extends JPanel {
 			// Computer player logic
 			ComputerPlayer cpu = (ComputerPlayer) currentPlayer;
 			BoardCell target = cpu.selectTarget(targetCells, theInstance);
-			playerAnimation(currentPlayer, target);
+			playerAnimation(currentPlayer, target, 1);
 			currentPlayer.movePlayer(target);
+			repaint();
 
+			// When CPU enters a room
+			if (theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn()).isRoomCenter()) { // check if room center
+				AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance); // make a new suggestion
 
-			if (theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn()).isRoomCenter()) {
-				AccusationOrSuggestion suggestion = cpu.createSuggestion(theInstance);
-
-				controlPanel.setGuess(
-						suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName()
+				// update control Panel
+				controlPanel.setGuess( 
+						suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName(),
+						currentPlayer.getColor()
 						);
+
 
 				// Handle the suggestion by checking if anyone can disprove it
 				Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
 
+				// Move suggested player to suggested room.
+				moveSuggestedPlayer(suggestion);
+
+				// process disprove
 				if (disprovingCard != null) {
-					controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.");
-					cpu.addSeenCard(disprovingCard); // Important: CPU should now know about the disproving card
+					// Find which player disproved (not the suggester!)
+					Player disprover = findPlayerWithCard(disprovingCard);
+					controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.", disprover.getColor());
+					cpu.addSeenCard(disprovingCard);
 				} else {
-					controlPanel.setGuessResult("No one could disprove the suggestion.");
+					controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
 				}
 			}
-
-
 		}
+	}
+
+	// Helper method to summon player to room if they are suggested/accused
+	private void moveSuggestedPlayer(AccusationOrSuggestion suggestion) {
+		Player suggestedPlayer = null;
+		for (Player player : players) {
+			if (player.getName().equals(suggestion.getPerson().getCardName())) {
+				suggestedPlayer = player;
+				break;
+			}
+		}
+
+		if (suggestedPlayer != null) {
+			// get room center cell
+			Room targetRoom = theInstance.getRoomByName(suggestion.getRoom().getCardName());
+			BoardCell roomCenter = targetRoom.getCenterCell();
+			
+			// Animate the suggested player AFTER CPU animation finishes
+			final Player playerToMove = suggestedPlayer;
+			final BoardCell destinationCell = roomCenter;
+
+			animateAfterPrevious(() -> {
+				playerAnimation(playerToMove, destinationCell, 1);
+				playerToMove.movePlayer(destinationCell);
+				playerToMove.setMovedBySuggestion(true);
+			});
+		}		
+	}
+
+	private Player findPlayerWithCard(Card card) {
+		for (Player p : players) {
+			if (p.getHand().contains(card)) {
+				return p;
+			}
+		}
+		return null; // Should not happen unless logic error
 	}
 
 	// Draws the board by invoking draw method in boardCells along with players and doors
@@ -182,20 +233,23 @@ public class BoardPanel extends JPanel {
 
 	// Helper method to ensure players are properly drawn
 	private void drawPlayers(Graphics g) {
-		List<Player> players = theInstance.getPlayers();
-		for (Player player : players) {
-			g.setColor(player.color);
-			int drawX = player.column * cellWidth + padding + 4;
-			int drawY = player.row * cellHeight + padding + 1;
-
-			if (player == currentPlayer && animationTimer != null && animationTimer.isRunning()) {
-				drawX = playerPixelX + padding + 4;
-				drawY = playerPixelY + padding + 1;
-			}
-
-			g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-			g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-		}
+	    List<Player> players = theInstance.getPlayers();
+	    for (Player player : players) {
+	        g.setColor(player.getColor());
+	        
+	        int drawX, drawY;
+	        if (playerAnimations.containsKey(player) && playerAnimations.get(player).isAnimating) {
+	            AnimationState state = playerAnimations.get(player);
+	            drawX = state.pixelX + padding + 4;
+	            drawY = state.pixelY + padding + 1;
+	        } else {
+	            drawX = player.getColumn() * cellWidth + padding + 4;
+	            drawY = player.getRow() * cellHeight + padding + 1;
+	        }
+	        
+	        g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+	        g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+	    }
 	}
 
 	// Helper method for drawing doors and labels
@@ -297,7 +351,7 @@ public class BoardPanel extends JPanel {
 
 
 			// move the player and start animation
-			playerAnimation(currentPlayer, clickedCell);
+			playerAnimation(currentPlayer, clickedCell, 1);
 			currentPlayer.movePlayer(clickedCell);
 			clickedCell.setOccupied(true);
 
@@ -313,60 +367,63 @@ public class BoardPanel extends JPanel {
 	}
 
 	// Helper method to animate player movement using Timer and action Listener
-	private void playerAnimation(Player player, BoardCell destCell) {
-		playerPixelX = player.getColumn() * cellWidth;
-		playerPixelY = player.getRow() * cellHeight;
-		destPixelX = destCell.getColumn() * cellWidth;
-		destPixelY = destCell.getRow() * cellHeight;
+	private void playerAnimation(Player player, BoardCell destCell, int speed) {
+	    // Initialize animation state if needed
+	    if (!playerAnimations.containsKey(player)) {
+	        playerAnimations.put(player, new AnimationState(
+	            player.getColumn() * cellWidth,
+	            player.getRow() * cellHeight
+	        ));
+	    }
+	    
+	    AnimationState state = playerAnimations.get(player);
+	    state.pixelX = player.getColumn() * cellWidth;
+	    state.pixelY = player.getRow() * cellHeight;
+	    state.isAnimating = true;
+	    
+	    int destPixelX = destCell.getColumn() * cellWidth;
+	    int destPixelY = destCell.getRow() * cellHeight;
 
-		animationTimer = new Timer(10, null);
-		final int speed = 1; // Pixels the animation will move per tick
+	    // before moving player we need to make the cell the player is in appear unoccupied
+	    int prevRow = player.getRow();
+	    int prevCol = player.getColumn();
+	    BoardCell prevCell = theInstance.getCell(prevRow, prevCol);
+	    prevCell.setOccupied(false);
 
-		// before moving player we need to make the cell the player is in appear unoccupied
-		int prevRow = currentPlayer.getRow();
-		int prevCol = currentPlayer.getColumn();
+	    Timer animationTimer = new Timer(10, e -> {
+	        boolean moved = false;
 
-		BoardCell[][] grid = theInstance.getGrid();
-		BoardCell prevCell = grid[prevRow][prevCol];
-		prevCell.setOccupied(false);
+	        if (state.pixelX < destPixelX) {
+	            state.pixelX += speed;
+	            if (state.pixelX > destPixelX) state.pixelX = destPixelX;
+	            moved = true;
+	        } else if (state.pixelX > destPixelX) {
+	            state.pixelX -= speed;
+	            if (state.pixelX < destPixelX) state.pixelX = destPixelX;
+	            moved = true;
+	        }
 
-		animationTimer.addActionListener(e-> {
-			playerMoved = false;
+	        if (state.pixelY < destPixelY) {
+	            state.pixelY += speed;
+	            if (state.pixelY > destPixelY) state.pixelY = destPixelY;
+	            moved = true;
+	        } else if (state.pixelY > destPixelY) {
+	            state.pixelY -= speed;
+	            if (state.pixelY < destPixelY) state.pixelY = destPixelY;
+	            moved = true;
+	        }
 
-			if (playerPixelX < destPixelX) {
-				playerPixelX += speed;
-				if (playerPixelX > destPixelX) playerPixelX = destPixelX;
-				playerMoved = true;
-			} else if (playerPixelX > destPixelX) {
-				playerPixelX -= speed;
-				if (playerPixelX < destPixelX) playerPixelX = destPixelX;
-				playerMoved = true;
-			}
+	        repaint();
 
-			if (playerPixelY < destPixelY) {
-				playerPixelY += speed;
-				if (playerPixelY > destPixelY) playerPixelY = destPixelY;
-				playerMoved = true;
-			} else if (playerPixelY > destPixelY) {
-				playerPixelY -= speed;
-				if (playerPixelY < destPixelY) playerPixelY = destPixelY;
-				playerMoved = true;
-			}
-
-			repaint();
-
-			if (!playerMoved) {
-				((Timer) e.getSource()).stop();
-				// Update actual player position in board terms
-				player.movePlayer(destCell);
-
-			}
-		});
-
-
-		animationTimer.start();
+	        if (!moved) {
+	            ((Timer)e.getSource()).stop();
+	            state.isAnimating = false;
+	            player.movePlayer(destCell);
+	        }
+	    });
+	    
+	    animationTimer.start();
 	}
-
 	// Create the suggestion dialog screen
 	private void createSuggestionPane(Room room) {
 		String[] suspects = { "Harry Potter", "Hermione Granger", "Ron Weasley", "Draco Malfoy", "Luna Lovegood", "Neville Longbottom" };
@@ -398,7 +455,7 @@ public class BoardPanel extends JPanel {
 				);
 
 		if (result == JOptionPane.OK_OPTION) {
-			
+
 			String selectedPerson = (String) personBox.getSelectedItem();
 			String selectedWeapon = (String) weaponBox.getSelectedItem();
 
@@ -412,6 +469,47 @@ public class BoardPanel extends JPanel {
 
 
 	}
+
+	// helper function for player Animation and suggestion
+	private Player findPlayerByName(String name) {
+		for (Player p : players) {
+			if (p.getName().equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
+
+	// Helper to delay animation until current animation finishes
+	private void animateAfterPrevious(Runnable nextAnimation) {
+		Timer waitTimer = new Timer(100, null);
+	    waitTimer.addActionListener(e -> {
+	        if (animationTimer == null || !animationTimer.isRunning()) {
+	            waitTimer.stop();
+	            // Add a small buffer delay (e.g., 200ms) for visual clarity
+	            Timer bufferTimer = new Timer(200, ev -> {
+	                nextAnimation.run();
+	                ((Timer)ev.getSource()).stop();
+	            });
+	            bufferTimer.setRepeats(false); // Run only once
+	            bufferTimer.start();
+	        }
+	    });
+	    waitTimer.start();
+	}
+	
+	// inner class to track animation state ** needed for animating several players 
+		private class AnimationState {
+		    int pixelX;
+		    int pixelY;
+		    boolean isAnimating;
+		    
+		    public AnimationState(int x, int y) {
+		        this.pixelX = x;
+		        this.pixelY = y;
+		        this.isAnimating = false;
+		    }
+		}
 
 	// Must make an instance for testing 
 	public static void setUp() {

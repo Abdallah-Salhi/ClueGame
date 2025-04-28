@@ -349,10 +349,10 @@ public class Board {
 		return switch (strColor.toLowerCase()) {
 		case "red" -> java.awt.Color.RED;
 		case "green" -> java.awt.Color.GREEN;
-		case "blue" -> java.awt.Color.BLUE;
+		case "blue" -> new java.awt.Color(135, 206, 235);
 		case "yellow" -> java.awt.Color.YELLOW;
 		case "orange" -> java.awt.Color.ORANGE;
-		case "purple" -> new java.awt.Color(128, 0, 128);
+		case "purple" -> new java.awt.Color(200, 100, 200);
 		default -> java.awt.Color.GRAY; // Fallback for unknown color
 		};
 	}
@@ -413,23 +413,6 @@ public class Board {
 
 	// Process all the players in turn, each to see if they can dispute the suggestion and return the first card that disputed the suggestion
 	public Card handleSuggestion(AccusationOrSuggestion suggestion, ArrayList<Player> players) {
-
-	    // Move suggested player to suggested room.
-	    Player suggestedPlayer = null;
-	    for (Player player : players) {
-	        if (player.getName().equals(suggestion.getPerson().getCardName())) {
-	            suggestedPlayer = player;
-	            break;
-	        }
-	    }
-
-	    if (suggestedPlayer != null) {
-	    	Room targetRoom = getRoomByName(suggestion.getRoom().getCardName());
-	        BoardCell roomCenter = targetRoom.getCenterCell();
-
-	        suggestedPlayer.movePlayer(roomCenter);
-	        suggestedPlayer.setMovedBySuggestion(true);
-	    }
 
 	    // Handle trying to disprove a suggestion
 	    for (Player player : players) {
