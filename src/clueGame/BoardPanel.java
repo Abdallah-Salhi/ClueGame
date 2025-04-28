@@ -136,9 +136,8 @@ public class BoardPanel extends JPanel {
 			    Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList<Player>) theInstance.getPlayers());
 
 			    if (disprovingCard != null) {
-			        // Find which player disproved (not the suggester!)
-			        Player disprover = findPlayerWithCard(disprovingCard);
-			        controlPanel.setGuessResult(disprovingCard.getCardName() + " disproved the suggestion.", disprover.getColor());
+			        Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
+			        controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
 			        cpu.addSeenCard(disprovingCard);
 			    } else {
 			        controlPanel.setGuessResult("No one could disprove the suggestion.", Color.LIGHT_GRAY);

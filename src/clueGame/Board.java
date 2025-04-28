@@ -36,6 +36,7 @@ public class Board {
 	private Solution solution;
 	private List<Player> players;
 	private Set<Card> deck;
+	private Player disprovingPlayer;
 
 	// Singleton instance of the Board (only one Board exists in the game)
 	private static Board theInstance = new Board();
@@ -324,24 +325,24 @@ public class Board {
 
 	// Recursive function to find all valid move targets
 	private void findAllTargets(BoardCell currentCell, int stepsRemaining) {
-		visited.add(currentCell);
+	    visited.add(currentCell);
 
-		if (stepsRemaining == 0) {
-			targets.add(currentCell);
-		} else {
-			for (BoardCell adj : currentCell.getAdjList()) {
-				if (!visited.contains(adj) && (!adj.isOccupied() || adj.isRoomCenter())) {
-					if(adj.isRoomCenter()) {
-						findAllTargets(adj, 0);
-					}else {
-						findAllTargets(adj, stepsRemaining - 1);
-					}
+	    for (BoardCell adj : currentCell.getAdjList()) {
+	        if (visited.contains(adj)) continue; // Already visited
+	        // Only move onto adj if its a room center or it is not occupied.
+	        if (adj.isRoomCenter() || !adj.isOccupied()) {
+	            visited.add(adj);
 
-				}
-			}
-		}
+	            if (stepsRemaining == 1 || adj.isRoomCenter()) {
+	                targets.add(adj);
+	            } else {
+	                findAllTargets(adj, stepsRemaining - 1);
+	            }
 
-		visited.remove(currentCell); // Backtracking step
+	            visited.remove(adj); // Backtrack
+	        }
+	    }
+	    visited.remove(currentCell); // Backtrack
 	}
 
 	// Converts color data, used in loadSetupConfig
@@ -433,14 +434,16 @@ public class Board {
 
 	    // Handle trying to disprove a suggestion
 	    for (Player player : players) {
-	        if (suggestion.getSuggestor() != player) {
+	        if (suggestion.getSuggestor() != player) { // Skip suggestor
 	            for (Card c : player.getHand()) {
 	                if (c == suggestion.getPerson() || c == suggestion.getWeapon() || c == suggestion.getRoom()) {
-	                    return c;
+	                    disprovingPlayer = player; // Save the player who disproved
+	                    return c; // Return the card that disproved
 	                }
 	            }
 	        }
 	    }
+	    disprovingPlayer = null; // No one disproved
 	    return null;
 	}
 	
@@ -454,6 +457,10 @@ public class Board {
 	    return null; // Should not happen if data is valid
 	}
 
+	public Player getDisprovingPlayer() {
+	    return disprovingPlayer;
+	}
+	
 	public Set<BoardCell> getAdjList(int row, int col) {
 		return getCell(row,col).getAdjList(); 
 	}

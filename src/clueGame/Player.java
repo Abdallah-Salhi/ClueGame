@@ -58,8 +58,16 @@ public abstract class Player {
     
     // Sets new position cell for players to establish movement for game logic
     public void movePlayer(BoardCell cell) {
-    	this.row = cell.getRow();
-    	this.column = cell.getColumn();
+        // Before moving, clear the old cell
+        Board board = Board.getInstance();
+        board.getCell(this.row, this.column).setOccupied(false);
+
+        // Update player location
+        this.row = cell.getRow();
+        this.column = cell.getColumn();
+
+        // After moving, mark the new cell as occupied
+        board.getCell(this.row, this.column).setOccupied(true);
     }
 
     // Getters
