@@ -6,29 +6,43 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MusicPlayer {
-	 private Clip clip;
+	private Clip clip;
 
-	    public void playMusic(String musicFileName) {
-	        try {
-	            // Use getResourceAsStream to load the audio from the JAR
-	            InputStream musicStream = getClass().getResourceAsStream("data/" + musicFileName);
-	            if (musicStream == null) {
-	                System.out.println("Music file not found!");
-	                return;
-	            }
+	// Constructor - load the music
+	public MusicPlayer(String filepath) {
+		try {
+			File musicPath = new File(filepath);
+			if (musicPath.exists()) {
+				AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+				clip = AudioSystem.getClip();
+				clip.open(audioInput);
+			} else {
+				System.out.println("File not found: " + filepath);
+			}
+		} catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+			e.printStackTrace();
+		}
+	}
 
-	            AudioInputStream audioStream = AudioSystem.getAudioInputStream(musicStream);
-	            clip = AudioSystem.getClip();
-	            clip.open(audioStream);
-	            clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop the music indefinitely
-	        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-	            e.printStackTrace();
-	        }
-	    }
+	// Play the music
+	public void play() {
+		if (clip != null) {
+			clip.start();
+			clip.loop(Clip.LOOP_CONTINUOUSLY); // Loop forever
+		}
+	}
 
-	    public void stopMusic() {
-	        if (clip != null && clip.isRunning()) {
-	            clip.stop();
-	        }
-	    }
+	// Stop the music
+	public void stop() {
+		if (clip != null && clip.isRunning()) {
+			clip.stop();
+		}
+	}
+
+	// Close and release resources
+	public void close() {
+		if (clip != null) {
+			clip.close();
+		}
+	}
 }
