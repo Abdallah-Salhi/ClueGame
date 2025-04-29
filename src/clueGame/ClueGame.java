@@ -41,7 +41,7 @@ public class ClueGame extends JFrame {
 		scrollPane.setPreferredSize(new Dimension(190, 0)); // 
 		add(scrollPane, BorderLayout.EAST);
 		
-		MusicPlayer musicPlayer = new MusicPlayer("/data/BackgroundMusic.wav");
+		MusicPlayer musicPlayer = new MusicPlayer("data/BackgroundMusic.wav");
 		musicPlayer.play();
 		boardPanel.nextTurn();
 	}

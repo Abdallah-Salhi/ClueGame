@@ -30,7 +30,7 @@ import javax.swing.Timer;
  *
  * Authors/Contributors:
  * Abdallah Salhi
- * Montgomery Hughes
+ * Montgomery Hughes	
  */
 public class BoardPanel extends JPanel {
 	private Board theInstance = Board.getInstance();
@@ -75,6 +75,9 @@ public class BoardPanel extends JPanel {
 	private int speed;
 	private Map<Player, AnimationState> playerAnimations = new HashMap<>();
 	private KnownCardsPanel knownCardsPanel;
+	
+	private Map<Player, Timer> playerTimers = new HashMap<>();
+	private Runnable pendingSuggestionAnimation;
 
 	// Main constructor. Connects to gameControlPanel and  adds the JPanel and MouseListener
 	public BoardPanel(GameControlPanel controlPanel, KnownCardsPanel knownCardsPanel) {
@@ -107,6 +110,8 @@ public class BoardPanel extends JPanel {
 
 	// nextTurn runs all the logic for turn events, such as highlighting target cells, calling the calcTargets function and handling Human and Computer player logic
 	public void nextTurn() {
+		forceFinishAllAnimations();
+		
 		players = theInstance.getPlayers();
 		currentPlayer = players.get(currentPlayerIndex);
 		currentPlayerIndex = (currentPlayerIndex + 1) % players.size(); // increment for next turn
@@ -292,23 +297,51 @@ public class BoardPanel extends JPanel {
 
 	// Helper method to ensure players are properly drawn
 	private void drawPlayers(Graphics g) {
-		List<Player> players = theInstance.getPlayers();
-		for (Player player : players) {
-			g.setColor(player.getColor());
+	    List<Player> players = theInstance.getPlayers();
 
-			int drawX, drawY;
-			if (playerAnimations.containsKey(player) && playerAnimations.get(player).isAnimating) {
-				AnimationState state = playerAnimations.get(player);
-				drawX = state.pixelX + padding + 4;
-				drawY = state.pixelY + padding + 1;
-			} else {
-				drawX = player.getColumn() * cellWidth + padding + 4;
-				drawY = player.getRow() * cellHeight + padding + 1;
-			}
+	    // Group players by the cell they are standing in
+	    Map<BoardCell, List<Player>> cellToPlayers = new HashMap<>();
+	    for (Player player : players) {
+	        BoardCell cell = theInstance.getCell(player.getRow(), player.getColumn());
+	        cellToPlayers.putIfAbsent(cell, new ArrayList<>());
+	        cellToPlayers.get(cell).add(player);
+	    }
 
-			g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-			g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-		}
+	    // Now draw players
+	    for (Map.Entry<BoardCell, List<Player>> entry : cellToPlayers.entrySet()) {
+	        BoardCell cell = entry.getKey();
+	        List<Player> playersInCell = entry.getValue();
+
+	        for (int i = 0; i < playersInCell.size(); i++) {
+	            Player player = playersInCell.get(i);
+
+	            g.setColor(player.getColor());
+
+	            int drawX, drawY;
+
+	            if (playerAnimations.containsKey(player) && playerAnimations.get(player).isAnimating) {
+	                // If player is moving, use animation coordinates (no offset!)
+	                AnimationState state = playerAnimations.get(player);
+	                drawX = state.pixelX + padding + 4;
+	                drawY = state.pixelY + padding + 1;
+	            } else {
+	                // Static players (apply offsets to spread them out if needed)
+	                drawX = player.getColumn() * cellWidth + padding + 4;
+	                drawY = player.getRow() * cellHeight + padding + 1;
+
+	                // Apply small offset if multiple players are in same cell
+	                int offsetX = (i % 2) * 10;
+	                int offsetY = (i / 2) * 10;
+
+	                drawX += offsetX;
+	                drawY += offsetY;
+	            }
+
+	            // Draw the player oval same size as before
+	            g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+	            g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+	        }
+	    }
 	}
 
 	// Helper method for drawing doors and labels
@@ -428,62 +461,88 @@ public class BoardPanel extends JPanel {
 
 	// Helper method to animate player movement using Timer and action Listener
 	private void playerAnimation(Player player, BoardCell destCell, int speed) {
-		// Initialize animation state if needed
-		if (!playerAnimations.containsKey(player)) {
-			playerAnimations.put(player, new AnimationState(
-					player.getColumn() * cellWidth,
-					player.getRow() * cellHeight
-					));
-		}
+	    // Initialize animation state if needed
+	    if (!playerAnimations.containsKey(player)) {
+	        playerAnimations.put(player, new AnimationState(
+	                player.getColumn() * cellWidth,
+	                player.getRow() * cellHeight
+	        ));
+	    }
 
-		AnimationState state = playerAnimations.get(player);
-		state.pixelX = player.getColumn() * cellWidth;
-		state.pixelY = player.getRow() * cellHeight;
-		state.isAnimating = true;
+	    AnimationState state = playerAnimations.get(player);
+	    state.pixelX = player.getColumn() * cellWidth;
+	    state.pixelY = player.getRow() * cellHeight;
+	    state.isAnimating = true;
 
-		int destPixelX = destCell.getColumn() * cellWidth;
-		int destPixelY = destCell.getRow() * cellHeight;
+	    int destPixelX = destCell.getColumn() * cellWidth;
+	    int destPixelY = destCell.getRow() * cellHeight;
 
-		// before moving player we need to make the cell the player is in appear unoccupied
-		int prevRow = player.getRow();
-		int prevCol = player.getColumn();
-		BoardCell prevCell = theInstance.getCell(prevRow, prevCol);
-		prevCell.setOccupied(false);
+	    // Before moving player we need to mark old cell as unoccupied
+	    int prevRow = player.getRow();
+	    int prevCol = player.getColumn();
+	    BoardCell prevCell = theInstance.getCell(prevRow, prevCol);
+	    prevCell.setOccupied(false);
 
-		Timer animationTimer = new Timer(10, e -> {
-			boolean moved = false;
+	    Timer timer = new Timer(10, e -> {
+	        boolean moved = false;
 
-			if (state.pixelX < destPixelX) {
-				state.pixelX += speed;
-				if (state.pixelX > destPixelX) state.pixelX = destPixelX;
-				moved = true;
-			} else if (state.pixelX > destPixelX) {
-				state.pixelX -= speed;
-				if (state.pixelX < destPixelX) state.pixelX = destPixelX;
-				moved = true;
-			}
+	        if (state.pixelX < destPixelX) {
+	            state.pixelX += speed;
+	            if (state.pixelX > destPixelX) state.pixelX = destPixelX;
+	            moved = true;
+	        } else if (state.pixelX > destPixelX) {
+	            state.pixelX -= speed;
+	            if (state.pixelX < destPixelX) state.pixelX = destPixelX;
+	            moved = true;
+	        }
 
-			if (state.pixelY < destPixelY) {
-				state.pixelY += speed;
-				if (state.pixelY > destPixelY) state.pixelY = destPixelY;
-				moved = true;
-			} else if (state.pixelY > destPixelY) {
-				state.pixelY -= speed;
-				if (state.pixelY < destPixelY) state.pixelY = destPixelY;
-				moved = true;
-			}
+	        if (state.pixelY < destPixelY) {
+	            state.pixelY += speed;
+	            if (state.pixelY > destPixelY) state.pixelY = destPixelY;
+	            moved = true;
+	        } else if (state.pixelY > destPixelY) {
+	            state.pixelY -= speed;
+	            if (state.pixelY < destPixelY) state.pixelY = destPixelY;
+	            moved = true;
+	        }
 
-			repaint();
+	        repaint();
 
-			if (!moved) {
-				((Timer)e.getSource()).stop();
-				state.isAnimating = false;
-				player.movePlayer(destCell);
-			}
-		});
+	        if (!moved) {
+	            ((Timer) e.getSource()).stop();
+	            state.isAnimating = false;
+	            player.movePlayer(destCell);
+	        }
+	    });
 
-		animationTimer.start();
+	    // SAVE the timer so we can cancel it if needed
+	    playerTimers.put(player, timer);
+
+	    timer.start();
 	}
+	
+	private void forceFinishAllAnimations() {
+	    // Stop all player timers
+	    for (Map.Entry<Player, Timer> entry : playerTimers.entrySet()) {
+	        Timer timer = entry.getValue();
+	        if (timer != null && timer.isRunning()) {
+	            timer.stop();
+	        }
+	    }
+
+	    // Reset all player animation states
+	    for (AnimationState state : playerAnimations.values()) {
+	        if (state != null) {
+	            state.isAnimating = false;
+	        }
+	    }
+
+	    // Clear pending suggestion
+	    pendingSuggestionAnimation = null;
+
+	    repaint(); // Update board visually
+	}
+	
 	// Create the suggestion dialog screen
 	private void createSuggestionPane(Room room) {
 		String[] suspects = { "Harry Potter", "Hermione Granger", "Ron Weasley", "Draco Malfoy", "Luna Lovegood", "Neville Longbottom" };
@@ -557,28 +616,29 @@ public class BoardPanel extends JPanel {
 			controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
 		}
 
-
-
 	}
-
-
 
 	// Helper to delay animation until current animation finishes
 	private void animateAfterPrevious(Runnable nextAnimation) {
-		Timer waitTimer = new Timer(100, null);
-		waitTimer.addActionListener(e -> {
-			if (animationTimer == null || !animationTimer.isRunning()) {
-				waitTimer.stop();
-				// Add a small buffer delay (e.g., 200ms) for visual clarity
-				Timer bufferTimer = new Timer(200, ev -> {
-					nextAnimation.run();
-					((Timer)ev.getSource()).stop();
-				});
-				bufferTimer.setRepeats(false); // Run only once
-				bufferTimer.start();
-			}
-		});
-		waitTimer.start();
+	    pendingSuggestionAnimation = nextAnimation;
+
+	    Timer waitTimer = new Timer(100, null);
+	    waitTimer.addActionListener(e -> {
+	        if (animationTimer == null || !animationTimer.isRunning()) {
+	            waitTimer.stop();
+
+	            Timer bufferTimer = new Timer(200, ev -> {
+	                if (pendingSuggestionAnimation != null) {
+	                    pendingSuggestionAnimation.run();
+	                    pendingSuggestionAnimation = null; // Clear after running
+	                }
+	                ((Timer)ev.getSource()).stop();
+	            });
+	            bufferTimer.setRepeats(false);
+	            bufferTimer.start();
+	        }
+	    });
+	    waitTimer.start();
 	}
 
 	// inner class to track animation state ** needed for animating several players 
@@ -618,4 +678,3 @@ public class BoardPanel extends JPanel {
 	}
 
 }
-
