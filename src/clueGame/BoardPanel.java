@@ -82,23 +82,23 @@ public class BoardPanel extends JPanel {
 		this.knownCardsPanel = knownCardsPanel;
 		players = theInstance.getPlayers();
 		currentPlayer = players.get(0); // Human always first
-		
+
 		// Update knownCards Panel with user's cards
 		if(currentPlayer instanceof HumanPlayer) {
 			for(Card card : currentPlayer.getHand()) {
 				if(card.getType() == CardType.PERSON) {
 					knownCardsPanel.updatePanels(knownCardsPanel.personPanel, card, currentPlayer);
 
-		        }else if(card.getType() == CardType.ROOM) {
-		    		knownCardsPanel.updatePanels(knownCardsPanel.roomPanel, card, currentPlayer);
+				}else if(card.getType() == CardType.ROOM) {
+					knownCardsPanel.updatePanels(knownCardsPanel.roomPanel, card, currentPlayer);
 
-		        }else {
-		    		knownCardsPanel.updatePanels(knownCardsPanel.weaponPanel, card, currentPlayer);
+				}else {
+					knownCardsPanel.updatePanels(knownCardsPanel.weaponPanel, card, currentPlayer);
 
-		        }
+				}
 			}
 		}
-		
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
 		add(panel);
@@ -129,12 +129,7 @@ public class BoardPanel extends JPanel {
 		controlPanel.setTurn(currentPlayer, roll);
 
 		BoardCell startCell = theInstance.getCell(currentPlayer.getRow(), currentPlayer.getColumn());
-		/*
-		// this is so your turn doesn't end if you are moved by a suggestion
-		if (currentPlayer.wasMovedBySuggestion()) {
-			currentPlayer.setMovedBySuggestion(false);
-		}
-		*/
+
 		theInstance.calcTargets(startCell, roll, currentPlayer);
 		targetCells = theInstance.getTargets();
 
@@ -148,9 +143,35 @@ public class BoardPanel extends JPanel {
 		} else {
 			// Computer player logic
 			ComputerPlayer cpu = (ComputerPlayer) currentPlayer;
+
+			// Check to see if they can make accusation
+			if(cpu.getFlag()) {
+				AccusationOrSuggestion accusation = cpu.createAccusation();
+				// Process accusation
+				Solution solution = theInstance.getSolution();
+				if(theInstance.checkAccusation(accusation, solution)) {
+					JOptionPane.showMessageDialog(null, "CPU has Won. \n Game Over ", "Message", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println("The correct solution was \n Room: " + solution.getRoom().getCardName() + " \n Person: " + solution.getPerson().getCardName() + "\n Weapon: " + solution.getWeapon().getCardName());
+					System.exit(0);
+				}else{
+					JOptionPane.showMessageDialog(null, "CPU made a wrong accusation. \n Game Over","Message", JOptionPane.INFORMATION_MESSAGE);
+					System.out.println("The correct solution was \n Room: " + solution.getRoom().getCardName() + " \n Person: " + solution.getPerson().getCardName() + "\n Weapon: " + solution.getWeapon().getCardName());
+					System.out.println("The CPU(" + cpu.getName() + ") guessed: \n Room: " + accusation.getRoom().getCardName() + " \n Person: " + accusation.getPerson().getCardName() + "\n Weapon: " + accusation.getWeapon().getCardName());
+
+					Set<Card> cpuHand = cpu.getHand();
+					List<Card> tempList = new ArrayList<>(cpuHand);
+					Card card1 = tempList.get(0);
+					Card card2 = tempList.get(1);
+					Card card3 = tempList.get(2);
+
+
+					System.out.println("" + cpu.getName() + "'s hand looks like this: \n Room: " + card1.getCardName() + " \n Person: " + card2.getCardName() + "\n Weapon: " + card3.getCardName());
+					System.exit(0);
+				}
+			}
 			BoardCell target = cpu.selectTarget(targetCells, theInstance);
 			cpu.setMovedBySuggestion(false); // after cpu chooses on their own 
-			playerAnimation(currentPlayer, target, 1);
+			playerAnimation(currentPlayer, target, 2);
 			currentPlayer.movePlayer(target);
 			repaint();
 
@@ -173,13 +194,25 @@ public class BoardPanel extends JPanel {
 				moveSuggestedPlayer(suggestion);
 
 				// Process disprove card
-			    if (disprovingCard != null) {
-			        Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
-			        controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
-			        cpu.addSeenCard(disprovingCard);
-			    } else {
-			        controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
-			    }
+				if (disprovingCard != null) {
+					Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
+					controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
+					cpu.addSeenCard(disprovingCard);
+				} else {
+					controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
+
+					// Before setting flag check to make sure that cpu doesn't have one of the cards
+					Set<Card> cpuHand = cpu.getHand();
+					List<Card> handList = new ArrayList<>(cpuHand);
+					
+					for(Card c : handList) {
+						if(c.equals(suggestion.getPerson()) || c.equals(suggestion.getRoom()) || c.equals(suggestion.getWeapon()) ) {
+							return; // come back if cpu has any of the cards in the suggestion
+						}
+					}
+					cpu.setFlag(true, suggestion);
+
+				}
 			}
 		}
 	}
@@ -198,13 +231,13 @@ public class BoardPanel extends JPanel {
 			// get room center cell
 			Room targetRoom = theInstance.getRoomByName(suggestion.getRoom().getCardName());
 			BoardCell roomCenter = targetRoom.getCenterCell();
-			
+
 			// Animate the suggested player AFTER CPU animation finishes
 			final Player playerToMove = suggestedPlayer;
 			final BoardCell destinationCell = roomCenter;
 
 			animateAfterPrevious(() -> {
-				playerAnimation(playerToMove, destinationCell, 1);
+				playerAnimation(playerToMove, destinationCell, 2);
 				playerToMove.movePlayer(destinationCell);
 			});
 		}
@@ -259,23 +292,23 @@ public class BoardPanel extends JPanel {
 
 	// Helper method to ensure players are properly drawn
 	private void drawPlayers(Graphics g) {
-	    List<Player> players = theInstance.getPlayers();
-	    for (Player player : players) {
-	        g.setColor(player.getColor());
-	        
-	        int drawX, drawY;
-	        if (playerAnimations.containsKey(player) && playerAnimations.get(player).isAnimating) {
-	            AnimationState state = playerAnimations.get(player);
-	            drawX = state.pixelX + padding + 4;
-	            drawY = state.pixelY + padding + 1;
-	        } else {
-	            drawX = player.getColumn() * cellWidth + padding + 4;
-	            drawY = player.getRow() * cellHeight + padding + 1;
-	        }
-	        
-	        g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-	        g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
-	    }
+		List<Player> players = theInstance.getPlayers();
+		for (Player player : players) {
+			g.setColor(player.getColor());
+
+			int drawX, drawY;
+			if (playerAnimations.containsKey(player) && playerAnimations.get(player).isAnimating) {
+				AnimationState state = playerAnimations.get(player);
+				drawX = state.pixelX + padding + 4;
+				drawY = state.pixelY + padding + 1;
+			} else {
+				drawX = player.getColumn() * cellWidth + padding + 4;
+				drawY = player.getRow() * cellHeight + padding + 1;
+			}
+
+			g.fillOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+			g.drawOval(drawX, drawY, cellWidth - 8, cellHeight - 2);
+		}
 	}
 
 	// Helper method for drawing doors and labels
@@ -377,7 +410,7 @@ public class BoardPanel extends JPanel {
 
 
 			// move the player and start animation
-			playerAnimation(currentPlayer, clickedCell, 1);
+			playerAnimation(currentPlayer, clickedCell, 2);
 			currentPlayer.movePlayer(clickedCell);
 			currentPlayer.setMovedBySuggestion(false);
 			clickedCell.setOccupied(true);
@@ -395,61 +428,61 @@ public class BoardPanel extends JPanel {
 
 	// Helper method to animate player movement using Timer and action Listener
 	private void playerAnimation(Player player, BoardCell destCell, int speed) {
-	    // Initialize animation state if needed
-	    if (!playerAnimations.containsKey(player)) {
-	        playerAnimations.put(player, new AnimationState(
-	            player.getColumn() * cellWidth,
-	            player.getRow() * cellHeight
-	        ));
-	    }
-	    
-	    AnimationState state = playerAnimations.get(player);
-	    state.pixelX = player.getColumn() * cellWidth;
-	    state.pixelY = player.getRow() * cellHeight;
-	    state.isAnimating = true;
-	    
-	    int destPixelX = destCell.getColumn() * cellWidth;
-	    int destPixelY = destCell.getRow() * cellHeight;
+		// Initialize animation state if needed
+		if (!playerAnimations.containsKey(player)) {
+			playerAnimations.put(player, new AnimationState(
+					player.getColumn() * cellWidth,
+					player.getRow() * cellHeight
+					));
+		}
 
-	    // before moving player we need to make the cell the player is in appear unoccupied
-	    int prevRow = player.getRow();
-	    int prevCol = player.getColumn();
-	    BoardCell prevCell = theInstance.getCell(prevRow, prevCol);
-	    prevCell.setOccupied(false);
+		AnimationState state = playerAnimations.get(player);
+		state.pixelX = player.getColumn() * cellWidth;
+		state.pixelY = player.getRow() * cellHeight;
+		state.isAnimating = true;
 
-	    Timer animationTimer = new Timer(10, e -> {
-	        boolean moved = false;
+		int destPixelX = destCell.getColumn() * cellWidth;
+		int destPixelY = destCell.getRow() * cellHeight;
 
-	        if (state.pixelX < destPixelX) {
-	            state.pixelX += speed;
-	            if (state.pixelX > destPixelX) state.pixelX = destPixelX;
-	            moved = true;
-	        } else if (state.pixelX > destPixelX) {
-	            state.pixelX -= speed;
-	            if (state.pixelX < destPixelX) state.pixelX = destPixelX;
-	            moved = true;
-	        }
+		// before moving player we need to make the cell the player is in appear unoccupied
+		int prevRow = player.getRow();
+		int prevCol = player.getColumn();
+		BoardCell prevCell = theInstance.getCell(prevRow, prevCol);
+		prevCell.setOccupied(false);
 
-	        if (state.pixelY < destPixelY) {
-	            state.pixelY += speed;
-	            if (state.pixelY > destPixelY) state.pixelY = destPixelY;
-	            moved = true;
-	        } else if (state.pixelY > destPixelY) {
-	            state.pixelY -= speed;
-	            if (state.pixelY < destPixelY) state.pixelY = destPixelY;
-	            moved = true;
-	        }
+		Timer animationTimer = new Timer(10, e -> {
+			boolean moved = false;
 
-	        repaint();
+			if (state.pixelX < destPixelX) {
+				state.pixelX += speed;
+				if (state.pixelX > destPixelX) state.pixelX = destPixelX;
+				moved = true;
+			} else if (state.pixelX > destPixelX) {
+				state.pixelX -= speed;
+				if (state.pixelX < destPixelX) state.pixelX = destPixelX;
+				moved = true;
+			}
 
-	        if (!moved) {
-	            ((Timer)e.getSource()).stop();
-	            state.isAnimating = false;
-	            player.movePlayer(destCell);
-	        }
-	    });
-	    
-	    animationTimer.start();
+			if (state.pixelY < destPixelY) {
+				state.pixelY += speed;
+				if (state.pixelY > destPixelY) state.pixelY = destPixelY;
+				moved = true;
+			} else if (state.pixelY > destPixelY) {
+				state.pixelY -= speed;
+				if (state.pixelY < destPixelY) state.pixelY = destPixelY;
+				moved = true;
+			}
+
+			repaint();
+
+			if (!moved) {
+				((Timer)e.getSource()).stop();
+				state.isAnimating = false;
+				player.movePlayer(destCell);
+			}
+		});
+
+		animationTimer.start();
 	}
 	// Create the suggestion dialog screen
 	private void createSuggestionPane(Room room) {
@@ -496,34 +529,34 @@ public class BoardPanel extends JPanel {
 
 		suggestion = new AccusationOrSuggestion(currentPlayer, person, weapon, roomCard);
 		Card disprovingCard = theInstance.handleSuggestion(suggestion, (ArrayList) players);
-		
+
 		// update control Panel
 		controlPanel.setGuess( 
 				suggestion.getPerson().getCardName() + ", " + suggestion.getRoom().getCardName() + ", " + suggestion.getWeapon().getCardName(),
 				currentPlayer.getColor()
 				);
-		
+
 		// Move suggested player to suggested room.
 		moveSuggestedPlayer(suggestion);
 
 		// Process disprove card
-	    if (disprovingCard != null) {
-	        Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
-	        controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
-	        
-	        if(disprovingCard.getType().equals(CardType.PERSON)) {
-		        knownCardsPanel.updatePanels(knownCardsPanel.seenPersonPanel, disprovingCard, disprover);
+		if (disprovingCard != null) {
+			Player disprover = theInstance.getDisprovingPlayer(); // USE the saved player!
+			controlPanel.setGuessResult(disprover.getName() + " disproved the suggestion.", disprover.getColor());
 
-	        }else if(disprovingCard.getType().equals(CardType.ROOM)) {
-		        knownCardsPanel.updatePanels(knownCardsPanel.seenRoomPanel, disprovingCard, disprover);
+			if(disprovingCard.getType().equals(CardType.PERSON)) {
+				knownCardsPanel.updatePanels(knownCardsPanel.seenPersonPanel, disprovingCard, disprover);
 
-	        }else {
-		        knownCardsPanel.updatePanels(knownCardsPanel.seenWeaponPanel, disprovingCard, disprover);
-	        }
-	    } else {
-	        controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
-	    }
-		
+			}else if(disprovingCard.getType().equals(CardType.ROOM)) {
+				knownCardsPanel.updatePanels(knownCardsPanel.seenRoomPanel, disprovingCard, disprover);
+
+			}else {
+				knownCardsPanel.updatePanels(knownCardsPanel.seenWeaponPanel, disprovingCard, disprover);
+			}
+		} else {
+			controlPanel.setGuessResult("No new clue was found", Color.LIGHT_GRAY);
+		}
+
 
 
 	}
@@ -541,33 +574,33 @@ public class BoardPanel extends JPanel {
 	// Helper to delay animation until current animation finishes
 	private void animateAfterPrevious(Runnable nextAnimation) {
 		Timer waitTimer = new Timer(100, null);
-	    waitTimer.addActionListener(e -> {
-	        if (animationTimer == null || !animationTimer.isRunning()) {
-	            waitTimer.stop();
-	            // Add a small buffer delay (e.g., 200ms) for visual clarity
-	            Timer bufferTimer = new Timer(200, ev -> {
-	                nextAnimation.run();
-	                ((Timer)ev.getSource()).stop();
-	            });
-	            bufferTimer.setRepeats(false); // Run only once
-	            bufferTimer.start();
-	        }
-	    });
-	    waitTimer.start();
+		waitTimer.addActionListener(e -> {
+			if (animationTimer == null || !animationTimer.isRunning()) {
+				waitTimer.stop();
+				// Add a small buffer delay (e.g., 200ms) for visual clarity
+				Timer bufferTimer = new Timer(200, ev -> {
+					nextAnimation.run();
+					((Timer)ev.getSource()).stop();
+				});
+				bufferTimer.setRepeats(false); // Run only once
+				bufferTimer.start();
+			}
+		});
+		waitTimer.start();
 	}
-	
+
 	// inner class to track animation state ** needed for animating several players 
-		private class AnimationState {
-		    int pixelX;
-		    int pixelY;
-		    boolean isAnimating;
-		    
-		    public AnimationState(int x, int y) {
-		        this.pixelX = x;
-		        this.pixelY = y;
-		        this.isAnimating = false;
-		    }
+	private class AnimationState {
+		int pixelX;
+		int pixelY;
+		boolean isAnimating;
+
+		public AnimationState(int x, int y) {
+			this.pixelX = x;
+			this.pixelY = y;
+			this.isAnimating = false;
 		}
+	}
 
 	// Must make an instance for testing 
 	public static void setUp() {

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 /*
  * ClueGame:
@@ -31,11 +32,16 @@ public class ClueGame extends JFrame {
 
 		// Set up layout
 		setLayout(new BorderLayout());
+		controlPanel.setPreferredSize(new Dimension(950, 150));
 		add(controlPanel, BorderLayout.SOUTH);
 		add(boardPanel, BorderLayout.CENTER);
-		add(knownCardsPanel, BorderLayout.EAST);
+		
+		
+		JScrollPane scrollPane = new JScrollPane(knownCardsPanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setPreferredSize(new Dimension(190, 0)); // 
+		add(scrollPane, BorderLayout.EAST);
+		
 
-		knownCardsPanel.setPreferredSize(new Dimension(180, 0));
 		boardPanel.nextTurn();
 	}
 	

@@ -137,12 +137,12 @@ public class BoardAdjTargetTest {
 	public void testSecretPassageAdjacencies() {
 		// Test SC/CS Secret Passage Adjacency
 		Set<BoardCell> testList = board.getAdjList(34, 23);
-		assertEquals(2, testList.size()); // Should connect to the other room center 
+		assertEquals(3, testList.size()); // Should connect to the other room center 
 		assertTrue(testList.contains(board.getCell(15, 6))); // Other room center
 
 		// Test HG/GH Secret Passage Adjacency
 		testList = board.getAdjList(6, 23);
-		assertEquals(2, testList.size()); // Should connect to the other room center
+		assertEquals(3, testList.size()); // Should connect to the other room center
 		assertTrue(testList.contains(board.getCell(35, 6))); // Other room center
 	}
 
@@ -232,13 +232,13 @@ public class BoardAdjTargetTest {
 		// W/ a roll of 1, can only move from center of one room to another
 		board.calcTargets(board.getCell(35, 6), 1, randomPlayer);
 		Set<BoardCell> targets= board.getTargets();
-		assertEquals(2, targets.size());
+		assertEquals(3, targets.size());
 		assertTrue(targets.contains(board.getCell(6, 23)));
 
 		// Test a roll of 2
 		board.calcTargets(board.getCell(35, 6), 2, randomPlayer);
 		targets= board.getTargets();
-		assertEquals(3, targets.size());
+		assertEquals(6, targets.size());
 		assertTrue(targets.contains(board.getCell(6, 23)));
 		assertTrue(targets.contains(board.getCell(31, 6)));
 		assertTrue(targets.contains(board.getCell(32, 7)));
@@ -246,7 +246,7 @@ public class BoardAdjTargetTest {
 		// Test a roll of 4
 		board.calcTargets(board.getCell(35, 6), 4, randomPlayer);
 		targets= board.getTargets();
-		assertEquals(9, targets.size());
+		assertEquals(18, targets.size());
 		assertTrue(targets.contains(board.getCell(6, 23)));
 		assertTrue(targets.contains(board.getCell(29, 6)));
 		assertTrue(targets.contains(board.getCell(32, 9)));

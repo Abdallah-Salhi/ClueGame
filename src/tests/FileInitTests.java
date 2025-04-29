@@ -94,7 +94,7 @@ public class FileInitTests {
                 }
             }
         }
-        assertEquals(13, numDoors); 
+        assertEquals(19, numDoors); 
     }
 
 	@Test

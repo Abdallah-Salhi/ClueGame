@@ -18,6 +18,9 @@ import java.util.Set;
  */
 public class ComputerPlayer extends Player {
     private Set<Card> seen = new HashSet<>();
+    private boolean accusationFlag = false;
+	private AccusationOrSuggestion successfulSuggestion;
+	
 
     // Constructor only calls super because each computer player only has the same information as player object. Only diff is in logic.
     public ComputerPlayer(String name, java.awt.Color color, int row, int col) {
@@ -77,6 +80,11 @@ public class ComputerPlayer extends Player {
         return allTargets.get(0);
     }
     
+	// Allows Computer players to make an accusation
+    public AccusationOrSuggestion createAccusation() {
+		return successfulSuggestion;
+	}
+    
     // Add cards to seen list which allows for dynamic changes as game progresses
     public void addSeenCard(Card card) {
         seen.add(card);
@@ -85,4 +93,17 @@ public class ComputerPlayer extends Player {
     public Set<Card> getSeenCards() {
         return seen;
     }
+    
+    // Setter for accusation flag
+    public void setFlag(boolean flag, AccusationOrSuggestion suggestion) {
+    	this.accusationFlag = flag;
+    	successfulSuggestion = suggestion;
+    }
+    
+    // getter for accusation flag
+    public boolean getFlag() {
+    	return accusationFlag;
+    }
+
+	
 }

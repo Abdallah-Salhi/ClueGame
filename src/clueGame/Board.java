@@ -431,15 +431,7 @@ public class Board {
 					disprovingPlayer = player; // Save the player who disproved
 					return disprovingCard; // Return the card that disproved
 				}
-				/*
-	            for (Card c : player.getHand()) {
-	                if (c.equals(suggestion.getPerson()) || c.equals(suggestion.getWeapon()) || c.equals(suggestion.getRoom())) {
-	                    disprovingPlayer = player; // Save the player who disproved
-	                    return c; // Return the card that disproved
-	                }
-
-	            }
-				 */
+			
 			}
 		}
 		disprovingPlayer = null; // No one disproved

@@ -137,7 +137,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
-		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
 		panel.add(noneTextfield);
 
@@ -153,7 +153,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
-		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		panel.add(noneTextfield);
 
 
@@ -199,14 +199,21 @@ public class KnownCardsPanel extends JPanel {
 		for(Component c : components) {	
 			if(c instanceof JTextField) {
 				String text = ((JTextField) c).getText();
-				if(text.equals("None")) {
+				if(text.equals("None") || text.equals(card.getCardName())) {
 					panel.remove(c);
 				}
 			}
 		}
 		
 		panel.add(newTextField);
-		newTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+		// only make small if room panel beacuse its the only one that might need 9 text fields instead of 6
+		if(panel.equals(roomPanel) || panel.equals(seenRoomPanel)) {
+			newTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+		}else {
+			newTextField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+
+		}
 		newTextField.setHorizontalAlignment(JTextField.CENTER);
 		newTextField.setText(card.getCardName());
 		newTextField.setBackground(player.color);
