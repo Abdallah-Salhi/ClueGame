@@ -11,8 +11,6 @@ import java.util.Set;
 import java.util.List;
 import java.util.Collections;
 
-import experiment.TestBoardCell;
-
 /*
  * Board:
  * Represents the Clue game board and manages its configuration, layout,
