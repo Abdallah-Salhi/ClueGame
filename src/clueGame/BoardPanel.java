@@ -561,15 +561,7 @@ public class BoardPanel extends JPanel {
 
 	}
 
-	// helper function for player Animation and suggestion
-	private Player findPlayerByName(String name) {
-		for (Player p : players) {
-			if (p.getName().equals(name)) {
-				return p;
-			}
-		}
-		return null;
-	}
+
 
 	// Helper to delay animation until current animation finishes
 	private void animateAfterPrevious(Runnable nextAnimation) {

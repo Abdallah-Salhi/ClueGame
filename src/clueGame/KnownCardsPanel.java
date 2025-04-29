@@ -104,6 +104,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 
 		panel.add(noneTextfield);
@@ -121,6 +122,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		panel.add(noneTextfield);
 
@@ -137,6 +139,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
 		panel.add(noneTextfield);
@@ -153,6 +156,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		panel.add(noneTextfield);
 
@@ -169,6 +173,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 
 		panel.add(noneTextfield);
@@ -185,6 +190,7 @@ public class KnownCardsPanel extends JPanel {
 
 		noneTextfield = new JTextField();
 		noneTextfield.setText("None");
+		noneTextfield.setEditable(false);
 		noneTextfield.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
 		panel.add(noneTextfield);
 
@@ -216,6 +222,8 @@ public class KnownCardsPanel extends JPanel {
 		}
 		newTextField.setHorizontalAlignment(JTextField.CENTER);
 		newTextField.setText(card.getCardName());
+		newTextField.setEditable(false);
+
 		newTextField.setBackground(player.color);
 
 		panel.revalidate();
